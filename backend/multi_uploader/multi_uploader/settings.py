@@ -22,6 +22,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -31,6 +32,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api',  
+    
 ]
 INSTALLED_APPS += ["corsheaders"]
 

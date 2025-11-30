@@ -1,16 +1,65 @@
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from django.contrib.auth import login
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from .models import Listing ,ListingPlatform, Platform
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.decorators import login_required
+import json
+
+
+def createListingFunc(owner, title, description, price, city, postal, phone, condition, platforms):
+    listing = Listing.objects.create(
+        owner=owner,
+        title=title,
+        description=description,
+        price=price,
+        city=city,
+        postal=postal,
+        phone=phone,
+        condition=condition
+    )
+
+    for platform in platforms:
+        matched_platform = Platform.objects.filter(name=platform).first()
+        if matched_platform:
+            ListingPlatform.objects.create(
+                listing=listing,
+                platform=matched_platform
+            )
+
+    return listing
+
+    
+
+
+
+    for platform in platforms:
+        matched_platform = Platform.objects.filter(name=platform).first()
+        if matched_platform:        
+            ListingPlatform.objects.create(
+                listing=listing,
+                platform=matched_platform
+            )
+        
+    return listing
+
+
+
+
 def home(request):
-    return render(request,'index.html');
+    return render(request, 'index.html')
+
+def create_listing_page(request):
+    if not request.user.is_authenticated:
+        return redirect('home')     # URL name  
+    return render(request, 'create_listing.html')
+
 def login_page(request):
-    return render(request,'login.html');
+    return render(request, 'login.html')
+
 
 def register_page(request):
-    return render(request,'register.html')
+    return render(request, 'register.html')
 
 
 def login_check(request):
@@ -26,7 +75,32 @@ def login_check(request):
         return JsonResponse({"success": False, "error": "Invalid credentials"})
 
     login(request, user)
-    return JsonResponse({"success": True})
+    return redirect('deepweb')      # URL name
+
+
+def deepweb_page(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+
+    listings = Listing.objects.filter(owner=request.user)
+
+    data = {}
+    i = 1
+    for l in listings:
+        data[f"Listing {i}"] = {
+    "title": l.title,
+    "description": l.description,
+    "price": float(l.price),
+    "city": l.city,
+    "postal": l.postal,
+    "phone": l.phone,
+    "condition": l.condition,
+    "platforms": [listing_platform.platform.name for listing_platform in ListingPlatform.objects.filter(listing=l)]
+}
+        i += 1
+
+    return render(request, 'deepweb.html', {"data_json": json.dumps(data)})
+
 
 def register(request):
     if request.method != "POST":
@@ -34,11 +108,45 @@ def register(request):
 
     username = request.POST.get("username")
     password = request.POST.get("password")
-    
+
     if User.objects.filter(username=username).exists():
         return JsonResponse({"success": False, "error": "Username already taken"})
 
     User.objects.create_user(username=username, password=password)
 
-    return JsonResponse({"success": True})
+    return redirect('login_page')   # URL name
 
+
+
+
+
+
+@login_required(login_url='home')
+def create_listing(request):
+    if request.method != "POST":
+        return HttpResponse("Invalid method", status=405)
+
+    title = request.POST.get("title")
+    description = request.POST.get("description")
+    price = request.POST.get("price")
+    city = request.POST.get("city")
+    postal = request.POST.get("postal")
+    phone = request.POST.get("phone")
+    condition = request.POST.get("condition")
+    platforms = request.POST.getlist("platforms")
+
+    createListingFunc(
+        owner=request.user,
+        title=title,
+        description=description,
+        price=price,
+        city=city,
+        postal=postal,
+        phone=phone,
+        condition=condition,
+        platforms=platforms
+    )
+
+    return redirect('deepweb')  # URL name
+
+    
