@@ -18,13 +18,3 @@ env/
 
 # PyCharm
 .idea/
-
-# Logs and temp files
-*.log
-*.pot
-*.pyc
-*.tmp
-
-# OS files
-.DS_Store
-Thumbs.db

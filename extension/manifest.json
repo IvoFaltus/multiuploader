@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Auction Uploader",
+  "version": "1.0.0",
+  "description": "Helper extension for uploading listings to Aukro/Bazoš (semi-automatic).",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://aukro.cz/*",
+    "https://www.aukro.cz/*",
+    "https://www.bazos.cz/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Upload listing"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+  {
+    "matches": [
+      "http://localhost:8000/*",
+      "http://127.0.0.1:8000/*",
+      "https://aukro.cz/*",
+      "https://www.aukro.cz/*",
+      "https://www.bazos.cz/*"
+    ],
+    "js": ["content.js"]
+  }
+]
+
+}
