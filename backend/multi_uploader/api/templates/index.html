@@ -1,150 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Three EXR</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three EXR</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}" />
+    <!-- Import map for Three.js -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "/static/three.js-master/build/three.module.js"
+        }
+      }
+    </script>
 
-  <!-- Import map for Three.js -->
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "/static/three.js-master/build/three.module.js"
-    }
-  }
-  </script>
+    {% load static %}
+    <script type="module" src="{% static 'events.js' %}"></script>
+    <script type="module" src="{% static 'script.js' %}"></script>
+  </head>
 
-  <style>
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-    }
+  <div class="canvas-shadow"></div>
 
-    /* ===== COMMON ===== */
+  <body>
+    <!-- ===== PAGE: HOME ===== -->
+    <!-- ===== PAGE: HOME ===== -->
+    <!-- ===== PAGE: HOME ===== -->
+    <div class="page page-home">
+      <div class="home-wrapper">
+        <!-- NAV -->
+        <div class="home-container glass-nav">
+          <div class="nav-item" id="About">
+            <button class="btn">
+              <img src="static/icons/About.svg" width="44" />
+            </button>
+            <p>About</p>
+          </div>
 
-    .hidden {
-      display: none;
-    }
+          <div class="nav-item" id="Contact">
+            <button class="btn">
+              <img src="static/icons/Contact.svg" width="44" />
+            </button>
+            <p>Contact</p>
+          </div>
 
-    .btn {
-      padding: 12px 24px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 18px;
-      text-decoration: none;
-      display: block;
-      margin: 10px auto;
-      width: 150px;
-      text-align: center;
-    }
+          <div class="nav-item" id="Home">
+            <button class="btn">
+              <img src="static/icons/Home.svg" width="44" />
+            </button>
+            <p>Home</p>
+          </div>
 
-    .btn:hover {
-      background: #0056c7;
-    }
+          <div class="nav-item" id="Login">
+            <button class="btn">
+              <img src="static/icons/Login.svg" width="44" />
+            </button>
+            <p>Login</p>
+          </div>
 
-    /* ===== HOME PAGE ===== */
+          <div class="nav-item" id="Register">
+            <button class="btn">
+              <img src="static/icons/Register.svg" width="44" />
+            </button>
+            <p>Register</p>
+          </div>
+        </div>
 
-    .container {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-      pointer-events: none;
-      color: white;
-    }
-
-    .container * {
-      pointer-events: auto;
-    }
-
-    /* ===== LOGIN PAGE ===== */
-
-    .login {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 20;
-    }
-
-    .login-box {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 300px;
-    }
-
-    .login-box h2 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .login-box input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- ===== PAGE: HOME ===== -->
-  <div class="home">
-    <div class="container">
-      <h1>Welcome</h1>
-      <button class="btn" id="login">Login</button>
-      <button class="btn" id="register">Register</button>
-      <button class="btn" id="rotateBtn">Rotate</button>
+        <!-- CONTENT -->
+        <div class="home-content">
+          <h1>Multi-Uploader</h1>
+          <p class="home-subtitle">
+            <b>Focus</b> on what matters. We handle the rest.
+          </p>
+          <div class="home-text">
+            MultiUploader is a web application designed to
+            <b>simplify and automate</b> multi-platform uploads from a single
+            place. It allows users to <b>prepare content once</b> and
+            <b>publish it across multiple services</b> without repetitive manual
+            work. The focus is on <b>speed</b>, <b>clarity</b>, and
+            <b>efficiency</b>, reducing errors and
+            <b>saving valuable time</b> when managing listings or data on
+            different platforms. The system is built with
+            <b>scalability in mind</b>, so <b>new platforms and features</b> can
+            be added seamlessly as the project grows.
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- ===== PAGE: LOGIN ===== -->
-  <div class="login hidden">
-    <div class="login-box">
-      <h2>Login</h2>
-      <form method="POST" action="/login/check/">
+    <!-- ===== PAGE: LOGIN ===== -->
+    <div class="page page-login hidden">
+      <div class="login-box">
+        <h2 class="login-title">Login</h2>
+        <form method="POST" action="/login/check/" class="login-form">
+          {% csrf_token %}
+          <input
+            class="login-input"
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+          />
+          <input
+            class="login-input"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <button class="btn login-submit" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== PAGE: REGISTER ===== -->
+    <div class="page page-register hidden">
+      <h2 class="register-title">Create Account</h2>
+
+      <form action="/register/check/" method="POST" class="register-form">
         {% csrf_token %}
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button class="btn" type="submit">Login</button>
+        <input
+          class="register-input"
+          type="text"
+          name="username"
+          placeholder="Username"
+          required
+        />
+        <input
+          class="register-input"
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button class="btn register-submit" type="submit">Register</button>
       </form>
     </div>
-  </div>
 
-  <!-- ===== THREE.JS SCRIPT ===== -->
-  <script type="module" src="/static/script.js"></script>
-<style>
-  .hidden {
-      display: none;
-    }
+    <!-- ===== PAGE: ABOUT ===== -->
+    <div class="page page-about hidden">
+      <div class="about-box">
+        <h2>About</h2>
+        <p>
+          MultiUploader centralizes multi-platform publishing into one workflow.
+          Prepare once, publish everywhere.
+        </p>
+      </div>
+    </div>
 
+    <!-- ===== PAGE: CONTACT ===== -->
+    <div class="page page-contact hidden">
+      <div class="contact-box">
+        <h2>Contact</h2>
+        <form class="contact-form">
+          <input type="email" placeholder="Email" required />
+          <textarea placeholder="Message" required></textarea>
+          <button class="btn" type="submit">Send</button>
+        </form>
+      </div>
+    </div>
 
-    .login-box.hidden{
+    <!-- ===== THREE.JS SCRIPT ===== -->
+    <script type="module" src="/static/script.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden; /* prevent scroll bars */
+      }
 
-      opacity: 0;
-    }
-.login-box{
+      canvas {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        display: block; /* removes inline spacing that can create gaps */
+        z-index: 0; /* keep the background behind the UI */
+      }
 
+      .page {
+        position: relative;
+        z-index: 1;
+      }
 
-  transition: opacity 0.5s ease;
-}
-
-</style>
-</body>
+      .hidden {
+        display: none;
+      }
+    </style>
+  </body>
 </html>

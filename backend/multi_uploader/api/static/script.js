@@ -1,64 +1,11 @@
-import * as THREE from './three.js-master/build/three.module.js';
-import { EXRLoader } from './three.js-master/examples/jsm/loaders/EXRLoader.js';
-import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitControls.js';
+import * as THREE from "./three.js-master/build/three.module.js";
+import { EXRLoader } from "./three.js-master/examples/jsm/loaders/EXRLoader.js";
+import { OrbitControls } from "./three.js-master/examples/jsm/controls/OrbitControls.js";
 // @ts-check
 
 /* ---------- SCENE / CAMERA / RENDERER ---------- */
 
-
-/*logic*/ 
-
-
-let location = "home";
-
-Element.prototype.delayedRemove = function (className, delay) {
-  setTimeout(() => {
-    this.classList.remove(className);
-  }, delay);
-};
-
-
-
-
-
-const switchToPage = (page)=>{
-
-if (!backgrounds.length) return;
-
-  fadeToBackground(toggle ? backgrounds[0] : backgrounds[1]);
-  toggle = !toggle;
-
-
-
-
-const selector = `body *:not(.${page}):not(.${page} *)`;
-document.querySelectorAll(selector).forEach(el => {
-  el.classList.add('hidden');
-});
-
-
-
-
-document.querySelectorAll(`.${page}`).forEach(e=>{
-
-
-
-
-
-  e.delayedRemove('hidden',1000);
-})
-  
-
-}
-
-document.querySelector("#login").addEventListener("click",()=>{
-
-switchToPage("login");
-
-})
-/**/ 
-
-
+/*logic*/
 
 
 
@@ -86,7 +33,7 @@ controls.enableDamping = true;
 
 /* ---------- RESIZE ---------- */
 
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -104,7 +51,7 @@ function createBgSphere(texture) {
       map: texture,
       side: THREE.BackSide,
       transparent: true,
-      opacity: 1
+      opacity: 1,
     })
   );
 }
@@ -123,9 +70,7 @@ function loadEXR(path) {
 /* ---------- EASING ---------- */
 
 function easeInOut(t) {
-  return t < 0.5
-    ? 2 * t * t
-    : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
 
 /* ---------- FADE / ROTATION STATE ---------- */
@@ -143,7 +88,7 @@ let bgRotationSpeed = 0.0002; // constant slow rotation
 
 /* ---------- FADE METHODS ---------- */
 
-function fadeToBackground(texture) {
+export function fadeToBackground(texture) {
   bgNext = createBgSphere(texture);
   bgNext.material.opacity = 0;
   bgGroup.add(bgNext);
@@ -174,11 +119,11 @@ function updateBackgroundFade() {
 
 /* ---------- PRELOAD BACKGROUNDS ---------- */
 
-let backgrounds = [];
+export let backgrounds = [];
 
 Promise.all([
-  loadEXR('/static/models/bg10.exr'),
-  loadEXR('/static/models/nature.exr')
+  loadEXR("/static/models/bg10.exr"),
+  loadEXR("/static/models/nature.exr"),
 ]).then((textures) => {
   backgrounds = textures;
 
@@ -204,11 +149,6 @@ animate();
 
 /* ---------- BUTTON ---------- */
 
-let toggle = false;
-document.querySelector('#rotateBtn').addEventListener('click', () => {
-  if (!backgrounds.length) return;
+export let toggle = false;
 
-  fadeToBackground(toggle ? backgrounds[0] : backgrounds[1]);
-  toggle = !toggle;
-});
 renderer.toneMappingExposure = 0.5;
