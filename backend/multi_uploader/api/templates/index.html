@@ -26,7 +26,7 @@
     <!-- ===== PAGE: HOME ===== -->
     <!-- ===== PAGE: HOME ===== -->
     <!-- ===== PAGE: HOME ===== -->
-    <div class="page page-home">
+    <div class="page page-home hidden">
       <div class="home-wrapper">
         <!-- NAV -->
         <div class="home-container glass-nav">
@@ -34,7 +34,7 @@
             <button class="btn">
               <img src="static/icons/About.svg" width="44" />
             </button>
-            <p>About</p>
+            <p>Purpose</p>
           </div>
 
           <div class="nav-item" id="Contact">
@@ -89,7 +89,10 @@
     </div>
 
     <!-- ===== PAGE: LOGIN ===== -->
-    <div class="page page-login hidden">
+    <div class="page page-login ">
+
+      <div class="loginBody">
+        
       <div class="login-box">
         <h2 class="login-title">Login</h2>
         <form method="POST" action="/login/check/" class="login-form">
@@ -111,6 +114,8 @@
           <button class="btn login-submit" type="submit">Login</button>
         </form>
       </div>
+      </div>
+
     </div>
 
     <!-- ===== PAGE: REGISTER ===== -->

@@ -4,11 +4,7 @@
   "version": "1.0.0",
   "description": "Helper extension for uploading listings to E-Shops (semi-automatic).",
 
-  "permissions": [
-    "tabs",
-    "scripting",
-    "storage"
-  ],
+  "permissions": ["tabs", "scripting", "storage"],
 
   "host_permissions": [
     "https://aukro.cz/*",
@@ -22,18 +18,17 @@
 
   "content_scripts": [
     {
-      "matches": [
-        "http://localhost:8000/*",
-        "http://127.0.0.1:8000/*"
-      ],
+      "matches": ["http://localhost:8000/*", "http://127.0.0.1:8000/*"],
       "js": ["content.js"]
     },
     {
-      "matches": [
-        "https://aukro.cz/*",
-        "https://www.aukro.cz/*"
-      ],
+      "matches": ["https://aukro.cz/*", "https://www.aukro.cz/*"],
       "js": ["aukroContent.js"]
     }
-  ]
+  ],
+
+  "web_accessible_resources": [{
+    "resources": ["fonts/GreaterTheory.otf"],
+    "matches": ["https://*.aukro.cz/*"]
+  }]
 }

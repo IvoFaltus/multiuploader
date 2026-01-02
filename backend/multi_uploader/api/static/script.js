@@ -4,12 +4,7 @@ import { OrbitControls } from "./three.js-master/examples/jsm/controls/OrbitCont
 // @ts-check
 
 /* ---------- SCENE / CAMERA / RENDERER ---------- */
-
-/*logic*/
-
-
-
-
+/*
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
@@ -24,6 +19,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.5;
 document.body.appendChild(renderer.domElement);
 
 /* ---------- CONTROLS ---------- */
@@ -39,7 +35,7 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ---------- BACKGROUND SPHERES ---------- */
+/* ---------- BACKGROUND GROUP ---------- */
 
 const bgGroup = new THREE.Group();
 scene.add(bgGroup);
@@ -56,7 +52,7 @@ function createBgSphere(texture) {
   );
 }
 
-/* ---------- LOADER (PROMISE) ---------- */
+/* ---------- LOADER ---------- */
 
 function loadEXR(path) {
   return new Promise((resolve) => {
@@ -73,7 +69,7 @@ function easeInOut(t) {
   return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
 
-/* ---------- FADE / ROTATION STATE ---------- */
+/* ---------- FADE STATE ---------- */
 
 let bgCurrent = null;
 let bgNext = null;
@@ -81,14 +77,15 @@ let fading = false;
 let fadeStart = 0;
 
 const FADE_TIME = 1500;
-const FADE_ROTATION = Math.PI / 3; // 60° during transition
+const FADE_ROTATION = Math.PI / 3;
 let startRotation = 0;
+let bgRotationSpeed = 0.0003;
 
-let bgRotationSpeed = 0.0002; // constant slow rotation
-
-/* ---------- FADE METHODS ---------- */
+/* ---------- FADE FUNCTION ---------- */
 
 export function fadeToBackground(texture) {
+  if (fading || !texture) return;
+
   bgNext = createBgSphere(texture);
   bgNext.material.opacity = 0;
   bgGroup.add(bgNext);
@@ -105,7 +102,7 @@ function updateBackgroundFade() {
   const e = easeInOut(t);
 
   if (bgCurrent) bgCurrent.material.opacity = 1 - e;
-  bgNext.material.opacity = e;
+  if (bgNext) bgNext.material.opacity = e;
 
   bgGroup.rotation.y = startRotation + FADE_ROTATION * e;
 
@@ -114,24 +111,73 @@ function updateBackgroundFade() {
     bgCurrent = bgNext;
     bgNext = null;
     fading = false;
+    startRotation = bgGroup.rotation.y;
   }
 }
 
 /* ---------- PRELOAD BACKGROUNDS ---------- */
 
-export let backgrounds = [];
-
-Promise.all([
-  loadEXR("/static/models/bg10.exr"),
-  loadEXR("/static/models/nature.exr"),
-]).then((textures) => {
-  backgrounds = textures;
-
-  bgCurrent = createBgSphere(backgrounds[0]);
+export const backgrounds = [];
+/*
+loadEXR("/static/models/bg1.exr").then((tex) => {
+  backgrounds[0] = tex;
+  bgCurrent = createBgSphere(tex);
   bgGroup.add(bgCurrent);
 });
 
-/* ---------- ANIMATION LOOP (ONLY ONE) ---------- */
+Promise.all([
+  loadEXR("/static/models/nature.exr"),   // [0]
+  loadEXR("/static/models/sky1.exr"),     // [1]
+  loadEXR("/static/models/sky2.exr"),     // [2]
+  loadEXR("/static/models/nature3.exr"),  // [3]
+])
+.then((textures) => {
+
+  /* ===========================
+     HDRI 1 — nature.exr
+     =========================== */
+  backgrounds[1] = textures[0];
+  textures[0].userData = {
+    rotX: 0,
+    rotY: 0,
+  };
+
+  /* ===========================
+     HDRI 2 — sky1.exr
+     =========================== */
+  backgrounds[2] = textures[1];
+  textures[1].userData = {
+    rotX: 0,
+    rotY: Math.PI / 2,
+  };
+
+  /* ===========================
+     HDRI 3 — sky2.exr
+     =========================== */
+  backgrounds[3] = textures[2];
+  textures[2].userData = {
+    rotX: THREE.MathUtils.degToRad(10),
+    rotY: Math.PI,
+  };
+
+  /* ===========================
+     HDRI 4 — nature3.exr
+     =========================== */
+  backgrounds[4] = textures[3];
+  textures[3].userData = {
+    rotX: 0,
+    rotY: -Math.PI / 2,
+  };
+
+  // ✅ everything loaded and configured here
+  // safe to enable UI / first background
+
+})
+.catch((err) => {
+  console.error("Background load failed:", err);
+});
+
+/* ---------- ANIMATION LOOP ---------- */
 
 function animate() {
   requestAnimationFrame(animate);
@@ -146,9 +192,3 @@ function animate() {
 }
 
 animate();
-
-/* ---------- BUTTON ---------- */
-
-export let toggle = false;
-
-renderer.toneMappingExposure = 0.5;

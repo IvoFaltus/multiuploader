@@ -1,3 +1,7 @@
+@import url(animations.css);
+@import url(login.css);
+
+
 @font-face {
   font-family: "MyFont";
   src: url("fonts/GreaterTheory.otf") format("opentype");
@@ -172,3 +176,9 @@ font-family: "myfont";
   transition: transform 0.3s ease;  
   transform: scale(1.05);
 }
+
+
+
+
+
+

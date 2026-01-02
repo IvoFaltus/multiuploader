@@ -1,109 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Listing</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f5f5f5;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            width: 350px;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        .checkbox {
-            margin: 10px 0;
-        }
-        .btn {
-            width: 100%;
-            padding: 12px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 18px;
-            margin-top: 10px;
-        }
-        .btn:hover {
-            background: #0056c7;
-        }
-    </style>
-</head>
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Listing</title>
 
-<div class="container">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f5f5f5;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .checkbox {
+      margin: 10px 0;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background: #0056c7;
+    }
+
+    /* TOGGLE BUTTONS */
+    .toggle-group {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #eee;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .toggle-btn.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
     <h2>Create Listing</h2>
 
     <form action="/createListing/" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+      {% csrf_token %}
 
-        <input type="text" name="title" placeholder="Title" required>
+      <input type="text" name="title" placeholder="Title" required />
 
-        <textarea name="description" rows="4" placeholder="Description" required></textarea>
+      <textarea name="description" rows="4" placeholder="Description" required></textarea>
 
-        <input type="number" name="price" placeholder="Price" required>
+      <!-- SALE TYPE TOGGLE -->
+      <div class="toggle-group">
+        <button type="button" class="toggle-btn active" id="buyNowBtn">Kup teď</button>
+        <button type="button" class="toggle-btn" id="auctionBtn">Aukce</button>
+      </div>
 
-        <input type="file" name="photos" multiple required>
+      <!-- hidden value actually submitted -->
+      <input type="hidden" name="sale_type" id="saleType" value="buy_now" />
 
-        <select name="condition" required>
-            <option value="">Stav zboží</option>
-            <option value="new">Nové</option>
-            <option value="opened">Rozbaleno</option>
-            <option value="used_short">Zánovní</option>
-            <option value="used">Použité</option>
-            <option value="repaired">Opravené</option>
-            <option value="damaged">Poškozené</option>
-            <option value="nonfunctional">Nefunkční / na díly</option>
-        </select>
+      <input type="number" name="price" placeholder="Price" required />
 
-        <select name="sale_type" required>
-            <option value="">Typ prodeje</option>
-            <option value="auction">Aukce</option>
-            <option value="buy_now">Kup teď</option>
-        </select>
+      <input type="file" name="photos" multiple required />
 
-        <input type="text" name="bank_account" placeholder="Číslo účtu" required>
+      <select name="condition" required>
+        <option value="">Stav zboží</option>
+        <option value="new">Nové</option>
+        <option value="opened">Rozbaleno</option>
+        <option value="used_short">Zánovní</option>
+        <option value="used">Použité</option>
+        <option value="repaired">Opravené</option>
+        <option value="damaged">Poškozené</option>
+        <option value="nonfunctional">Nefunkční / na díly</option>
+      </select>
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="personal_pickup">
-                Nabídnout osobní předání
-            </label>
-        </div>
+      <input type="text" name="bank_account" placeholder="Číslo účtu" required />
 
-        <input type="text" name="city" placeholder="City" required>
-        <input type="text" name="postal" placeholder="Postal Code" required>
-        <input type="text" name="phone" placeholder="Phone Number" required>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="personal_pickup" />
+          Nabídnout osobní předání
+        </label>
+      </div>
 
-        <div class="checkbox">
-            <label><input type="checkbox" name="platforms" value="bazos"> Bazos</label><br>
-            <label><input type="checkbox" name="platforms" value="sbazar"> Sbazar</label><br>
-            <label><input type="checkbox" name="platforms" value="facebook"> Facebook</label><br>
-            <label><input type="checkbox" name="platforms" value="aukro"> Aukro</label>
-        </div>
+      <input type="text" name="city" placeholder="City" required />
+      <input type="text" name="postal" placeholder="Postal Code" required />
+      <input type="text" name="phone" placeholder="Phone Number" required />
 
-        <button class="btn" id="uploadBtn" type="submit">Submit</button>
+      <div class="checkbox">
+        <label><input type="checkbox" name="platforms" value="bazos" /> Bazos</label><br />
+        <label><input type="checkbox" name="platforms" value="sbazar" /> Sbazar</label><br />
+        <label><input type="checkbox" name="platforms" value="facebook" /> Facebook</label><br />
+        <label><input type="checkbox" name="platforms" value="aukro" /> Aukro</label>
+      </div>
+
+      <button class="btn" id="uploadBtn" type="submit">Submit</button>
     </form>
-</div>
+  </div>
 
+  <script>
+    const buyNowBtn = document.getElementById("buyNowBtn");
+    const auctionBtn = document.getElementById("auctionBtn");
+    const saleTypeInput = document.getElementById("saleType");
+
+    buyNowBtn.onclick = () => {
+      buyNowBtn.classList.add("active");
+      auctionBtn.classList.remove("active");
+      saleTypeInput.value = "buy_now";
+    };
+
+    auctionBtn.onclick = () => {
+      auctionBtn.classList.add("active");
+      buyNowBtn.classList.remove("active");
+      saleTypeInput.value = "auction";
+    };
+  </script>
 </body>
 </html>

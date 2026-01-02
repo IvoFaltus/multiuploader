@@ -1,58 +1,73 @@
-import { backgrounds } from "./script.js";
-import { fadeToBackground } from "./script.js";
-import { toggle } from "./script.js";
+import { backgrounds, fadeToBackground } from "./script.js";
 
+const HOME_EXIT_CLASS = "slide-out-elliptic-top-bck";
+const HOME_EXIT_TIME = 500; // must match CSS (0.5s)
 
-
-
-
-
-
-
-let location = "home";
-console.log(backgrounds);
-
-// local state
-let bgToggle = false;
-
-const delayedRemove = (el, cls, delay) => {
-  setTimeout(() => el.classList.remove(cls), delay);
-};
-
-const switchToPage = (pageClass) => {
-  console.log("switching");
-
-  if (backgrounds.length >= 2) {
-    fadeToBackground(bgToggle ? backgrounds[0] : backgrounds[1]);
-    bgToggle = !bgToggle;
+// ======================================================
+// PAGE SWITCH (HDRI + animation SAFE)
+// ======================================================
+const switchToPage = (pageClass, bgIndex) => {
+  // background is OPTIONAL
+  if (backgrounds?.[bgIndex]) {
+    fadeToBackground(backgrounds[bgIndex]);
   }
 
-  // hide only pages
-  document.querySelectorAll(".page").forEach((p) => p.classList.add("hidden"));
+  const home = document.querySelector(".page-home");
 
-  // show target page after fade
-  const page = document.querySelector(`.${pageClass}`);
-  if (page) delayedRemove(page, "hidden", 1000);
+  let finished = false;
+
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+
+    home?.classList.remove(HOME_EXIT_CLASS);
+    finishSwitch(pageClass);
+  };
+
+  // leaving HOME → try animation, but NEVER block logic
+  if (home && !home.classList.contains("hidden") && pageClass !== "page-home") {
+    home.classList.add(HOME_EXIT_CLASS);
+
+    home.addEventListener("animationend", finish, { once: true });
+
+    // 🔒 fallback if animation never fires
+    setTimeout(finish, HOME_EXIT_TIME + 50);
+  } else {
+    finish();
+  }
 };
 
-document.getElementById("About").addEventListener("click", () => {
-switchToPage("page-about"); 
+// ======================================================
+// FINAL PAGE VISIBILITY SWITCH
+// ======================================================
+const finishSwitch = (pageClass) => {
+  document.querySelectorAll(".page").forEach((p) =>
+    p.classList.add("hidden")
+  );
 
-});
+  const page = document.querySelector(`.${pageClass}`);
+  if (page) page.classList.remove("hidden");
+};
 
-document.getElementById("Contact").addEventListener("click", () => {
-  switchToPage("page-contact"); 
-});
+// ======================================================
+// NAV BUTTONS
+// ======================================================
+document.getElementById("About")?.addEventListener("click", () =>
+  switchToPage("page-about", 1)
+);
 
-document.getElementById("Home").addEventListener("click", () => {
-  switchToPage("page-home"); 
-});
+document.getElementById("Contact")?.addEventListener("click", () =>
+  switchToPage("page-contact", 2)
+);
 
-document.getElementById("Login").addEventListener("click", () => {
-  switchToPage("page-login"); 
-});
+document.getElementById("Home")?.addEventListener("click", () =>
+  switchToPage("page-home", 0)
+);
 
-document.getElementById("Register").addEventListener("click", () => {
-  alert("register")
-  switchToPage("page-register"); 
-});
+document.getElementById("Login")?.addEventListener("click", () =>
+  switchToPage("page-login", 3)
+);
+
+document.getElementById("Register")?.addEventListener("click", () =>
+  switchToPage("page-register", 4)
+);
