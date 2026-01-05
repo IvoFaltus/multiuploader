@@ -4,7 +4,22 @@ import { OrbitControls } from "./three.js-master/examples/jsm/controls/OrbitCont
 // @ts-check
 
 /* ---------- SCENE / CAMERA / RENDERER ---------- */
-/*
+
+const loadingFinished = () => {
+  const loadingElem = document.querySelector(".loading");
+  if (loadingElem) {
+    loadingElem.classList.add("hidden");
+  }
+  const navElem = document.querySelector(".global-nav");
+  if (navElem) {
+    navElem.classList.remove("hidden");
+  }
+  const homePageElem = document.querySelector(".page-home");
+  if (homePageElem) {
+    homePageElem.classList.remove("hidden");
+  }
+};
+
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
@@ -117,65 +132,39 @@ function updateBackgroundFade() {
 
 /* ---------- PRELOAD BACKGROUNDS ---------- */
 
+const bar = document.querySelector(".loading-bar");
+
+let done = 0;
+const total = 5;
+
+const track = (promise) =>
+  promise.finally(() => {
+    done++;
+    if (bar) bar.style.width = `${(done / total) * 100}%`;
+  });
 export const backgrounds = [];
-/*
-loadEXR("/static/models/bg1.exr").then((tex) => {
-  backgrounds[0] = tex;
-  bgCurrent = createBgSphere(tex);
-  bgGroup.add(bgCurrent);
-});
 
 Promise.all([
-  loadEXR("/static/models/nature.exr"),   // [0]
-  loadEXR("/static/models/sky1.exr"),     // [1]
-  loadEXR("/static/models/sky2.exr"),     // [2]
-  loadEXR("/static/models/nature3.exr"),  // [3]
+  track(loadEXR("/static/models/bg1.exr")),
+  track(loadEXR("/static/models/nature.exr")),
+  track(loadEXR("/static/models/sky1.exr")),
+  track(loadEXR("/static/models/sky2.exr")),
+  track(loadEXR("/static/models/nature3.exr")),
 ])
 .then((textures) => {
+  backgrounds[0] = textures[0];
+  backgrounds[1] = textures[1];
+  backgrounds[2] = textures[2];
+  backgrounds[3] = textures[3];
+  backgrounds[4] = textures[4];
 
-  /* ===========================
-     HDRI 1 — nature.exr
-     =========================== */
-  backgrounds[1] = textures[0];
-  textures[0].userData = {
-    rotX: 0,
-    rotY: 0,
-  };
+  bgCurrent = createBgSphere(backgrounds[0]);
+  bgGroup.add(bgCurrent);
 
-  /* ===========================
-     HDRI 2 — sky1.exr
-     =========================== */
-  backgrounds[2] = textures[1];
-  textures[1].userData = {
-    rotX: 0,
-    rotY: Math.PI / 2,
-  };
-
-  /* ===========================
-     HDRI 3 — sky2.exr
-     =========================== */
-  backgrounds[3] = textures[2];
-  textures[2].userData = {
-    rotX: THREE.MathUtils.degToRad(10),
-    rotY: Math.PI,
-  };
-
-  /* ===========================
-     HDRI 4 — nature3.exr
-     =========================== */
-  backgrounds[4] = textures[3];
-  textures[3].userData = {
-    rotX: 0,
-    rotY: -Math.PI / 2,
-  };
-
-  // ✅ everything loaded and configured here
-  // safe to enable UI / first background
-
+  if (bar) bar.style.width = "100%";
+  setTimeout(loadingFinished, 200);
 })
-.catch((err) => {
-  console.error("Background load failed:", err);
-});
+.catch(console.error);
 
 /* ---------- ANIMATION LOOP ---------- */
 
@@ -192,3 +181,5 @@ function animate() {
 }
 
 animate();
+// ===== LOADING BAR CONTROL =====
+

@@ -23,48 +23,53 @@
   <div class="canvas-shadow"></div>
 
   <body>
-    <!-- ===== PAGE: HOME ===== -->
-    <!-- ===== PAGE: HOME ===== -->
+    <div class="loading ">
+      <div class="loading-track">
+        <div class="loading-bar"></div>
+      </div>
+      <div class="loading-text">Loading…</div>
+    </div>
+
+    <div class="global-nav glass-nav hidden">
+      <div class="nav-item" id="About">
+        <button class="btn">
+          <img src="static/icons/About.svg" width="44" />
+        </button>
+        <p>Purpose</p>
+      </div>
+
+      <div class="nav-item" id="Contact">
+        <button class="btn">
+          <img src="static/icons/Contact.svg" width="44" />
+        </button>
+        <p>Contact</p>
+      </div>
+
+      <div class="nav-item" id="Home">
+        <button class="btn">
+          <img src="static/icons/Home.svg" width="44" />
+        </button>
+        <p>Home</p>
+      </div>
+
+      <div class="nav-item" id="Login">
+        <button class="btn">
+          <img src="static/icons/Login.svg" width="44" />
+        </button>
+        <p>Login</p>
+      </div>
+
+      <div class="nav-item" id="Register">
+        <button class="btn">
+          <img src="static/icons/Register.svg" width="44" />
+        </button>
+        <p>Register</p>
+      </div>
+    </div>
     <!-- ===== PAGE: HOME ===== -->
     <div class="page page-home hidden">
       <div class="home-wrapper">
         <!-- NAV -->
-        <div class="home-container glass-nav">
-          <div class="nav-item" id="About">
-            <button class="btn">
-              <img src="static/icons/About.svg" width="44" />
-            </button>
-            <p>Purpose</p>
-          </div>
-
-          <div class="nav-item" id="Contact">
-            <button class="btn">
-              <img src="static/icons/Contact.svg" width="44" />
-            </button>
-            <p>Contact</p>
-          </div>
-
-          <div class="nav-item" id="Home">
-            <button class="btn">
-              <img src="static/icons/Home.svg" width="44" />
-            </button>
-            <p>Home</p>
-          </div>
-
-          <div class="nav-item" id="Login">
-            <button class="btn">
-              <img src="static/icons/Login.svg" width="44" />
-            </button>
-            <p>Login</p>
-          </div>
-
-          <div class="nav-item" id="Register">
-            <button class="btn">
-              <img src="static/icons/Register.svg" width="44" />
-            </button>
-            <p>Register</p>
-          </div>
-        </div>
 
         <!-- CONTENT -->
         <div class="home-content">
@@ -89,57 +94,65 @@
     </div>
 
     <!-- ===== PAGE: LOGIN ===== -->
-    <div class="page page-login ">
-
+    <div class="page page-login hidden">
       <div class="loginBody">
-        
-      <div class="login-box">
-        <h2 class="login-title">Login</h2>
-        <form method="POST" action="/login/check/" class="login-form">
-          {% csrf_token %}
-          <input
-            class="login-input"
-            type="text"
-            name="username"
-            placeholder="Username"
-            required
-          />
-          <input
-            class="login-input"
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-          />
-          <button class="btn login-submit" type="submit">Login</button>
-        </form>
+        <div class="login-box">
+          <div class="loginIcon"></div>
+          <h2 class="login-title">Log in to your account</h2>
+          <form method="POST" action="/login/check/" class="login-form">
+            {% csrf_token %}
+            <input
+              class="login-input"
+              type="text"
+              name="username"
+              placeholder="Username"
+              required
+            />
+            <input
+              class="login-input"
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+            />
+            <button class="btn login-submit" type="submit">Login</button>
+          </form>
+        </div>
       </div>
-      </div>
-
     </div>
 
     <!-- ===== PAGE: REGISTER ===== -->
+    <!-- ===== PAGE: REGISTER ===== -->
     <div class="page page-register hidden">
-      <h2 class="register-title">Create Account</h2>
+      <div class="registerBody">
+        <div class="register-box">
+          <div class="registerIcon"></div>
 
-      <form action="/register/check/" method="POST" class="register-form">
-        {% csrf_token %}
-        <input
-          class="register-input"
-          type="text"
-          name="username"
-          placeholder="Username"
-          required
-        />
-        <input
-          class="register-input"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
-        <button class="btn register-submit" type="submit">Register</button>
-      </form>
+          <h2 class="register-title">Create Account</h2>
+
+          <form action="/register/check/" method="POST" class="register-form">
+            {% csrf_token %}
+
+            <input
+              class="register-input"
+              type="text"
+              name="username"
+              placeholder="Username"
+              required
+            />
+
+            <input
+              class="register-input"
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+            />
+
+            <button class="btn register-submit" type="submit">Register</button>
+          </form>
+        </div>
+      </div>
     </div>
 
     <!-- ===== PAGE: ABOUT ===== -->
