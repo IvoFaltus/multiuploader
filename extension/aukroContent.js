@@ -207,7 +207,7 @@ function addPhotosButton(anchor) {
 // ======================================================
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action !== "fillAukroForm") return;
-
+  console.log("[AUKRO] fillAukroForm message received");
   data = msg.payload; // make accessible for button handler
 
   // ----------------------------------------------

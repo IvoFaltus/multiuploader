@@ -53,7 +53,6 @@
       background: #0056c7;
     }
 
-    /* TOGGLE BUTTONS */
     .toggle-group {
       display: flex;
       gap: 10px;
@@ -86,19 +85,52 @@
       {% csrf_token %}
 
       <input type="text" name="title" placeholder="Title" required />
-
       <textarea name="description" rows="4" placeholder="Description" required></textarea>
 
-      <!-- SALE TYPE TOGGLE -->
+      <!-- CATEGORY -->
+      <select name="category" required>
+        <option value="">Category</option>
+        <option value="auto">Auto</option>
+        <option value="deti">Děti</option>
+        <option value="dum_a_zahrada">Dům a zahrada</option>
+        <option value="elektro">Elektro</option>
+        <option value="foto">Foto</option>
+        <option value="hudba">Hudba</option>
+        <option value="knihy">Knihy</option>
+        <option value="mobily">Mobily</option>
+        <option value="motorky">Motorky</option>
+        <option value="nabytek">Nábytek</option>
+        <option value="obleceni">Oblečení</option>
+        <option value="pc">PC</option>
+        <option value="prace">Práce</option>
+        <option value="reality">Reality</option>
+        <option value="sluzby">Služby</option>
+        <option value="sport">Sport</option>
+        <option value="stroje">Stroje</option>
+        <option value="vstupenky">Vstupenky</option>
+        <option value="zvirata">Zvířata</option>
+        <option value="ostatni">Ostatní</option>
+      </select>
+
+      <!-- PRICE TYPE -->
+      <select name="price_type" required>
+        <option value="">Vyberte jednu z možností</option>
+        <option value="dohodou">Dohodou</option>
+        <option value="nabidnete">Nabídněte</option>
+        <option value="nerozhoduje">Nerozhoduje</option>
+        <option value="v_textu">V textu</option>
+        <option value="zdarma">Zdarma</option>
+      </select>
+
+      <!-- SALE TYPE -->
       <div class="toggle-group">
         <button type="button" class="toggle-btn active" id="buyNowBtn">Kup teď</button>
         <button type="button" class="toggle-btn" id="auctionBtn">Aukce</button>
       </div>
 
-      <!-- hidden value actually submitted -->
       <input type="hidden" name="sale_type" id="saleType" value="buy_now" />
 
-      <input type="number" name="price" placeholder="Price" required />
+      <input type="number" name="price" placeholder="Price" />
 
       <input type="file" name="photos" multiple required />
 
@@ -112,6 +144,10 @@
         <option value="damaged">Poškozené</option>
         <option value="nonfunctional">Nefunkční / na díly</option>
       </select>
+
+      <!-- CONTACT -->
+      <input type="email" name="email" placeholder="E-mail (nebude zveřejněn)" required />
+      <input type="password" name="password" placeholder="Vaše heslo (pro úpravu/smazání inzerátu)" required />
 
       <input type="text" name="bank_account" placeholder="Číslo účtu" required />
 
@@ -133,7 +169,7 @@
         <label><input type="checkbox" name="platforms" value="aukro" /> Aukro</label>
       </div>
 
-      <button class="btn" id="uploadBtn" type="submit">Submit</button>
+      <button id="uploadBtn" class="btn" type="button">Submit</button>
     </form>
   </div>
 

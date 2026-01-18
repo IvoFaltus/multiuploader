@@ -24,6 +24,13 @@
     {
       "matches": ["https://aukro.cz/*", "https://www.aukro.cz/*"],
       "js": ["aukroContent.js"]
+    },
+    {
+       "matches": [
+        "*://bazos.cz/*",
+        "*://www.bazos.cz/*"
+      ],
+      "js": ["bazosContent.js"]
     }
   ],
 

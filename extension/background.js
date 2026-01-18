@@ -1,30 +1,67 @@
-// background.js
+// background.js — FIXED (null-safe, opens tabs even with empty payload)
 
 const AUKRO_URL =
-    "https://aukro.cz/jednoduche-vystaveni?simpleFormOnDesktopAllowed=true";
+  "https://aukro.cz/jednoduche-vystaveni?simpleFormOnDesktopAllowed=true";
+
+const BAZOS_URL =
+  "https://www.bazos.cz/pridat-inzerat.php";
 
 chrome.runtime.onMessage.addListener((msg, sender) => {
-    if (msg.action !== "startUpload") return;
+  const data = msg.payload || {};
+  const platforms = Array.isArray(data.platforms) ? data.platforms : [];
 
-    const data = msg.payload;
+  // ==================================================
+  // AUKRO
+  // ==================================================
+  if (msg.action === "aukro") {
+    console.log("Starting Aukro upload with data:", data);
 
-    // open Aukro listing page
+    // open Aukro ALWAYS, fill only if requested
     chrome.tabs.create({ url: AUKRO_URL }, (tab) => {
-        const tabId = tab.id;
+      const tabId = tab.id;
 
-        // wait until Aukro page is fully loaded
-        const listener = (updatedTabId, info) => {
-            if (updatedTabId === tabId && info.status === "complete") {
-                chrome.tabs.onUpdated.removeListener(listener);
+      const listener = (updatedTabId, info) => {
+        if (updatedTabId === tabId && info.status === "complete") {
+          chrome.tabs.onUpdated.removeListener(listener);
 
-                // send data to aukroContent.js
-                chrome.tabs.sendMessage(tabId, {
-                    action: "fillAukroForm",
-                    payload: data
-                });
-            }
-        };
+          if (platforms.includes("aukro")) {
+            chrome.tabs.sendMessage(tabId, {
+              action: "fillAukroForm",
+              payload: data,
+            });
+          }
+        }
+      };
 
-        chrome.tabs.onUpdated.addListener(listener);
+      chrome.tabs.onUpdated.addListener(listener);
     });
+    return;
+  }
+
+  // ==================================================
+  // BAZOS
+  // ==================================================
+  if (msg.action === "bazos") {
+    console.log("Opening Bazos with data:", data);
+
+    // open Bazos ALWAYS, fill only if requested
+    chrome.tabs.create({ url: BAZOS_URL }, (tab) => {
+      const tabId = tab.id;
+
+      const listener = (updatedTabId, info) => {
+        if (updatedTabId === tabId && info.status === "complete") {
+          chrome.tabs.onUpdated.removeListener(listener);
+
+          if (platforms.includes("bazos")) {
+            chrome.tabs.sendMessage(tabId, {
+              action: "fillBazosForm",
+              payload: data,
+            });
+          }
+        }
+      };
+
+      chrome.tabs.onUpdated.addListener(listener);
+    });
+  }
 });
