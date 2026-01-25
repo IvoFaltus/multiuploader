@@ -1,76 +1,69 @@
 // ======================================================
-// BAZOS CONTENT SCRIPT — FINAL FIXED VERSION
+// BAZOS CONTENT SCRIPT — FIXED, STABLE VERSION
 // ======================================================
+function injectMyFont() {
+  if (document.getElementById("myfont-style")) return;
 
+  const style = document.createElement("style");
+  style.id = "myfont-style";
+  style.textContent = `
+    @font-face {
+      font-family: "MyFont";
+      src: url("${chrome.runtime.getURL("fonts/GreaterTheory.otf")}") format("opentype");
+    }
+  `;
+  document.head.appendChild(style);
+}
+function getDropzoneInstance() {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.textContent = `
+      (function() {
+        if (window.myDropzone) {
+          window.dispatchEvent(
+            new CustomEvent("DROPZONE_READY", { detail: window.myDropzone })
+          );
+        }
+      })();
+    `;
+    document.documentElement.appendChild(script);
+    script.remove();
+
+    window.addEventListener("DROPZONE_READY", (e) => {
+      resolve(e.detail);
+    }, { once: true });
+  });
+}
+
+function base64ToFile(base64, filename = "photo.jpg") {
+  const [meta, content] = base64.split(",");
+  const mime = meta.match(/data:(.*);base64/)?.[1] || "image/jpeg";
+  const bytes = atob(content);
+  const arr = new Uint8Array(bytes.length);
+
+  for (let i = 0; i < bytes.length; i++) {
+    arr[i] = bytes.charCodeAt(i);
+  }
+
+  return new File([arr], filename, { type: mime });
+}
 // ======================================================
-// #region GLOBAL STATE
+// GLOBAL STATE
 // ======================================================
 let data = null;
-let smsVerified = false;
-// #endregion
+
+
+
+const priceTypeMap = {
+  "Dohodou": "2",
+  "Nabídněte": "3",
+  "Nerozhoduje": "4",
+  "V textu": "5",
+  "Zdarma": "6"
+};
 
 // ======================================================
-// #region GLOBAL CLICK HELPER (SHARED)
-// ======================================================
-function humanClick(el) {
-  if (!el) return false;
-  el.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-  el.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-  el.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-  return true;
-}
-// #endregion
-function clickAutoAndPridatUntilPhone(onSuccess) {
-  
-    // SUCCESS condition
-    if (document.querySelector("input#teloverit")) {
-      clearInterval(t);
-      console.log("[BAZOS] phone input detected, navigation unlocked");
-      onSuccess?.(); // 👈 continue normal logic
-      return;
-    }
-
-    const auto = document.querySelector('body > div > div.listalogor > div.listalogop > a:nth-child(3)');
-    const add = document.querySelector('a[href="/pridat-inzerat.php"]');
-
-    if (auto) {
-      humanClick(auto);
-      console.log("[BAZOS] Auto clicked");
-    }
-    
-    
-  
-}
-
-// ======================================================
-// #region BAZOS NAVIGATION FLOW
-// ======================================================
-function clickAuto(cb) {
-  const t = setInterval(() => {
-    const auto = document.querySelector('a[href="https://auto.bazos.cz/"]');
-    if (!auto) return;
-
-    humanClick(auto);
-    clearInterval(t);
-    console.log("[BAZOS] Auto clicked");
-    cb?.();
-  }, 200);
-}
-
-function clickPridatInzerat() {
-  const t = setInterval(() => {
-    const add = document.querySelector('a[href="/pridat-inzerat.php"]');
-    if (!add) return;
-
-    humanClick(add);
-    clearInterval(t);
-    console.log("[BAZOS] Přidat inzerát clicked");
-  }, 200);
-}
-// #endregion
-
-// ======================================================
-// #region UTIL — WAIT
+// UTIL — WAIT FOR ELEMENT
 // ======================================================
 function waitForElement(fn, cb, interval = 200) {
   const t = setInterval(() => {
@@ -81,138 +74,270 @@ function waitForElement(fn, cb, interval = 200) {
     }
   }, interval);
 }
-// #endregion
 
 // ======================================================
-// #region UTIL — MAPPERS
+// SAFE VALUE SETTER (INPUT / TEXTAREA / SELECT)
 // ======================================================
-function mapRubrikaToBazos(value) {
-  switch (value) {
-    case "dum_a_zahrada":
-      return "dum";
-    case "mobily":
-      return "mobil";
-    default:
-      return value || "";
-  }
-}
-
-function mapPriceTypeToBazos(value) {
-  switch (value) {
-    case "dohodou":
-      return "2";
-    case "nabidnete":
-      return "3";
-    case "nerozhoduje":
-      return "4";
-    case "v_textu":
-      return "5";
-    case "zdarma":
-      return "6";
-    default:
-      return "1";
-  }
-}
-// #endregion
-
-// ======================================================
-// #region SAFE INPUT SETTER
-// ======================================================
-function setInputValue(el, value) {
+function setValue(el, value) {
   if (!el) return;
 
-  const setter = Object.getOwnPropertyDescriptor(
-    HTMLInputElement.prototype,
-    "value",
-  ).set;
+  const proto =
+    el instanceof HTMLInputElement
+      ? HTMLInputElement.prototype
+      : el instanceof HTMLTextAreaElement
+        ? HTMLTextAreaElement.prototype
+        : el instanceof HTMLSelectElement
+          ? HTMLSelectElement.prototype
+          : null;
 
+  if (!proto) return;
+
+  const setter = Object.getOwnPropertyDescriptor(proto, "value").set;
   el.focus();
   setter.call(el, value);
   el.dispatchEvent(new Event("input", { bubbles: true }));
   el.dispatchEvent(new Event("change", { bubbles: true }));
   el.blur();
 }
-// #endregion
 
-// ======================================================
-// #region SMS VERIFICATION
-// ======================================================
-function detectSmsVerified() {
-  return !document.getElementById("klic");
+
+function addDebugCube() {
+
+
+  const cube = document.createElement("div");
+  cube.id = "DEBUG_CUBE";
+  cube.textContent = "DEBUG";
+
+  cube.style.cssText = `
+    width: 200px;
+    height: 200px;
+    background: red;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 999999;
+    margin: 20px;
+  `;
+
+  // just add that cube to body
+  document.body.appendChild(cube);
+
+  console.log("[DEBUG] red cube injected");
 }
 
-function waitForSmsVerification(cb) {
-  const t = setInterval(() => {
-    if (detectSmsVerified()) {
-      clearInterval(t);
-      smsVerified = true;
-      cb();
+function addPhotosButton(anchor) {
+  if (!anchor || document.getElementById("uploadBtn2")) return;
+  
+  injectMyFont();
+
+  const btn = document.createElement("button");
+  btn.id = "uploadBtn2";
+  btn.type = "button";
+  btn.textContent = "Upload photos";
+
+  btn.style.cssText = `
+    margin-left: 12px;
+    padding: 8px 14px;
+    background: green;
+    color: white;
+    font-family: "MyFont", sans-serif;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    z-index: 999999;
+    position: relative;
+  `;
+
+  // 🔑 IMPORTANT CHANGE — do NOT append into parent
+  anchor.insertAdjacentElement("afterend", btn);
+
+btn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+
+  if (!Array.isArray(data?.photos) || data.photos.length === 0) {
+    console.error("[BAZOS] no photos in data.photos");
+    return;
+  }
+
+  // wait for Dropzone hidden input
+  let input;
+  for (let i = 0; i < 30; i++) {
+    input = document.querySelector('input[type="file"].dz-hidden-input');
+    if (input) break;
+    await new Promise(r => setTimeout(r, 50));
+  }
+
+  if (!input) {
+    console.error("[BAZOS] Dropzone hidden input not found");
+    return;
+  }
+
+  const dt = new DataTransfer();
+
+  data.photos.slice(0, 20).forEach((p, i) => {
+    let file = null;
+
+    if (p instanceof File) {
+      file = p;
+    } else if (p instanceof Blob) {
+      file = new File([p], `photo_${i}.jpg`, {
+        type: p.type || "image/jpeg"
+      });
+    } else if (typeof p === "string") {
+      file = base64ToFile(p, `photo_${i}.jpg`);
+    } else if (p?.data && typeof p.data === "string") {
+      file = base64ToFile(p.data, p.name || `photo_${i}.jpg`);
     }
-  }, 300);
+
+    if (file) dt.items.add(file);
+  });
+
+  input.files = dt.files;
+
+  // 🔑 THIS triggers Dropzone upload
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+
+  console.log("[BAZOS] photos injected:", dt.files.length);
+});
+
+
+
+
+  console.log("[BAZOS] upload button injected");
 }
-// #endregion
 
 // ======================================================
-// #region MAIN FORM FILL
+// PHONE VERIFICATION PAGE
 // ======================================================
-function fillMainForm() {
-  if (!smsVerified || !data) return;
-
-  setInputValue(document.getElementById("nadpis"), data.title);
-  setInputValue(document.getElementById("popis"), data.description);
-  setInputValue(document.getElementById("cena"), data.price);
-  setInputValue(
-    document.getElementById("cenavyber"),
-    mapPriceTypeToBazos(data.priceType),
-  );
-  setInputValue(document.getElementById("lokalita"), data.postal);
-  setInputValue(
-    document.querySelector('select[name="rubrikyvybrat"]'),
-    mapRubrikaToBazos(data.category),
-  );
-
-  setInputValue(document.getElementById("jmeno"), data.name || "");
-  setInputValue(document.getElementById("telefoni"), data.phone);
-  setInputValue(document.getElementById("maili"), data.email);
-  setInputValue(document.getElementById("heslobazar"), data.password);
-
-  console.log("[BAZOS] main form filled");
-}
-// #endregion
-
-// ======================================================
-// #region PHONE + SUBMIT
-// ======================================================
-function fillnumber(phone) {
+function fillPhoneVerification(phone) {
   waitForElement(
-    () => document.querySelector('input[name="teloverit"]'),
-    (el) => setInputValue(el, phone),
+    () => document.querySelector("#teloverit"),
+    (el) => setValue(el, phone),
   );
 
   waitForElement(
     () => document.querySelector("#podminky"),
-    (btn) => (btn.checked = true),
+    (el) => (el.checked = true),
   );
 
   waitForElement(
-    () => document.querySelector('input[type="submit"][name="Submit"]'),
+    () =>
+      document.querySelector('form[name="formovereni"] input[type="submit"]'),
     (btn) => btn.click(),
   );
 }
-// #endregion
 
 // ======================================================
-// #region ENTRY POINT
+// MAIN FORM DETECTION
 // ======================================================
+function isMainFormActive() {
+  return (
+    document.querySelector("#nadpis") &&
+    document.querySelector("#popis") &&
+    document.querySelector("#cena") &&
+    document.querySelector("#lokalita") &&
+    document.querySelector("#jmeno") &&
+    document.querySelector("#telefoni") &&
+    document.querySelector("#heslobazar")
+  );
+}
+
+// ======================================================
+// MAIN FORM FILL (NO NAVIGATION ELEMENTS)
+// ======================================================
+function fillMainForm() {
+  if (!data || !isMainFormActive()) return;
+
+  setValue(document.getElementById("nadpis"), data.title);
+  setValue(document.getElementById("popis"), data.description);
+  setValue(document.getElementById("cena"), data.price);
+  setValue(document.getElementById("lokalita"), data.postal);
+  setValue(document.getElementById("jmeno"), data.name || "");
+  setValue(document.getElementById("telefoni"), data.phone);
+  setValue(document.getElementById("maili"), data.email);
+  setValue(document.getElementById("heslobazar"), data.password);
+
+  const priceType = document.querySelector("#cenavyber");
+
+  setValue(priceType, String(priceTypeMap[data.priceType] || ""));
+
+  console.log("[BAZOS] main form filled");
+}
+
+// ======================================================
+// CATEGORY (RUBRIKA) — SET ONCE, NAVIGATION CONTROL
+// ======================================================
+function setCategoryOnce() {
+  chrome.storage.local.get(["bazosData", "categorySet"], (res) => {
+    if (res.categorySet) return;
+
+    data = res.bazosData;
+    if (!data) return;
+
+    const select = document.querySelector("select[name='rubrikyvybrat']");
+    if (!select) return;
+
+    // this triggers form.submit() → page reload (EXPECTED)
+    setValue(select, String(data.category));
+
+    chrome.storage.local.set({ categorySet: true });
+  });
+}
+
+// ======================================================
+// INIT — RUN ON EVERY LOAD
+// ======================================================
+function init() {
+  if (!data) return;
+  waitForElement(
+  () => document.querySelector("#uploadbutton"),
+  (el) => addPhotosButton(el)
+);
+  // phone verification
+  if (document.querySelector("#teloverit")) {
+    fillPhoneVerification(data.phone);
+    return;
+  }
+
+  // category navigation (runs once)
+  setCategoryOnce();
+
+  // main form
+  if (isMainFormActive()) {
+    fillMainForm();
+  }
+}
+
+// ======================================================
+// ENTRY POINT
+// ======================================================
+
+// restore data on reload
+chrome.storage.local.get("bazosData", (res) => {
+  data = res.bazosData;
+  init();
+  
+});
+
+// receive fresh data
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action !== "fillBazosForm") return;
-  data = msg.payload;
-  clickAutoAndPridatUntilPhone(() => {
-    fillnumber(data.phone);
 
-    waitForSmsVerification(() => {
-      fillMainForm();
-    });
+  data = msg.payload;
+
+  // reset one-time navigation flags for new listing
+  chrome.storage.local.set({
+    bazosData: msg.payload,
+    categorySet: false,
   });
+
+  init();
 });
-// #endregion

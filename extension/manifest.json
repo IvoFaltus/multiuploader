@@ -9,7 +9,8 @@
   "host_permissions": [
     "https://aukro.cz/*",
     "https://www.aukro.cz/*",
-    "https://www.bazos.cz/*"
+    "https://www.bazos.cz/*",
+    "https://www.sbazar.cz/*"
   ],
 
   "background": {
@@ -26,9 +27,15 @@
       "js": ["aukroContent.js"]
     },
     {
+      "matches": ["https://sbazar.cz/*", "https://www.sbazar.cz/*"],
+      "js": ["sbazar.js"]
+    },
+    {
        "matches": [
         "*://bazos.cz/*",
-        "*://www.bazos.cz/*"
+        "*://www.bazos.cz/*",
+        "*://auto.bazos.cz/*",
+        "*://*.bazos.cz/*"
       ],
       "js": ["bazosContent.js"]
     }
@@ -36,6 +43,6 @@
 
   "web_accessible_resources": [{
     "resources": ["fonts/GreaterTheory.otf"],
-    "matches": ["https://*.aukro.cz/*"]
+    "matches": ["https://*.aukro.cz/*", "https://*.bazos.cz/*"]
   }]
 }

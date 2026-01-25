@@ -3,8 +3,9 @@
 const AUKRO_URL =
   "https://aukro.cz/jednoduche-vystaveni?simpleFormOnDesktopAllowed=true";
 
-const BAZOS_URL =
-  "https://www.bazos.cz/pridat-inzerat.php";
+const BAZOS_URL = "https://auto.bazos.cz/pridat-inzerat.php";
+
+const SBazar_URL = "https://www.sbazar.cz/nova-nabidka";
 
 chrome.runtime.onMessage.addListener((msg, sender) => {
   const data = msg.payload || {};
@@ -64,4 +65,34 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
       chrome.tabs.onUpdated.addListener(listener);
     });
   }
-});
+  // ==================================================
+  // SBAZAR
+  // ==================================================
+  if (msg.action === "sbazar") {
+    console.log("Opening Sbazar with data:", data);
+
+    // open Sbazar ALWAYS, fill only if requested
+    chrome.tabs.create({ url: SBazar_URL }, (tab) => {
+      const tabId = tab.id;
+
+      const listener = (updatedTabId, info) => {
+        if (updatedTabId === tabId && info.status === "complete") {
+          chrome.tabs.onUpdated.removeListener(listener);
+
+          if (platforms.includes("sbazar")) {
+            chrome.tabs.sendMessage(tabId, {
+              action: "fillSbazarForm",
+              payload: data,
+            });
+          }
+        }
+      };
+
+      chrome.tabs.onUpdated.addListener(listener);
+    });
+  }
+
+
+
+  
+});    

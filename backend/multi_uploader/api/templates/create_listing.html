@@ -92,7 +92,7 @@
         <option value="">Category</option>
         <option value="auto">Auto</option>
         <option value="deti">Děti</option>
-        <option value="dum_a_zahrada">Dům a zahrada</option>
+        <option value="dum">Dům a zahrada</option>
         <option value="elektro">Elektro</option>
         <option value="foto">Foto</option>
         <option value="hudba">Hudba</option>
@@ -115,11 +115,11 @@
       <!-- PRICE TYPE -->
       <select name="price_type" required>
         <option value="">Vyberte jednu z možností</option>
-        <option value="dohodou">Dohodou</option>
-        <option value="nabidnete">Nabídněte</option>
-        <option value="nerozhoduje">Nerozhoduje</option>
-        <option value="v_textu">V textu</option>
-        <option value="zdarma">Zdarma</option>
+        <option value="Dohodou">Dohodou</option>
+        <option value="Nabídněte">Nabídněte</option>
+        <option value="Nerozhoduje">Nerozhoduje</option>
+        <option value="V textu">V textu</option>
+        <option value="Zdarma">Zdarma</option>
       </select>
 
       <!-- SALE TYPE -->
@@ -146,6 +146,7 @@
       </select>
 
       <!-- CONTACT -->
+      <input type="text" name="name" placeholder="Name" required />
       <input type="email" name="email" placeholder="E-mail (nebude zveřejněn)" required />
       <input type="password" name="password" placeholder="Vaše heslo (pro úpravu/smazání inzerátu)" required />
 
@@ -168,7 +169,8 @@
         <label><input type="checkbox" name="platforms" value="facebook" /> Facebook</label><br />
         <label><input type="checkbox" name="platforms" value="aukro" /> Aukro</label>
       </div>
-
+      <label for="displayPhone">Zobrazit cislo</label>
+      <input type="checkbox" value="dislay number" name='displayPhone'>
       <button id="uploadBtn" class="btn" type="button">Submit</button>
     </form>
   </div>
