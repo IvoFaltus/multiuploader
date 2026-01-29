@@ -38,6 +38,9 @@
         "*://*.bazos.cz/*"
       ],
       "js": ["bazosContent.js"]
+    },{
+      "matches": ["https://aukro.cz/*", "https://www.aukro.cz/*", "https://sbazar.cz/*", "https://www.sbazar.cz/*", "*://bazos.cz/*", "*://www.bazos.cz/*", "*://auto.bazos.cz/*", "*://*.bazos.cz/*"],
+      "js": ["sync.js"]
     }
   ],
 

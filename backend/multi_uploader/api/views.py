@@ -1,22 +1,30 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from .models import Listing ,ListingPlatform, Platform
+from .models import Listing ,ListingPlatform, Platform, ListingImage
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 import json
 
 
-def createListingFunc(owner, title, description, price, city, postal, phone, condition, platforms):
+def createListingFunc(owner, title, description, category, price_type, sale_type, price, condition, name, email, bank_account, city, postal, phone, personal_pickup, display_phone, platforms, images):
     listing = Listing.objects.create(
         owner=owner,
         title=title,
         description=description,
+        category=category,
+        price_type=price_type,
+        sale_type=sale_type,
         price=price,
+        condition=condition,
+        name=name,
+        email=email,
+        bank_account=bank_account,
         city=city,
         postal=postal,
         phone=phone,
-        condition=condition
+        personal_pickup=personal_pickup,
+        display_phone=display_phone
     )
 
     for platform in platforms:
@@ -26,6 +34,12 @@ def createListingFunc(owner, title, description, price, city, postal, phone, con
                 listing=listing,
                 platform=matched_platform
             )
+
+    for image in images:
+        ListingImage.objects.create(
+            listing=listing,
+            image=image
+        )
 
     return listing
 
@@ -87,17 +101,22 @@ def deepweb_page(request):
     data = {}
     i = 1
     for l in listings:
-        data[f"Listing {i}"] = {
+        data[f"Listing {i}"] = { 
     "title": l.title,
     "description": l.description,
-    "price": float(l.price),
+    "price":  str(l.price) if l.price is not None else None,
     "city": l.city,
     "postal": l.postal,
     "phone": l.phone,
     "condition": l.condition,
-    "platforms": [listing_platform.platform.name for listing_platform in ListingPlatform.objects.filter(listing=l)]
+    "platforms": [listing_platform.platform.name for listing_platform in ListingPlatform.objects.filter(listing=l)],
+    "pictures": [img.image.url for img in ListingImage.objects.filter(listing=l)]
 }
         i += 1
+        
+    
+        
+        
 
     return render(request, 'deepweb.html', {"data_json": json.dumps(data)})
 
@@ -121,32 +140,95 @@ def register(request):
 
 
 
+from django.shortcuts import redirect
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+from decimal import Decimal, InvalidOperation
+
+from .models import Listing, ListingImage, Platform, ListingPlatform
+
+
 @login_required(login_url='home')
 def create_listing(request):
     if request.method != "POST":
         return HttpResponse("Invalid method", status=405)
 
-    title = request.POST.get("title")
-    description = request.POST.get("description")
-    price = request.POST.get("price")
-    city = request.POST.get("city")
-    postal = request.POST.get("postal")
-    phone = request.POST.get("phone")
-    condition = request.POST.get("condition")
-    platforms = request.POST.getlist("platforms")
+    # -------- SAFE FIELD READING --------
 
-    createListingFunc(
+    def get(name):
+        return request.POST.get(name, "").strip()
+
+    title = get("title")
+    description = get("description")
+    category = get("category")
+    price_type = get("price_type")
+    sale_type = get("sale_type")
+    condition = get("condition")
+
+    name = get("name")
+    email = get("email")
+    bank_account = get("bank_account")
+
+    city = get("city")
+    postal = get("postal")
+    phone = get("phone")
+
+    # -------- SAFE PRICE PARSING --------
+
+    price_raw = get("price")
+    price = None
+
+    if price_raw != "":
+        try:
+            price = Decimal(price_raw.replace(",", "."))
+        except InvalidOperation:
+            return HttpResponse("Invalid price format", status=400)
+
+    # -------- CHECKBOXES --------
+
+    personal_pickup = "personal_pickup" in request.POST
+    display_phone = "displayPhone" in request.POST
+
+    # -------- PASSWORD (HASHED) --------
+
+    raw_password = get("password")
+    password = make_password(raw_password) if raw_password else None
+
+    # -------- CREATE LISTING --------
+
+    listing = Listing.objects.create(
         owner=request.user,
         title=title,
         description=description,
+        category=category,
+        price_type=price_type,
+        sale_type=sale_type,
         price=price,
+        condition=condition,
+        name=name,
+        email=email,
+        bank_account=bank_account,
         city=city,
         postal=postal,
         phone=phone,
-        condition=condition,
-        platforms=platforms
+        personal_pickup=personal_pickup,
+        display_phone=display_phone,
     )
 
-    return redirect('deepweb')  # URL name
+    # -------- SAVE IMAGES --------
 
+    photos = request.FILES.getlist("photos")
+    for photo in photos:
+        ListingImage.objects.create(listing=listing, image=photo)
+
+    # -------- SAVE PLATFORMS --------
+
+    platforms = request.POST.getlist("platforms")
+    for p in platforms:
+        platform_obj = Platform.objects.filter(name=p).first()
+        if platform_obj:
+            ListingPlatform.objects.create(listing=listing, platform=platform_obj)
+
+    return redirect("deepweb")
     

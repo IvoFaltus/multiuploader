@@ -6,6 +6,9 @@ document.addEventListener(
   "click",
   async (e) => {
     const btn = e.target.closest("#uploadBtn");
+
+    
+
     if (!btn) return;
 
     // stop page scripts + navigation
@@ -100,3 +103,14 @@ document.addEventListener(
   },
   true,
 ); // capture phase prevents site handlers
+
+
+document.querySelector("#sync").addEventListener("click", async (e) => {
+
+
+
+chrome.runtime.sendMessage({
+  action: "sync",
+});
+
+});

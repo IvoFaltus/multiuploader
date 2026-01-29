@@ -81,98 +81,113 @@
   <div class="container">
     <h2>Create Listing</h2>
 
-    <form action="/createListing/" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
+    <form action="/createListing/" method="POST" enctype="multipart/form-data" onsubmit="return validateForm(this)">
+  {% csrf_token %}
 
-      <input type="text" name="title" placeholder="Title" required />
-      <textarea name="description" rows="4" placeholder="Description" required></textarea>
+  <input type="text" name="title" placeholder="Title" />
 
-      <!-- CATEGORY -->
-      <select name="category" required>
-        <option value="">Category</option>
-        <option value="auto">Auto</option>
-        <option value="deti">Děti</option>
-        <option value="dum">Dům a zahrada</option>
-        <option value="elektro">Elektro</option>
-        <option value="foto">Foto</option>
-        <option value="hudba">Hudba</option>
-        <option value="knihy">Knihy</option>
-        <option value="mobily">Mobily</option>
-        <option value="motorky">Motorky</option>
-        <option value="nabytek">Nábytek</option>
-        <option value="obleceni">Oblečení</option>
-        <option value="pc">PC</option>
-        <option value="prace">Práce</option>
-        <option value="reality">Reality</option>
-        <option value="sluzby">Služby</option>
-        <option value="sport">Sport</option>
-        <option value="stroje">Stroje</option>
-        <option value="vstupenky">Vstupenky</option>
-        <option value="zvirata">Zvířata</option>
-        <option value="ostatni">Ostatní</option>
-      </select>
+  <textarea name="description" rows="4" placeholder="Description"></textarea>
 
-      <!-- PRICE TYPE -->
-      <select name="price_type" required>
-        <option value="">Vyberte jednu z možností</option>
-        <option value="Dohodou">Dohodou</option>
-        <option value="Nabídněte">Nabídněte</option>
-        <option value="Nerozhoduje">Nerozhoduje</option>
-        <option value="V textu">V textu</option>
-        <option value="Zdarma">Zdarma</option>
-      </select>
+  <!-- CATEGORY -->
+  <select name="category">
+    <option value="">Category</option>
+    <option value="auto">Auto</option>
+    <option value="deti">Děti</option>
+    <option value="dum">Dům a zahrada</option>
+    <option value="elektro">Elektro</option>
+    <option value="foto">Foto</option>
+    <option value="hudba">Hudba</option>
+    <option value="knihy">Knihy</option>
+    <option value="mobily">Mobily</option>
+    <option value="motorky">Motorky</option>
+    <option value="nabytek">Nábytek</option>
+    <option value="obleceni">Oblečení</option>
+    <option value="pc">PC</option>
+    <option value="prace">Práce</option>
+    <option value="reality">Reality</option>
+    <option value="sluzby">Služby</option>
+    <option value="sport">Sport</option>
+    <option value="stroje">Stroje</option>
+    <option value="vstupenky">Vstupenky</option>
+    <option value="zvirata">Zvířata</option>
+    <option value="ostatni">Ostatní</option>
+  </select>
 
-      <!-- SALE TYPE -->
-      <div class="toggle-group">
-        <button type="button" class="toggle-btn active" id="buyNowBtn">Kup teď</button>
-        <button type="button" class="toggle-btn" id="auctionBtn">Aukce</button>
-      </div>
+  <!-- PRICE TYPE -->
+  <select name="price_type">
+    <option value="">Vyberte jednu z možností</option>
+    <option value="Dohodou">Dohodou</option>
+    <option value="Nabídněte">Nabídněte</option>
+    <option value="Nerozhoduje">Nerozhoduje</option>
+    <option value="V textu">V textu</option>
+    <option value="Zdarma">Zdarma</option>
+  </select>
 
-      <input type="hidden" name="sale_type" id="saleType" value="buy_now" />
+  <!-- SALE TYPE -->
+  <div class="toggle-group">
+    <button type="button" class="toggle-btn active" id="buyNowBtn">Kup teď</button>
+    <button type="button" class="toggle-btn" id="auctionBtn">Aukce</button>
+  </div>
 
-      <input type="number" name="price" placeholder="Price" />
+  <input type="hidden" name="sale_type" id="saleType" value="buy_now" />
 
-      <input type="file" name="photos" multiple required />
+  <input type="number" name="price" placeholder="Price" step="0.01" />
 
-      <select name="condition" required>
-        <option value="">Stav zboží</option>
-        <option value="new">Nové</option>
-        <option value="opened">Rozbaleno</option>
-        <option value="used_short">Zánovní</option>
-        <option value="used">Použité</option>
-        <option value="repaired">Opravené</option>
-        <option value="damaged">Poškozené</option>
-        <option value="nonfunctional">Nefunkční / na díly</option>
-      </select>
+  <input type="file" name="photos" multiple />
 
-      <!-- CONTACT -->
-      <input type="text" name="name" placeholder="Name" required />
-      <input type="email" name="email" placeholder="E-mail (nebude zveřejněn)" required />
-      <input type="password" name="password" placeholder="Vaše heslo (pro úpravu/smazání inzerátu)" required />
+  <!-- CONDITION -->
+  <select name="condition">
+    <option value="">Stav zboží</option>
+    <option value="new">Nové</option>
+    <option value="opened">Rozbaleno</option>
+    <option value="used_short">Zánovní</option>
+    <option value="used">Použité</option>
+    <option value="repaired">Opravené</option>
+    <option value="damaged">Poškozené</option>
+    <option value="nonfunctional">Nefunkční / na díly</option>
+  </select>
 
-      <input type="text" name="bank_account" placeholder="Číslo účtu" required />
+  <!-- CONTACT -->
+  <input type="text" name="name" placeholder="Name" />
+  <input type="email" name="email" placeholder="E-mail (nebude zveřejněn)" />
+  <input type="password" name="password" placeholder="Vaše heslo" autocomplete="current-password" />
 
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="personal_pickup" />
-          Nabídnout osobní předání
-        </label>
-      </div>
+  <input type="text" name="bank_account" placeholder="Číslo účtu" />
 
-      <input type="text" name="city" placeholder="City" required />
-      <input type="text" name="postal" placeholder="Postal Code" required />
-      <input type="text" name="phone" placeholder="Phone Number" required />
+  <label>
+    <input type="checkbox" name="personal_pickup" />
+    Nabídnout osobní předání
+  </label>
 
-      <div class="checkbox">
-        <label><input type="checkbox" name="platforms" value="bazos" /> Bazos</label><br />
-        <label><input type="checkbox" name="platforms" value="sbazar" /> Sbazar</label><br />
-        <label><input type="checkbox" name="platforms" value="facebook" /> Facebook</label><br />
-        <label><input type="checkbox" name="platforms" value="aukro" /> Aukro</label>
-      </div>
-      <label for="displayPhone">Zobrazit cislo</label>
-      <input type="checkbox" value="dislay number" name='displayPhone'>
-      <button id="uploadBtn" class="btn" type="button">Submit</button>
-    </form>
+  <input type="text" name="city" placeholder="City" />
+  <input type="text" name="postal" placeholder="Postal Code" />
+  <input type="text" name="phone" placeholder="Phone Number" />
+
+  <div class="checkbox">
+    <label><input type="checkbox" name="platforms" value="bazos" /> Bazos</label><br />
+    <label><input type="checkbox" name="platforms" value="sbazar" /> Sbazar</label><br />
+    <label><input type="checkbox" name="platforms" value="facebook" /> Facebook</label><br />
+    <label><input type="checkbox" name="platforms" value="aukro" /> Aukro</label>
+  </div>
+
+  <label>
+    <input type="checkbox" name="displayPhone" />
+    Zobrazit číslo
+  </label>
+
+  <button class="btn" type="submit">Submit</button>
+</form>
+
+<script>
+function validateForm(form) {
+  // minimal safety check (optional)
+  if (form.title.value.trim() === "") {
+    alert("Title is recommended");
+  }
+  return true; // allow submit always
+}
+</script>
+
   </div>
 
   <script>

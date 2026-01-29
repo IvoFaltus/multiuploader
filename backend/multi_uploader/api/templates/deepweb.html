@@ -63,12 +63,30 @@
 <div class="cards-section">
 
 </div>
+
+
+
 <script>
 
 const data = {{ data_json|safe }};
 
 Object.keys(data).forEach(key => {
     const listing = data[key];
+
+
+    const pictures = []
+
+
+    for(const picUrl of listing.pictures){
+
+        const newPicUrl = "../.."+picUrl;
+       pictures.push(newPicUrl);
+    }
+
+
+
+
+
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -79,8 +97,18 @@ Object.keys(data).forEach(key => {
     const value = listing[field];
     const li = document.createElement('li');
     li.innerHTML = `<strong>${field.charAt(0).toUpperCase() + field.slice(1)}</strong>: ${value}`;
+    
     ul.appendChild(li);
 }
+    for(const picUrl of pictures){
+        const li = document.createElement('li');
+        const img = document.createElement('img');
+        img.src = picUrl;
+        img.style.maxWidth = '100%';
+        img.style.marginTop = '10px';
+        li.appendChild(img);
+        ul.appendChild(li);
+    }
 
     card.appendChild(ul);
     document.querySelector('.cards-section').appendChild(card);
@@ -88,7 +116,7 @@ Object.keys(data).forEach(key => {
 
 </script>
 
-
+<button id="sync">sync</button>
 
 
 </div>
