@@ -14,7 +14,11 @@ SECRET_KEY = 'django-insecure-z)+yj65a@qp766id@hlzj@4%=d44x&#*ai7bvl*jt0g%ffaa=@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "faltus-projekt.dev.spsejecna.net",
+    "127.0.0.1",
+    "localhost",
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",

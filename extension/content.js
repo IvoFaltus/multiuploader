@@ -6,7 +6,7 @@ document.addEventListener(
   "click",
   async (e) => {
     const btn = e.target.closest("#uploadBtn");
-
+    
     
 
     if (!btn) return;
@@ -106,11 +106,11 @@ document.addEventListener(
 
 
 document.querySelector("#sync").addEventListener("click", async (e) => {
-
-
+console.log("sync executed")
 
 chrome.runtime.sendMessage({
   action: "sync",
+  payload: data,
 });
 
 });

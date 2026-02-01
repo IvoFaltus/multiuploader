@@ -19,7 +19,9 @@
 
   "content_scripts": [
     {
-      "matches": ["http://localhost:8000/*", "http://127.0.0.1:8000/*"],
+      "matches": ["http://localhost:8000/*",
+        "http://127.0.0.1:8000/*","http://faltus-projekt.dev.spsejecna.net/*",
+        "https://faltus-projekt.dev.spsejecna.net/*"],
       "js": ["content.js"]
     },
     {
