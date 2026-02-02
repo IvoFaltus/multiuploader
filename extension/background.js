@@ -7,7 +7,7 @@ const BAZOS_URL = "https://auto.bazos.cz/pridat-inzerat.php";
 
 const SBazar_URL = "https://www.sbazar.cz/nova-nabidka";
 
-const AukroListingsUrl= "https://aukro.cz/moje-aukro/muj-prodej/prodavam";
+const AukroListingsUrl = "https://aukro.cz/moje-aukro/muj-prodej/prodavam";
 chrome.runtime.onMessage.addListener((msg, sender) => {
   const data = msg.payload || {};
   const platforms = Array.isArray(data.platforms) ? data.platforms : [];
@@ -93,28 +93,23 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
     });
   }
 
- if (msg.action === "sync") {
-  console.log("message received")
-  chrome.tabs.create({ url: AukroListingsUrl, active: false }, (tab) => {
-    const tabId = tab.id;
+  if (msg.action === "sync") {
+    console.log("message received");
+    chrome.tabs.create({ url: AukroListingsUrl, active: false }, (tab) => {
+      const tabId = tab.id;
+      const listener = (id, info) => {
+        if (id === tabId && info.status === "complete") {
+          chrome.tabs.onUpdated.removeListener(listener);
+          chrome.tabs.sendMessage(tabId, {
 
-    const listener = (id, info) => {
-      if (id === tabId && info.status === "complete") {
-        chrome.tabs.onUpdated.removeListener(listener);
+            action: "sync",
+            payload: data,
+            
+          });
+        }
+      };
 
-        chrome.tabs.sendMessage(tabId, {
-          action: "sync",
-          payload: data,
-        });
-      }
-    };
-
-    chrome.tabs.onUpdated.addListener(listener);
-  });
-}
-
-
-
-
-  
-});    
+      chrome.tabs.onUpdated.addListener(listener);
+    });
+  }
+});
