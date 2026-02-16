@@ -3,51 +3,95 @@
   "name": "Multi-Uploader",
   "version": "1.0.0",
   "description": "Helper extension for uploading listings to E-Shops (semi-automatic).",
-
-  "permissions": ["tabs", "scripting", "storage"],
-
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage"
+  ],
   "host_permissions": [
     "https://aukro.cz/*",
     "https://www.aukro.cz/*",
     "https://www.bazos.cz/*",
     "https://www.sbazar.cz/*"
   ],
-
   "background": {
     "service_worker": "background.js"
   },
-
   "content_scripts": [
     {
-      "matches": ["http://localhost:8000/*",
-        "http://127.0.0.1:8000/*","http://faltus-projekt.dev.spsejecna.net/*",
-        "https://faltus-projekt.dev.spsejecna.net/*"],
-      "js": ["content.js"]
+      "matches": [
+        "http://localhost:8000/*",
+        "http://127.0.0.1:8000/*",
+        "http://faltus-projekt.dev.spsejecna.net/*",
+        "https://faltus-projekt.dev.spsejecna.net/*"
+      ],
+      "js": [
+        "content.js"
+      ]
     },
     {
-      "matches": ["https://aukro.cz/*", "https://www.aukro.cz/*"],
-      "js": ["aukroContent.js"]
+      "matches": [
+        "https://aukro.cz/*",
+        "https://www.aukro.cz/*"
+      ],
+      "js": [
+        "aukroContent.js"
+      ]
     },
     {
-      "matches": ["https://sbazar.cz/*", "https://www.sbazar.cz/*"],
-      "js": ["sbazar.js"]
+      "matches": [
+        "https://sbazar.cz/*",
+        "https://www.sbazar.cz/*"
+      ],
+      "js": [
+        "sbazar.js"
+      ]
     },
     {
-       "matches": [
+      "matches": [
         "*://bazos.cz/*",
         "*://www.bazos.cz/*",
         "*://auto.bazos.cz/*",
         "*://*.bazos.cz/*"
       ],
-      "js": ["bazosContent.js"]
-    },{
-      "matches": ["https://aukro.cz/*", "https://www.aukro.cz/*", "https://sbazar.cz/*", "https://www.sbazar.cz/*", "*://bazos.cz/*", "*://www.bazos.cz/*", "*://auto.bazos.cz/*", "*://*.bazos.cz/*"],
-      "js": ["sync.js"]
+      "js": [
+        "bazosContent.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://aukro.cz/*",
+        "https://www.aukro.cz/*",
+        "https://sbazar.cz/*",
+        "https://www.sbazar.cz/*",
+        "*://bazos.cz/*",
+        "*://www.bazos.cz/*",
+        "*://auto.bazos.cz/*",
+        "*://*.bazos.cz/*"
+      ],
+      "js": [
+        "sync.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://aukro.cz/*",
+        "https://www.aukro.cz/*"
+      ],
+      "js": [
+        "aukroListingReader.js"
+      ]
     }
   ],
-
-  "web_accessible_resources": [{
-    "resources": ["fonts/GreaterTheory.otf"],
-    "matches": ["https://*.aukro.cz/*", "https://*.bazos.cz/*"]
-  }]
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "fonts/GreaterTheory.otf"
+      ],
+      "matches": [
+        "https://*.aukro.cz/*",
+        "https://*.bazos.cz/*"
+      ]
+    }
+  ]
 }

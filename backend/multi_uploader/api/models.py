@@ -41,7 +41,7 @@ class Listing(models.Model):
     display_phone = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     def __str__(self):
         return f"{self.title} (id={self.id})"
 

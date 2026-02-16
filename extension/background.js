@@ -8,7 +8,7 @@ const BAZOS_URL = "https://auto.bazos.cz/pridat-inzerat.php";
 const SBazar_URL = "https://www.sbazar.cz/nova-nabidka";
 
 const AukroListingsUrl = "https://aukro.cz/moje-aukro/muj-prodej/prodavam";
-chrome.runtime.onMessage.addListener((msg, sender) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   const data = msg.payload || {};
   const platforms = Array.isArray(data.platforms) ? data.platforms : [];
 
@@ -112,4 +112,39 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
       chrome.tabs.onUpdated.addListener(listener);
     });
   }
+
+  // OPEN hidden tab
+if (msg.action === "openHiddenTab") {
+  chrome.tabs.create({ url: msg.url, active: false }, (tab) => {
+    const tabId = tab.id;
+
+    const listener = (updatedTabId, info) => {
+      if (updatedTabId === tabId && info.status === "complete") {
+        chrome.tabs.onUpdated.removeListener(listener);
+        sendResponse(tab);
+      }
+    };
+
+    chrome.tabs.onUpdated.addListener(listener);
+  });
+  return true;
+}
+
+
+// FORWARD extraction request to listing tab
+if (msg.action === "extractListing") {
+  chrome.tabs.sendMessage(
+    msg.tabId,
+    { action: "extractListing" },
+    response => sendResponse(response)
+  );
+  return true;
+}
+
+
+// CLOSE tab after scraping
+if (msg.action === "closeTab") {
+  chrome.tabs.remove(msg.tabId);
+}
+
 });

@@ -1,5 +1,5 @@
 // content.js
-
+let data = {};
 console.log("content.js loaded");
 
 document.addEventListener(
@@ -11,6 +11,8 @@ document.addEventListener(
 
     if (!btn) return;
 
+
+    
     // stop page scripts + navigation
     e.preventDefault();
     e.stopImmediatePropagation();
@@ -22,7 +24,7 @@ document.addEventListener(
       return;
     }
 
-    const data = {
+    data = {
       title: document.querySelector('input[name="title"]')?.value ?? "",
       description:
         document.querySelector('textarea[name="description"]')?.value ?? "",
@@ -105,12 +107,14 @@ document.addEventListener(
 ); // capture phase prevents site handlers
 
 
-document.querySelector("#sync").addEventListener("click", async (e) => {
-console.log("sync executed")
+const syncBtn = document.querySelector("#sync");
+if (syncBtn) {
+  syncBtn.addEventListener("click", async () => {
+    console.log("sync executed");
 
-chrome.runtime.sendMessage({
-  action: "sync",
-  payload: data,
-});
-
-});
+    chrome.runtime.sendMessage({
+      action: "sync",
+      payload: data,
+    });
+  });
+}

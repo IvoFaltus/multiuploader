@@ -42,6 +42,7 @@ class ListingAdmin(admin.ModelAdmin):
         "display_phone",
         "owner",
         "created_at",
+        "description",
     )
 
     search_fields = ("title", "description", "city", "phone", "email")
