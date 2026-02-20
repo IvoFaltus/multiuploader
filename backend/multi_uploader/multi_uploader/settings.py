@@ -21,8 +21,16 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "chrome-extension://gfpofkjdligjpnbaagjildkjomeeckig",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "https://aukro.cz"
+]
+CORS_ALLOWED_ORIGINS = [
+    "chrome-extension://gfpofkjdligjpnbaagjildkjomeeckig",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://aukro.cz",
 ]
 
 
@@ -30,6 +38,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +48,7 @@ INSTALLED_APPS = [
     'api',  
     
 ]
-INSTALLED_APPS += ["corsheaders"]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -53,17 +62,11 @@ MIDDLEWARE = [
     
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
+
 CORS_ALLOW_CREDENTIALS = True
 
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
+
 
 
 ROOT_URLCONF = 'multi_uploader.urls'
@@ -129,6 +132,10 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
+
+# Allow cross-origin cookies for extension requests (development)
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = False
 
 USE_I18N = True
 

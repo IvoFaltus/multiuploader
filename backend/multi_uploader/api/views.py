@@ -5,7 +5,15 @@ from .models import Listing ,ListingPlatform, Platform, ListingImage
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 import json
+import base64
+from django.core.files.base import ContentFile
+from django.shortcuts import redirect
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+from decimal import Decimal, InvalidOperation
 
+from .models import Listing, ListingImage, Platform, ListingPlatform
 
 def createListingFunc(owner, title, description, category, price_type, sale_type, price, condition, name, email, bank_account, city, postal, phone, personal_pickup, display_phone, platforms, images):
     listing = Listing.objects.create(
@@ -103,12 +111,9 @@ def deepweb_page(request):
     for l in listings:
         data[f"Listing {i}"] = { 
     "title": l.title,
+    "link": ListingPlatform.objects.filter(listing=l).first().link,
     "description": l.description,
     "price":  str(l.price) if l.price is not None else None,
-    "city": l.city,
-    "postal": l.postal,
-    "phone": l.phone,
-    "condition": l.condition,
     "platforms": [listing_platform.platform.name for listing_platform in ListingPlatform.objects.filter(listing=l)],
     "pictures": [img.image.url for img in ListingImage.objects.filter(listing=l)]
 }
@@ -139,96 +144,78 @@ def register(request):
 
 
 
+def toImageFile(base64_string, filename="image"):
+    if not base64_string:
+        return None
 
-from django.shortcuts import redirect
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password
-from decimal import Decimal, InvalidOperation
+    format, imgstr = base64_string.split(";base64,")
+    ext = format.split("/")[-1]
 
-from .models import Listing, ListingImage, Platform, ListingPlatform
-
-
-@login_required(login_url='home')
-def create_listing(request):
-    if request.method != "POST":
-        return HttpResponse("Invalid method", status=405)
-
-    # -------- SAFE FIELD READING --------
-
-    def get(name):
-        return request.POST.get(name, "").strip()
-
-    title = get("title")
-    description = get("description")
-    category = get("category")
-    price_type = get("price_type")
-    sale_type = get("sale_type")
-    condition = get("condition")
-
-    name = get("name")
-    email = get("email")
-    bank_account = get("bank_account")
-
-    city = get("city")
-    postal = get("postal")
-    phone = get("phone")
-
-    # -------- SAFE PRICE PARSING --------
-
-    price_raw = get("price")
-    price = None
-
-    if price_raw != "":
-        try:
-            price = Decimal(price_raw.replace(",", "."))
-        except InvalidOperation:
-            return HttpResponse("Invalid price format", status=400)
-
-    # -------- CHECKBOXES --------
-
-    personal_pickup = "personal_pickup" in request.POST
-    display_phone = "displayPhone" in request.POST
-
-    # -------- PASSWORD (HASHED) --------
-
-    raw_password = get("password")
-    password = make_password(raw_password) if raw_password else None
-
-    # -------- CREATE LISTING --------
-
-    listing = Listing.objects.create(
-        owner=request.user,
-        title=title,
-        description=description,
-        category=category,
-        price_type=price_type,
-        sale_type=sale_type,
-        price=price,
-        condition=condition,
-        name=name,
-        email=email,
-        bank_account=bank_account,
-        city=city,
-        postal=postal,
-        phone=phone,
-        personal_pickup=personal_pickup,
-        display_phone=display_phone,
+    return ContentFile(
+        base64.b64decode(imgstr),
+        name=f"{filename}.{ext}"
     )
 
-    # -------- SAVE IMAGES --------
+from django.views.decorators.csrf import csrf_exempt
 
-    photos = request.FILES.getlist("photos")
-    for photo in photos:
-        ListingImage.objects.create(listing=listing, image=photo)
 
-    # -------- SAVE PLATFORMS --------
+@csrf_exempt
+def create_listing(request):
+    if request.method != "POST":
+        return HttpResponse(status=405)
 
-    platforms = request.POST.getlist("platforms")
-    for p in platforms:
-        platform_obj = Platform.objects.filter(name=p).first()
-        if platform_obj:
-            ListingPlatform.objects.create(listing=listing, platform=platform_obj)
+    if not request.user.is_authenticated:
+        return HttpResponse("Authentication required", status=401)
 
-    return redirect("deepweb")
-    
+    try:
+        data = json.loads(request.body)
+    except Exception:
+        return HttpResponse("Invalid JSON", status=400)
+
+    listings = data.get("listings", [])
+
+    for item in listings:
+        link = item.get("link")
+        platform_name = item.get("platform")
+        title = item.get("title", "").strip()
+        description = item.get("description", "").strip()
+        images = item.get("images", [])
+
+        if not (link and platform_name and title):
+            continue
+
+        # price parse
+        price = None
+        if item.get("price"):
+            try:
+                price = Decimal(str(item["price"]).replace(",", "."))
+            except InvalidOperation:
+                pass
+
+        # listing create/get
+        listing, created = Listing.objects.get_or_create(
+            owner=request.user,
+            title=title,
+            description=description,
+            defaults={"price": price},
+        )
+
+        # images only when new listing
+        if created:
+            for image in images:
+                img_file = toImageFile(image)
+                if img_file:
+                    ListingImage.objects.create(listing=listing, image=img_file)
+
+        platform = Platform.objects.filter(name=platform_name).first()
+        if not platform:
+            continue
+        
+        ListingPlatform.objects.get_or_create(
+            listing=listing,
+            platform=platform,
+            defaults={"link": link},
+        )
+
+    return HttpResponse(status=204)
+

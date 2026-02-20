@@ -8,6 +8,11 @@ const BAZOS_URL = "https://auto.bazos.cz/pridat-inzerat.php";
 const SBazar_URL = "https://www.sbazar.cz/nova-nabidka";
 
 const AukroListingsUrl = "https://aukro.cz/moje-aukro/muj-prodej/prodavam";
+const SbazarListingsUrl = "https://sbazar.cz";
+
+
+
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   const data = msg.payload || {};
   const platforms = Array.isArray(data.platforms) ? data.platforms : [];
@@ -133,11 +138,7 @@ if (msg.action === "openHiddenTab") {
 
 // FORWARD extraction request to listing tab
 if (msg.action === "extractListing") {
-  chrome.tabs.sendMessage(
-    msg.tabId,
-    { action: "extractListing" },
-    response => sendResponse(response)
-  );
+  chrome.tabs.sendMessage(msg.tabId,{ action: "extractListing" },response => sendResponse(response));
   return true;
 }
 
@@ -146,5 +147,36 @@ if (msg.action === "extractListing") {
 if (msg.action === "closeTab") {
   chrome.tabs.remove(msg.tabId);
 }
+if (msg.action === "syncListings") {
+  fetch("http://127.0.0.1:8000/createListing/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ listings: msg.data })
+  }).then(r => sendResponse({ ok: true }))
+    .catch(() => sendResponse({ ok: false }));
+
+  return true;
+}
+
+ if (msg.action === "syncSbazar") {
+    console.log("message received");
+    chrome.tabs.create({ url: SbazarListingsUrl, active: false }, (tab) => {
+      const tabId = tab.id;
+      const listener = (id, info) => {
+        if (id === tabId && info.status === "complete") {
+          chrome.tabs.onUpdated.removeListener(listener);
+          chrome.tabs.sendMessage(tabId, {
+
+            action: "syncSbazar",
+            payload: data,
+            
+          });
+        }
+      };
+
+      chrome.tabs.onUpdated.addListener(listener);
+    });
+  }
 
 });

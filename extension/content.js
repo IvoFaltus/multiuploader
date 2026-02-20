@@ -108,13 +108,54 @@ document.addEventListener(
 
 
 const syncBtn = document.querySelector("#sync");
+
+
+
+
+
 if (syncBtn) {
   syncBtn.addEventListener("click", async () => {
+
+    const all = document.querySelector("#all").checked
+    const sbazar = document.querySelector("#sbazar").checked
+    const aukro = document.querySelector("#aukro").checked
+    const bazos = document.querySelector("#bazos").checked
     console.log("sync executed");
 
-    chrome.runtime.sendMessage({
+    if(all){
+      chrome.runtime.sendMessage({
+      action: "syncAll",
+      payload: data,
+    })
+  }
+  if(aukro){
+
+     chrome.runtime.sendMessage({
       action: "sync",
       payload: data,
     });
+    console.log("aukro sync")
+  }
+
+  if(sbazar){
+     chrome.runtime.sendMessage({
+      action: "syncSbazar",
+      payload: data,
+    });
+  }
+
+  if(bazos){
+     chrome.runtime.sendMessage({
+      action: "syncBazos",
+      payload: data,
+    });
+  }
+
+
+
+
+
+
+
   });
 }

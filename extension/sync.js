@@ -39,4 +39,14 @@
 
   console.log("SYNC DONE:", synced);
 
+  
+chrome.runtime.sendMessage({
+  action: "syncListings",
+  data: synced
+});
+
+
+
+
+
 })();

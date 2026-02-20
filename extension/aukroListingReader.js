@@ -32,6 +32,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 
     const listing = {
+      platform: "aukro",
+      link: location.href,
       title: clean(document.querySelector(".tw-font-bold.tw-text-xl")?.innerText),
       description: clean(document.querySelector("#user-field")?.innerText),
       price: clean(document.querySelector(".tw-text-3xl.tw-font-bold")?.innerText)

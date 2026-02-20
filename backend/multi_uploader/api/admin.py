@@ -27,26 +27,14 @@ class ListingAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "title",
-        "category",
         "price",
-        "price_type",
-        "sale_type",
-        "condition",
-        "city",
-        "postal",
-        "phone",
-        "name",
-        "email",
-        "bank_account",
-        "personal_pickup",
-        "display_phone",
         "owner",
         "created_at",
         "description",
     )
 
-    search_fields = ("title", "description", "city", "phone", "email")
-    list_filter = ("category", "condition", "sale_type", "price_type", "created_at")
+    search_fields = ("title", "description", "owner")
+    
     readonly_fields = ("created_at",)
     inlines = [ListingImageInline, ListingPlatformInline]
 
