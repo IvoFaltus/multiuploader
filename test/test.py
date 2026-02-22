@@ -1,4 +1,4 @@
-print(4/2)
+import os
 
 if __name__ == "__main__":
-    print(4//2)
+    os.system("cd backend")

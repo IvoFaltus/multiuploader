@@ -48,7 +48,8 @@
       ],
       "js": [
         "sbazar.js",
-        "syncSbazar.js"
+        "syncSbazar.js",
+        "SbazarListingReader.js"
       ]
     },
     {

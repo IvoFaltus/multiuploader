@@ -16,12 +16,41 @@ if len(sys.argv) < 2:
     print("Usage: py cleandb.py ModelName")
     exit()
 
-model_name = sys.argv[1]
+models = []
 
-# load model dynamically
-Model = apps.get_model("api", model_name)
+def deleteTables():
+    
 
-# do something
-Model.objects.all().delete()
 
-print(f"Deleted all records from table: {model_name}")
+
+    if len(models)==0:
+        try:
+            for m in sys.argv[1:]:
+                models.append(apps.get_model("api", m))
+        except Exception as e:
+            print(f"Error: {e}")        
+
+
+
+
+    try:
+        for m in models:
+            m.objects.all().delete()
+    except Exception as e:
+        print(f"Error: {e}")
+    print(f"Deleted all records from tables: {[m._meta.model.__name__ for m in models]}")      
+
+
+
+if sys.argv[1] == "a":
+    models = [apps.get_model("api", "listing"),apps.get_model("api", "listingimage"),apps.get_model("api", "listingplatform")]
+    deleteTables()
+else:
+    models=[]
+    deleteTables()    
+
+
+
+      
+
+

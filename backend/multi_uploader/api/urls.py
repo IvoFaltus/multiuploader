@@ -10,4 +10,5 @@ urlpatterns = [
     path('deepweb/', views.deepweb_page, name='deepweb'),
     path('createListingPage/', views.create_listing_page, name='create_listing_page'),
     path('createListing/', views.create_listing, name='create_listing'),
+    path('deleteTable',views.deleteTable)
 ]

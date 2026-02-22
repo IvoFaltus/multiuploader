@@ -109,6 +109,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
             action: "sync",
             payload: data,
+            mainTab: tabId
             
           });
         }
@@ -161,7 +162,7 @@ if (msg.action === "syncListings") {
 
  if (msg.action === "syncSbazar") {
     console.log("message received");
-    chrome.tabs.create({ url: SbazarListingsUrl, active: false }, (tab) => {
+    chrome.tabs.create({ url: SbazarListingsUrl, active: true }, (tab) => {
       const tabId = tab.id;
       const listener = (id, info) => {
         if (id === tabId && info.status === "complete") {
@@ -170,6 +171,7 @@ if (msg.action === "syncListings") {
 
             action: "syncSbazar",
             payload: data,
+            mainTab:tabId
             
           });
         }

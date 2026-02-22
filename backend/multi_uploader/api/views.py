@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from decimal import Decimal, InvalidOperation
-
+from django.views.decorators.csrf import csrf_exempt
 from .models import Listing, ListingImage, Platform, ListingPlatform
 
 def createListingFunc(owner, title, description, category, price_type, sale_type, price, condition, name, email, bank_account, city, postal, phone, personal_pickup, display_phone, platforms, images):
@@ -70,6 +70,24 @@ def createListingFunc(owner, title, description, category, price_type, sale_type
 
 def home(request):
     return render(request, 'index.html')
+
+
+@csrf_exempt
+def deleteTable(request):
+    if request.method != "POST":
+        return HttpResponse("Bad Method",status=405)
+
+    try:
+        data = json.loads(request.body)
+    except Exception:
+        return HttpResponse("Invalid JSON", status=400)
+
+    if data.get("tables") == "all":
+        ListingImage.objects.all().delete()
+        ListingPlatform.objects.all().delete()
+        Listing.objects.all().delete()
+
+    return HttpResponse(status=204)
 
 def create_listing_page(request):
     if not request.user.is_authenticated:
@@ -156,7 +174,7 @@ def toImageFile(base64_string, filename="image"):
         name=f"{filename}.{ext}"
     )
 
-from django.views.decorators.csrf import csrf_exempt
+
 
 
 @csrf_exempt

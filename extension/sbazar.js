@@ -100,7 +100,7 @@ function init() {
   const localInput = document.querySelector(
     "body > div.flex.flex-col > div.grow.flex.justify-center > div > div.flex.justify-center.mb-12 > div > main > astro-island > div > div:nth-child(2) > form > div:nth-child(4) > div.relative > div > div > div.relative.h-full > input"
   );
-  const priceInput = document.querySelector("#P0-2");
+  const priceInput = document.querySelector("#input-price")
   const phoneInput = document.querySelector("#P0-3");
 
   const checkBoxCenaDohodou = document.querySelector(

@@ -1,4 +1,6 @@
 //sync.js
+chrome.runtime.onMessage.addListener(async msg => {
+  if (msg.action !== "sync") return;
 
 (async () => {
 
@@ -7,7 +9,7 @@
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const synced = [];
 
-  await wait(3000);
+  
 
   // collect listing links
   const links = [...document.querySelectorAll(".product-name a")]
@@ -22,7 +24,7 @@
       url: link
     });
 
-    await wait(4000);
+    
 
     const data = await chrome.runtime.sendMessage({
       action: "extractListing",
@@ -40,13 +42,18 @@
   console.log("SYNC DONE:", synced);
 
   
-chrome.runtime.sendMessage({
+await chrome.runtime.sendMessage({
   action: "syncListings",
   data: synced
 });
 
-
+await chrome.runtime.sendMessage({
+  action: "closeTab",
+  tabId: msg.mainTab
+})
 
 
 
 })();
+
+})

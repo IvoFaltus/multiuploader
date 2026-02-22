@@ -5,7 +5,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
 
   (async () => {
-    await wait(2500);
+    
 
     const clean = t => t?.replace(/\s+/g, " ").trim() || null;
 

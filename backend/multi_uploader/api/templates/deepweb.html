@@ -114,8 +114,22 @@ Object.keys(data).forEach(key => {
     document.querySelector('.cards-section').appendChild(card);
 });
 
+
+const deleteListings = ()=>{
+
+
+    fetch("/deleteTable", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ tables: "all" })
+})
+}
+
+
 </script>
 
+<button id="delete" onclick='deleteListings()' >delete all listings</button>
+<br>
 <button id="sync" >sync</button>
 <br>
 <label for="all">All</label>
