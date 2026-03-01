@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from decimal import Decimal, InvalidOperation
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Listing, ListingImage, Platform, ListingPlatform
 
 def createListingFunc(owner, title, description, category, price_type, sale_type, price, condition, name, email, bank_account, city, postal, phone, personal_pickup, display_phone, platforms, images):
@@ -66,8 +67,7 @@ def createListingFunc(owner, title, description, category, price_type, sale_type
     return listing
 
 
-
-
+@ensure_csrf_cookie
 def home(request):
     return render(request, 'index.html')
 

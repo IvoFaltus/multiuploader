@@ -218,6 +218,8 @@ btn.addEventListener("click", async (e) => {
 // PHONE VERIFICATION PAGE
 // ======================================================
 function fillPhoneVerification(phone) {
+  if (sessionStorage.getItem("phoneVerifiedOnce")) return;
+
   waitForElement(
     () => document.querySelector("#teloverit"),
     (el) => setValue(el, phone),
@@ -231,7 +233,10 @@ function fillPhoneVerification(phone) {
   waitForElement(
     () =>
       document.querySelector('form[name="formovereni"] input[type="submit"]'),
-    (btn) => btn.click(),
+    (btn) => {
+      btn.click();
+      sessionStorage.setItem("phoneVerifiedOnce", "1");
+    },
   );
 }
 

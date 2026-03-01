@@ -57,7 +57,7 @@ document.addEventListener(
 
       photos: [],
     };
-
+    console.log(data)
     // read files synchronously before any navigation
     const fileInput = document.querySelector('input[name="photos"]');
     if (fileInput?.files?.length) {
@@ -99,6 +99,13 @@ document.addEventListener(
         payload: data,
       });
     }
+    if (data.platforms.includes("facebook")) {
+      console.log("facebook included")
+      chrome.runtime.sendMessage({
+        action: "facebook",
+        payload: data,
+      });
+    }
 
 
 
@@ -116,11 +123,19 @@ const syncBtn = document.querySelector("#sync");
 if (syncBtn) {
   syncBtn.addEventListener("click", async () => {
 
+    const tel = prompt("Enter phone number for bazos")
+    const email = prompt("Enter email for bazos")
     const all = document.querySelector("#all").checked
     const sbazar = document.querySelector("#sbazar").checked
     const aukro = document.querySelector("#aukro").checked
     const bazos = document.querySelector("#bazos").checked
     console.log("sync executed");
+    payload = {
+
+      email:email,
+      phone:tel
+    }
+
 
     if(all){
       chrome.runtime.sendMessage({
@@ -147,7 +162,7 @@ if (syncBtn) {
   if(bazos){
      chrome.runtime.sendMessage({
       action: "syncBazos",
-      payload: data,
+      payload: payload,
     });
   }
 

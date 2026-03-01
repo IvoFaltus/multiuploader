@@ -133,9 +133,12 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-# Allow cross-origin cookies for extension requests (development)
-SESSION_COOKIE_SAMESITE = 'None'
+# Use same-site cookies for regular browser login flows.
+# `SameSite=None` requires `Secure=True`, otherwise many browsers reject the cookie.
+SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SECURE = False
 
 USE_I18N = True
 

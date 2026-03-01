@@ -1,5 +1,7 @@
 // background.js — FIXED (null-safe, opens tabs even with empty payload)
 
+
+
 const AUKRO_URL =
   "https://aukro.cz/jednoduche-vystaveni?simpleFormOnDesktopAllowed=true";
 
@@ -9,6 +11,7 @@ const SBazar_URL = "https://www.sbazar.cz/nova-nabidka";
 
 const AukroListingsUrl = "https://aukro.cz/moje-aukro/muj-prodej/prodavam";
 const SbazarListingsUrl = "https://sbazar.cz";
+const  BazosListingsUrl = "https://www.bazos.cz/moje-inzeraty.php";
 
 
 
@@ -118,6 +121,24 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       chrome.tabs.onUpdated.addListener(listener);
     });
   }
+   // ==================================================
+  // FACEBOOK
+  // ==================================================
+  if(msg.action === "facebook"){
+
+    chrome.tabs.create(
+  { url: "https://www.facebook.com/marketplace/" },
+  tab => {
+    chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
+      if (tabId === tab.id && info.status === "complete") {
+        chrome.tabs.sendMessage(tabId, { action: "syncFacebook" });
+        chrome.tabs.onUpdated.removeListener(listener);
+      }
+    });
+  }
+);
+
+  }
 
   // OPEN hidden tab
 if (msg.action === "openHiddenTab") {
@@ -180,5 +201,32 @@ if (msg.action === "syncListings") {
       chrome.tabs.onUpdated.addListener(listener);
     });
   }
+
+  if (msg.action === "syncBazos") {
+    console.log("message received");
+    chrome.tabs.create({ url: BazosListingsUrl, active: true }, (tab) => {
+      const tabId = tab.id;
+      const listener = (id, info) => {
+        if (id === tabId && info.status === "complete") {
+          chrome.tabs.onUpdated.removeListener(listener);
+          chrome.tabs.sendMessage(tabId, {
+
+            action: "syncBazos",
+            payload: data,
+            mainTab:tabId
+            
+          });
+        }
+      };
+
+      chrome.tabs.onUpdated.addListener(listener);
+    });
+  }
+
+
+
+
+
+  
 
 });

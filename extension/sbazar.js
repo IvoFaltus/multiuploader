@@ -3,6 +3,130 @@ const DBG = (...args) => console.log("[SBAZAR DEBUG]", ...args);
 const ERR = (...args) => console.error("[SBAZAR ERROR]", ...args);
 
 // ===== helpers =====
+
+function base64ToFile(base64, filename = "photo.jpg") {
+  const [meta, content] = base64.split(",");
+  const mime = meta.match(/data:(.*);base64/)?.[1] || "image/jpeg";
+  const bytes = atob(content);
+  const arr = new Uint8Array(bytes.length);
+
+  for (let i = 0; i < bytes.length; i++) {
+    arr[i] = bytes.charCodeAt(i);
+  }
+
+  return new File([arr], filename, { type: mime });
+}\
+
+
+
+
+
+
+
+
+
+
+function injectMyFont() {
+  if (document.getElementById("myfont-style")) return;
+
+  const style = document.createElement("style");
+  style.id = "myfont-style";
+  style.textContent = `
+    @font-face {
+      font-family: "MyFont";
+      src: url("${chrome.runtime.getURL("fonts/GreaterTheory.otf")}") format("opentype");
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+
+
+const addPhotosButton = () =>{
+
+const anchor = document.querySelector("body > div.flex.flex-col > div.grow.flex.justify-center > div > div.flex.justify-center.mb-12 > div > main > astro-island > div > div:nth-child(2) > form > div:nth-child(2) > div.grid.grid-cols-1 > div > div")
+injectMyFont()
+
+const btn = document.createElement("button");
+  btn.id = "uploadBtn";
+  btn.type = "button";
+  btn.textContent = "Upload photos";
+
+  btn.style.cssText = `
+    margin-left: 12px;
+    padding: 8px 14px;
+    background: green;
+    color: white;
+    font-family: "MyFont", sans-serif;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    z-index: 9999;
+    box-shadow: 0 4px 6px rgba(2,2,2,0.5);
+    pointer-events: auto;
+  `;
+
+  anchor.insertAdjacentElement("afterend",btn)
+
+
+btn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+
+  if (!Array.isArray(data?.photos) || data.photos.length === 0) {
+    console.error("[BAZOS] no photos in data.photos");
+    return;
+  }
+
+  // wait for Dropzone hidden input
+  let input;
+  for (let i = 0; i < 30; i++) {
+    input = document.querySelector("body > div.flex.flex-col > div.grow.flex.justify-center > div > div.flex.justify-center.mb-12 > div > main > astro-island > div > div:nth-child(2) > form > div:nth-child(2) > div.grid.grid-cols-1 > div > div > input[type=file]")
+    if (input) break;
+    await new Promise(r => setTimeout(r, 50));
+  }
+
+  if (!input) {
+    console.error("[BAZOS] Dropzone hidden input not found");
+    return;
+  }
+
+  const dt = new DataTransfer();
+
+  data.photos.slice(0, 20).forEach((p, i) => {
+    let file = null;
+
+    if (p instanceof File) {
+      file = p;
+    } else if (p instanceof Blob) {
+      file = new File([p], `photo_${i}.jpg`, {
+        type: p.type || "image/jpeg"
+      });
+    } else if (typeof p === "string") {
+      file = base64ToFile(p, `photo_${i}.jpg`);
+    } else if (p?.data && typeof p.data === "string") {
+      file = base64ToFile(p.data, p.name || `photo_${i}.jpg`);
+    }
+
+    if (file) dt.items.add(file);
+  });
+
+  input.files = dt.files;
+
+  // 🔑 THIS triggers Dropzone upload
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+
+  console.log("[BAZOS] photos injected:", dt.files.length);
+});
+
+
+
+
+
+}
 function setInput(input, value) {
   DBG("setInput called", { input, value });
 
@@ -72,7 +196,7 @@ function init() {
   }
 
   DBG("payload data:", data);
-
+  
   const nazev = data.title;
   const popis = data.description;
   const jmeno = data.name;
@@ -146,7 +270,7 @@ function init() {
       ERR("checkbox cena dohodou not found");
     }
   }
-
+  addPhotosButton()
   if (cena_typ === "zdarma") {
     if (checkBoxCenaZdarma) {
       checkBoxCenaZdarma.checked = true;

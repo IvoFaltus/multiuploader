@@ -4,23 +4,32 @@
   "version": "1.0.0",
   "description": "Helper extension for uploading listings to E-Shops (semi-automatic).",
   "permissions": [
-  "tabs",
-  "scripting",
-  "storage",
-  "cookies"
-],
-"host_permissions": [
-  "http://localhost:8000/*",
-  "http://127.0.0.1:8000/*",
-  "https://aukro.cz/*",
-  "https://www.aukro.cz/*",
-  "https://www.bazos.cz/*",
-  "https://www.sbazar.cz/*"
-],
+    "tabs",
+    "scripting",
+    "storage",
+    "cookies"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*",
+    "https://aukro.cz/*",
+    "https://www.aukro.cz/*",
+    "https://www.bazos.cz/*",
+    "https://www.sbazar.cz/*"
+  ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
+    {
+      "matches": [
+        "https://www.facebook.com/marketplace/",
+        "https://facebook.com/*"
+      ],
+      "js": [
+        "facebook.js"
+      ]
+    },
     {
       "matches": [
         "http://localhost:8000/*",
@@ -60,7 +69,8 @@
         "*://*.bazos.cz/*"
       ],
       "js": [
-        "bazosContent.js"
+        "bazosContent.js",
+        "syncBazos.js"
       ]
     },
     {
@@ -95,7 +105,8 @@
       ],
       "matches": [
         "https://*.aukro.cz/*",
-        "https://*.bazos.cz/*"
+        "https://*.bazos.cz/*",
+        "https://*.sbazar.cz/*"
       ]
     }
   ]
