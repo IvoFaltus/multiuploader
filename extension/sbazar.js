@@ -15,7 +15,7 @@ function base64ToFile(base64, filename = "photo.jpg") {
   }
 
   return new File([arr], filename, { type: mime });
-}\
+}
 
 
 
