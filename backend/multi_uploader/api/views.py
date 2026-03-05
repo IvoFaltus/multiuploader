@@ -8,13 +8,16 @@ import json
 import base64
 from django.core.files.base import ContentFile
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from decimal import Decimal, InvalidOperation
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Listing, ListingImage, Platform, ListingPlatform
+from django.views.decorators.http import require_GET,require_POST
+
+
 
 def createListingFunc(owner, title, description, category, price_type, sale_type, price, condition, name, email, bank_account, city, postal, phone, personal_pickup, display_phone, platforms, images):
     listing = Listing.objects.create(
@@ -236,4 +239,48 @@ def create_listing(request):
         )
 
     return HttpResponse(status=204)
+
+@require_GET
+def getAllListings(request):
+    listings = Listing.objects.filter(owner=request.user).prefetch_related(
+        "images",
+        "listingplatform_set__platform"
+    )
+    print(listings)
+    data = []
+
+    for l in listings:
+        data.append({
+            "id": l.id,
+            "title": l.title,
+            "description": l.description,
+            "price": str(l.price),
+            "images": [img.image.url for img in l.images.all()],
+            "platforms": [
+                {
+                    "name": lp.platform.name,
+                    "link": lp.link
+                }
+                for lp in l.listingplatform_set.all()
+            ]
+        })
+
+    return JsonResponse(data, safe=False)
+
+
+
+
+def getListingsForPlatform(request,platform):    
+    platform_name = platform
+
+    data = []
+    listings = Listing.objects.filter(owner=request.user).prefetch_related("ListingImage")
+    for l in listings:
+        data.append()
+
+
+
+    return JsonResponse(data,safe=False)
+
+
 
