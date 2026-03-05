@@ -1,106 +1,75 @@
-let cityInput = null
-let emailInput = null
-let photoInput = null
-let titleInput = null
-let priceInput = null
-let categoryCombo = null
-let conditionCombo = null
-let descriptionInput = null
-let addPhotosBtn = null
-let marketplaceForm = null
-
 let initialized = false
 
-const init = () => {
+const init = (data) => {
+  if (!data) {
+  console.log("payload missing")
+  return
+}
+  console.log("init before")
   if (initialized) return
   initialized = true
   console.log("init")
 
-  // CITY
-const cityInput =
-  document.querySelector('input[aria-label="PSČ nebo město"]') ||
-  document.querySelector('label:has(span:contains("PSČ nebo město")) input');
+  const i = setInterval(() => {
 
-console.log("cityInput:", cityInput ? "FOUND" : "NOT FOUND", cityInput);
+    const title = [...document.querySelectorAll('span')]
+      .find(e => e.textContent.trim() === 'Název')
+      ?.closest('label')
+      ?.querySelector('input')
 
+    const price = [...document.querySelectorAll('span')]
+      .find(e => e.textContent.trim() === 'Cena')
+      ?.closest('label')
+      ?.querySelector('input')
 
-// EMAIL
-const emailInput =
-  document.querySelector('input[type="email"][autocomplete="email"]') ||
-  document.querySelector('input[type="email"]');
+    const desc = [...document.querySelectorAll('span')]
+      .find(e => e.textContent.trim() === 'Popis')
+      ?.closest('label')
+      ?.querySelector('textarea')
 
-console.log("emailInput:", emailInput ? "FOUND" : "NOT FOUND", emailInput);
+    const email = document.querySelector('input[type="email"]')
 
+    const photos = document.querySelector('input[type="file"][multiple]')
 
-// PHOTOS
-const photoInput =
-  document.querySelector('input[type="file"][multiple][accept*="image"]');
+    const condition = [...document.querySelectorAll('span')]
+      .find(e => e.textContent.trim() === 'Stav')
+      ?.closest('[role="combobox"]')
 
-console.log("photoInput:", photoInput ? "FOUND" : "NOT FOUND", photoInput);
+    if (title && data.title) title.value = data.title
+    if (price && data.price) price.value = data.price
+    if (desc && data.description) desc.value = data.description
+    if (email && data.email) email.value = data.email
 
+      if (!title) console.log("title not found")
+    if (!price) console.log("price not found")
+    if (!desc) console.log("description not found")
+    if (!email) console.log("email not found")
+    if (!photos) console.log("photos not found")
+    if (!condition) console.log("condition not found")
 
-// TITLE
-const titleLabel = [...document.querySelectorAll("label span")]
-  .find(el => el.textContent.trim() === "Název");
+    console.log("try")
 
-const titleInput = titleLabel?.closest("label")?.querySelector("input");
+    if (
+      title?.value === data.title &&
+      desc?.value === data.description &&
+      price?.value === data.price
+    ) {
+      clearInterval(i)
 
-console.log("titleInput:", titleInput ? "FOUND" : "NOT FOUND", titleInput);
+      setTimeout(clearInterval(i),20000)
+    }
 
-
-// PRICE
-const priceLabel = [...document.querySelectorAll("label span")]
-  .find(el => el.textContent.trim() === "Cena");
-
-const priceInput = priceLabel?.closest("label")?.querySelector("input");
-
-console.log("priceInput:", priceInput ? "FOUND" : "NOT FOUND", priceInput);
-
-
-// CATEGORY
-const categoryCombo = [...document.querySelectorAll('[role="combobox"]')]
-  .find(el => el.textContent.includes("Kategorie"));
-
-console.log("categoryCombo:", categoryCombo ? "FOUND" : "NOT FOUND", categoryCombo);
-
-
-// CONDITION
-const conditionCombo = [...document.querySelectorAll('[role="combobox"]')]
-  .find(el => el.textContent.includes("Stav"));
-
-console.log("conditionCombo:", conditionCombo ? "FOUND" : "NOT FOUND", conditionCombo);
-
-
-// DESCRIPTION
-const descriptionLabel = [...document.querySelectorAll("label span")]
-  .find(el => el.textContent.trim() === "Popis");
-
-const descriptionInput =
-  descriptionLabel?.closest("label")?.querySelector("textarea") ||
-  document.querySelector("textarea");
-
-console.log("descriptionInput:", descriptionInput ? "FOUND" : "NOT FOUND", descriptionInput);
-
-
-// FORM
-const marketplaceForm =
-  document.querySelector('[role="form"][aria-label="Marketplace"]') ||
-  document.querySelector("form");
-
-console.log("marketplaceForm:", marketplaceForm ? "FOUND" : "NOT FOUND", marketplaceForm);
-
-  console.log("Marketplace page detected")
-  
-  
+  }, 1000)
 }
+
 
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action !== "syncFacebook") return
-  const data = msg.payload
+
   let i = 0
 
   const timer = setInterval(() => {
-    console.log(i)
+    console.log(i + " debug")
 
     const btn = [...document.querySelectorAll("span")].find(
       el =>
@@ -118,20 +87,17 @@ chrome.runtime.onMessage.addListener((msg) => {
     i++
   }, 100)
 
+
   const observer = new MutationObserver(() => {
 
-    const el1 = document.querySelector('input[aria-label="PSČ nebo město"]')
-    const el2 = document.querySelector("#_r_3u_")
-    const el3 = document.querySelector('input[type="file"][multiple]')
+    const el1 = [...document.querySelectorAll('span')]
+      .find(e => e.textContent.trim() === 'Název')
+      ?.closest('label')
+      ?.querySelector('input')
 
-    let found = 0
-    if (el1) found++
-    if (el2) found++
-    if (el3) found++
-
-    if (found >= 3) {
+    if (el1) {
       observer.disconnect()
-      init()
+      init(msg.payload)
     }
 
   })

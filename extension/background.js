@@ -131,7 +131,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   tab => {
     chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
       if (tabId === tab.id && info.status === "complete") {
-        chrome.tabs.sendMessage(tabId, { action: "syncFacebook" });
+        chrome.tabs.sendMessage(tabId, { action: "syncFacebook",payload:data });
         chrome.tabs.onUpdated.removeListener(listener);
       }
     });

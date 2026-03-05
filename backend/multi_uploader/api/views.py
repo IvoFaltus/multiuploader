@@ -270,17 +270,55 @@ def getAllListings(request):
 
 
 
-def getListingsForPlatform(request,platform):    
-    platform_name = platform
+def getListingsForPlatform(request, platform):
+    print("---- getListingsForPlatform DEBUG ----")
 
     data = []
-    listings = Listing.objects.filter(owner=request.user).prefetch_related("ListingImage")
+
+    print("platform param:", platform)
+
+    platform_obj = Platform.objects.get(name=platform)
+    print("platform_obj:", platform_obj)
+    print("platform_obj.id:", platform_obj.id)
+
+    print("request.user:", request.user)
+    print("request.user.id:", request.user.id)
+    print("request.user.is_authenticated:", request.user.is_authenticated)
+
+    listingplatform_qs = ListingPlatform.objects.filter(platform=platform_obj)
+    print("ListingPlatform rows:", list(listingplatform_qs.values()))
+
+    listing_ids = list(
+        listingplatform_qs.values_list("listing_id", flat=True)
+    )
+    print("listing_ids:", listing_ids)
+
+    user_listings = Listing.objects.filter(owner=request.user)
+    print("all user listings:", list(user_listings.values("id", "title")))
+
+    listings = Listing.objects.filter(
+        owner=request.user,
+        id__in=listing_ids
+    )
+
+    print("filtered listings count:", listings.count())
+    print("filtered listings:", list(listings.values("id", "title")))
+
     for l in listings:
-        data.append()
+        print("processing listing:", l.id, l.title)
 
+        images = [img.image.url for img in l.images.all()]
+        print("images:", images)
 
+        data.append({
+            "id": l.id,
+            "title": l.title,
+            "description": l.description,
+            "price": str(l.price),
+            "images": images
+        })
 
-    return JsonResponse(data,safe=False)
+    print("final data:", data)
+    print("---- END DEBUG ----")
 
-
-
+    return JsonResponse(data, safe=False)
