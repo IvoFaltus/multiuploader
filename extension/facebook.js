@@ -1,14 +1,195 @@
 let initialized = false
 
+
+
+function injectMyFont() {
+  if (document.getElementById("myfont-style")) return;
+
+  const style = document.createElement("style");
+  style.id = "myfont-style";
+  style.textContent = `
+    @font-face {
+      font-family: "MyFont";
+      src: url("${chrome.runtime.getURL("fonts/GreaterTheory.otf")}") format("opentype");
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+
+function base64ToFile(base64, filename = "photo.jpg") {
+  const [meta, content] = base64.split(",");
+  const mime = meta.match(/data:(.*);base64/)?.[1] || "image/jpeg";
+  const bytes = atob(content);
+  const arr = new Uint8Array(bytes.length);
+
+  for (let i = 0; i < bytes.length; i++) {
+    arr[i] = bytes.charCodeAt(i);
+  }
+
+  return new File([arr], filename, { type: mime });
+}
+
+
+
+
+
+
+function addPhotosButton(anchor,data) {
+  if (!anchor || document.getElementById("uploadBtn2")) return;
+  
+  injectMyFont();
+
+  const btn = document.createElement("button");
+  btn.id = "uploadBtn2";
+  btn.type = "button";
+  btn.textContent = "Upload photos";
+
+  btn.style.cssText = `
+    margin-left: 12px;
+    padding: 8px 14px;
+    background: green;
+    color: white;
+    font-family: "MyFont", sans-serif;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    z-index: 999999;
+    position: relative;
+  `;
+
+  // 🔑 IMPORTANT CHANGE — do NOT append into parent
+  anchor.insertAdjacentElement("afterend", btn);
+
+btn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+
+  if (!Array.isArray(data?.photos) || data.photos.length === 0) {
+    console.error("[BAZOS] no photos in data.photos");
+    return;
+  }
+
+  // find the real facebook upload input
+  let input;
+  for (let i = 0; i < 40; i++) {
+    input = document.querySelector('input[type="file"][multiple]');
+    if (input) break;
+    await new Promise(r => setTimeout(r, 50));
+  }
+
+  if (!input) {
+    console.error("[BAZOS] upload input not found");
+    return;
+  }
+
+  const files = [];
+
+  for (let i = 0; i < Math.min(data.photos.length, 20); i++) {
+    const p = data.photos[i];
+    let file = null;
+
+    if (p instanceof File) {
+      file = p;
+    } 
+    else if (p instanceof Blob) {
+      file = new File([p], `photo_${i}.jpg`, { type: p.type || "image/jpeg" });
+    } 
+    else if (typeof p === "string") {
+      file = base64ToFile(p, `photo_${i}.jpg`);
+    } 
+    else if (p?.data && typeof p.data === "string") {
+      file = base64ToFile(p.data, p.name || `photo_${i}.jpg`);
+    }
+
+    if (file) files.push(file);
+  }
+
+  if (!files.length) {
+    console.error("[BAZOS] no valid files created");
+    return;
+  }
+
+  const dt = new DataTransfer();
+  files.forEach(f => dt.items.add(f));
+
+  input.files = dt.files;
+
+  // trigger facebook/react upload pipeline
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+
+  console.log("[BAZOS] photos injected:", dt.files.length);
+});
+
+
+
+
+  console.log("[BAZOS] upload button injected");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const setReactInput = (el, value) => {
+  const setter = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype,
+    "value"
+  ).set
+
+  setter.call(el, value)
+
+  el.dispatchEvent(new Event("input", { bubbles: true }))
+  el.dispatchEvent(new Event("change", { bubbles: true }))
+}
+
+const setReactTextarea = (el, value) => {
+  const setter = Object.getOwnPropertyDescriptor(
+    HTMLTextAreaElement.prototype,
+    "value"
+  ).set
+
+  setter.call(el, value)
+
+  el.dispatchEvent(new Event("input", { bubbles: true }))
+}
+
 const init = (data) => {
   if (!data) {
-  console.log("payload missing")
-  return
-}
+    console.log("payload missing")
+    return
+  }
+
   console.log("init before")
   if (initialized) return
   initialized = true
   console.log("init")
+
+
+
+
+
+
+
+
+
+
 
   const i = setInterval(() => {
 
@@ -35,12 +216,12 @@ const init = (data) => {
       .find(e => e.textContent.trim() === 'Stav')
       ?.closest('[role="combobox"]')
 
-    if (title && data.title) title.value = data.title
-    if (price && data.price) price.value = data.price
-    if (desc && data.description) desc.value = data.description
-    if (email && data.email) email.value = data.email
+    if (title && data.title) setReactInput(title, data.title)
+    if (price && data.price) setReactInput(price/25, data.price)
+    if (desc && data.description) setReactTextarea(desc, data.description)
+    if (email && data.email) setReactInput(email, data.email)
 
-      if (!title) console.log("title not found")
+    if (!title) console.log("title not found")
     if (!price) console.log("price not found")
     if (!desc) console.log("description not found")
     if (!email) console.log("email not found")
@@ -51,15 +232,18 @@ const init = (data) => {
 
     if (
       title?.value === data.title &&
-      desc?.value === data.description &&
-      price?.value === data.price
+      desc?.value === data.description 
+      
     ) {
       clearInterval(i)
 
-      setTimeout(clearInterval(i),20000)
+      setTimeout(() => clearInterval(i), 20000)
     }
-
+addPhotosButton(photos,data)
   }, 1000)
+
+
+  
 }
 
 

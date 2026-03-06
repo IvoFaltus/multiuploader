@@ -123,12 +123,17 @@ const syncBtn = document.querySelector("#sync");
 if (syncBtn) {
   syncBtn.addEventListener("click", async () => {
 
-    const tel = prompt("Enter phone number for bazos")
-    const email = prompt("Enter email for bazos")
+   
+
+    
     const all = document.querySelector("#all").checked
     const sbazar = document.querySelector("#sbazar").checked
     const aukro = document.querySelector("#aukro").checked
     const bazos = document.querySelector("#bazos").checked
+    if(bazos){
+       const tel = prompt("Enter phone number for bazos")
+    const email = prompt("Enter email for bazos")
+    }
     console.log("sync executed");
     payload = {
 

@@ -70,7 +70,8 @@
       ],
       "js": [
         "bazosContent.js",
-        "syncBazos.js"
+        "syncBazos.js",
+        "BazosListingsReader.js"
       ]
     },
     {
@@ -106,7 +107,8 @@
       "matches": [
         "https://*.aukro.cz/*",
         "https://*.bazos.cz/*",
-        "https://*.sbazar.cz/*"
+        "https://*.sbazar.cz/*",
+        "https://*.facebook.com/*"
       ]
     }
   ]
