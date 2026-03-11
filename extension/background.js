@@ -180,6 +180,51 @@ if (msg.action === "syncListings") {
 
   return true;
 }
+if (msg.action === "syncListingsWithFetch") {
+
+  (async () => {
+    console.log("data are")
+    console.log(msg.data)
+    const data = msg.data;
+
+    async function urlToBase64(url) {
+      const res = await fetch(url);
+      const blob = await res.blob();
+
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    for (const listing of data) {
+      if (!Array.isArray(listing.images)) continue;
+
+      listing.images = await Promise.all(
+        listing.images.map(async url => {
+          try {
+            return await urlToBase64(url);
+          } catch {
+            return null;
+          }
+        })
+      ).then(arr => arr.filter(Boolean));
+    }
+
+    fetch("http://127.0.0.1:8000/createListing/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ listings: data })
+    })
+      .then(() => sendResponse({ ok: true }))
+      .catch(() => sendResponse({ ok: false }));
+
+  })();
+
+  return true;
+}
 
  if (msg.action === "syncSbazar") {
     console.log("message received");

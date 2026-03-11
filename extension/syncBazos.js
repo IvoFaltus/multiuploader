@@ -10,6 +10,7 @@ chrome.runtime.onMessage.addListener(async (msg) => {
   if (msg.action !== "syncBazos") return;
 
   const data = msg.payload || {};
+  const synced = [];
 
   const emailInput = document.querySelector(
     "body > div > div.flexmain > div.maincontent > form > span:nth-child(1) > input",
@@ -33,7 +34,7 @@ chrome.runtime.onMessage.addListener(async (msg) => {
   console.log("[syncBazos] links before submit:", links);
   sessionStorage.setItem("syncBazosLinks", JSON.stringify(links));
 
-  confirmBtn.click();
+  //confirmBtn.click();
 
 
 
@@ -61,11 +62,11 @@ chrome.runtime.onMessage.addListener(async (msg) => {
   }
 
   await chrome.runtime.sendMessage({
-    action: "syncListings",
+    action: "syncListingsWithFetch",
     data: synced,
     
   });
-  await chrome.runtime.sendMessage({action: "closeTab",tabId:maintab})
+  await chrome.runtime.sendMessage({action: "closeTab",tabId:msg.mainTab})
 
 
 

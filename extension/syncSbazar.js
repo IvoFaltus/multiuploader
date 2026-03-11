@@ -74,5 +74,5 @@ chrome.runtime.onMessage.addListener(async msg => {
     data: synced,
     
   });
-  await chrome.runtime.sendMessage({action: "closeTab",tabId:maintab})
+  await chrome.runtime.sendMessage({action: "closeTab",tabId:msg.mainTab})
 });

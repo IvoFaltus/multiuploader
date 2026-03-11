@@ -133,13 +133,14 @@ if (syncBtn) {
     if(bazos){
        const tel = prompt("Enter phone number for bazos")
     const email = prompt("Enter email for bazos")
-    }
-    console.log("sync executed");
-    payload = {
+    payload =(email && tel)? {
 
       email:email,
       phone:tel
+    }:null
     }
+    console.log("sync executed");
+    
 
 
     if(all){

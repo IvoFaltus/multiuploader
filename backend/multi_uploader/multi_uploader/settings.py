@@ -24,13 +24,15 @@ CSRF_TRUSTED_ORIGINS = [
     "chrome-extension://gfpofkjdligjpnbaagjildkjomeeckig",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://aukro.cz"
+    "https://aukro.cz",
+    "http://127.0.0.1:5555"
 ]
 CORS_ALLOWED_ORIGINS = [
     "chrome-extension://gfpofkjdligjpnbaagjildkjomeeckig",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "https://aukro.cz",
+    "http://127.0.0.1:5555"
 ]
 
 

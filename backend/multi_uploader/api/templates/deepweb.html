@@ -1,152 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>DeepWeb</title>
-    <style>
-        li{
-            list-style-type: none;
-        }
-        body {
-            background: #0a0a0a;
-            color: #0fda88;
-            font-family: Consolas, monospace;
-            text-align: center;
-            padding-top: 80px;
-        }
-        .box {
-            border: 1px solid #0fda88;
-            padding: 30px;
-            width: 420px;
-            margin: auto;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 8px;
-            margin-bottom: 40px;
-        }
-        .glow {
-            text-shadow: 0 0 10px #0fda88, 0 0 20px #0fda88;
-        }
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: #0fda88;
-            color: #000;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .btn:hover {
-            background: #11ff9a;
-        }
-        .card{
-            border: 1px solid #0fda88;
-            width: 300px;
-            margin: 0 auto;
-            
-            padding-right: 30px;    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'deepweb.css' %}" />
+    <link rel="preconnect" href="https://icons.googleapis.com" />
+    <link rel="preconnect" href="https://icons.gstatic.com" crossorigin />
+    <link
+      href="https://icons.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{% static 'deepweb.js' %}" type="module"></script>
+  </head>
+  <body class="indexBody">
+    <header class="header1">
+      <div class="navbarD">
+        <button class="btnD btnD1">
+          <img src="{% static 'icons/Info.svg' %}" alt="" />Guide
+        </button>
+        <button class="btnD btnD2">
+          <img src="{% static 'icons/Stat.svg' %}" alt="" />Statistics
+        </button>
+        <button class="btnD btnD4">
+          <img src="{% static 'icons/Sort list_alt.svg' %}" alt="" />Listings
+        </button>
+        <button class="btnD btnD3">
+          <img src="{% static 'icons/Setting_line.svg' %}" alt="" />Settings
+        </button>
+      </div>
+    </header>
 
-        }
-    </style>
-</head>
-<body>
+    <div class="main">
+      <div class="optionsD">
+        <input type="text" class="searchListing" placeholder="Search" />
 
-<div class="box">
-    <h1 class="glow">ACCESS GRANTED</h1>
-    <p>Welcome to the DeepWeb panel.</p>
-    <p>Your identity has been verified.</p>
+        <div class="subOptions">
+          <div class="optionD optionD0">
+            <h1 class="optionTitleD">Display</h1>
+            <p>All<input type="checkbox" id="all" checked /></p>
+            <p>Seperate<input type="checkbox" id="seperate" /></p>
+            <p>Only Bazoš<input type="checkbox" id="bazosOnly" /></p>
+            <p>Only Sbazar<input type="checkbox" id="sbazarOnly" /></p>
+            <p>Only Aukro<input type="checkbox" id="aukroOnly" /></p>
+          </div>
 
-    <!-- Button to go to Create Listing page -->
-    <a href="/createListingPage" class="btn">Create Listing</a>
-</div>
-<div class="cards-section">
+          <div class="optionD optionD1">
+            <h1 class="optionTitleD">Sort By</h1>
+            <p>Price (Low to High) <input type="checkbox" id="price1" /></p>
+            <p>Price (High to Low)<input type="checkbox" id="price2" /></p>
+            <p>Most Recent<input type="checkbox" id="mostRecent" checked /></p>
+            <p>Oldest First<input type="checkbox" id="oldestFirst" /></p>
+          </div>
 
-</div>
+          <div class="optionD optionD2">
+            <button class="addListingBtn aBtn">
+              <img src="{% static 'icons/Chat_plus.svg' %}" alt="" />Add Listing
+            </button>
+            <button class="removeListingBtn aBtn">
+              <img src="{% static './icons/Remove.svg' %}" alt="" />Remove
+              Listing
+            </button>
+          </div>
 
+          <div class="optionD optionD3">
+            <h1>Options</h1>
+          </div>
+        </div>
+      </div>
 
+      <script></script>
 
-<script>
-
-const data = {{ data_json|safe }};
-
-Object.keys(data).forEach(key => {
-    const listing = data[key];
-
-
-    const pictures = []
-
-
-    for(const picUrl of listing.pictures){
-
-        const newPicUrl = "../.."+picUrl;
-       pictures.push(newPicUrl);
-    }
-
-
-
-
-
-
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    const ul = document.createElement('ul');
-    
-    for (const field of Object.keys(listing)) {
-    const value = listing[field];
-    const li = document.createElement('li');
-    li.innerHTML = `<strong>${field.charAt(0).toUpperCase() + field.slice(1)}</strong>: ${value}`;
-    
-    ul.appendChild(li);
-}
-    for(const picUrl of pictures){
-        const li = document.createElement('li');
-        const img = document.createElement('img');
-        img.src = picUrl;
-        img.style.maxWidth = '100%';
-        img.style.marginTop = '10px';
-        li.appendChild(img);
-        ul.appendChild(li);
-    }
-
-    card.appendChild(ul);
-    document.querySelector('.cards-section').appendChild(card);
-});
-
-
-const deleteListings = ()=>{
-
-
-    fetch("/deleteTable", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ tables: "all" })
-})
-}
-
-
-</script>
-
-<button id="delete" onclick='deleteListings()' >delete all listings</button>
-<br>
-<button id="sync" >sync</button>
-<br>
-<label for="all">All</label>
-<input type="checkbox" name="all" id="all">
-<br>
-<label for="aukro">aukro</label>
-<input type="checkbox" name="aukro" id="aukro">
-<br>
-<label for="bazos">bazos</label>
-<input type="checkbox" name="bazos" id="bazos">
-<br>
-<label for="bazos">sbazar</label>
-<input type="checkbox" name="sbazar"  id="sbazar">
-
-
-</div>
-
-
-</body>
+      <div class="listingsDiv">
+        <div class="allListings">
+          
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

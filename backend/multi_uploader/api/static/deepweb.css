@@ -1,0 +1,413 @@
+:root {
+  --c1: #050505;
+  --c2: #111111;
+  --c3: #1b1b1b;
+  --c4: #0d0d0d;
+  --c5: #171717;
+  --c6: #f3f3f3;
+  --c7: rgb(205,205,205);
+  --c8: rgb(120,120,120);
+
+  --bg-gradient: linear-gradient(180deg, #0f0f0f, #040404);
+  --surface-gradient: linear-gradient(180deg, #1a1a1a, #111111);
+  --panel-gradient: linear-gradient(180deg, #232323, #161616);
+  --inner-gradient: linear-gradient(180deg, #181818, #0f0f0f);
+  --control-gradient: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+
+  --shadow1: rgba(0,0,0,0.35);
+  --shadow2: rgba(255,255,255,0.03);
+
+  --boxShadowSoft: 0px 6px 12px rgba(0,0,0,0.42);
+  --boxShadowMedium: 0px 10px 28px rgba(0,0,0,0.55);
+  --boxShadowInner: inset 0px 3px 0px rgba(255,255,255,0.04);
+}
+
+body {
+  font-family: "MyFont", sans-serif;
+}
+
+/* PAGE */
+
+.indexBody {
+  background: var(--bg-gradient);
+  margin: 0;
+}
+
+/* HEADER */
+
+.header1 {
+  width: 100%;
+  height: 100px;
+  background: var(--surface-gradient);
+  box-shadow: var(--boxShadowMedium);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbarD {
+  background: var(--panel-gradient);
+  width: 40%;
+  height: 60px;
+  box-shadow: var(--boxShadowSoft), var(--boxShadowInner);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  font-family: "MyFont", sans-serif;
+  border-radius: 25px;
+}
+
+.btnD {
+  all: unset;
+  font-family: inherit;
+  color: var(--c6);
+  text-shadow: 3px 4px 4px var(--shadow1);
+  border-radius: 25px;
+  font-size: 25px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 5px;
+  font-style: italic;
+}
+
+
+.btnD2 img  {
+  transform: translateY(-2px);
+}
+.btnD img, .btnD  {
+ filter: drop-shadow(0 2px 4px rgb(42, 40, 40));
+ text-shadow:var(--shadow2)
+}
+
+/* MAIN LAYOUT */
+
+.main {
+  display: flex;
+  gap: 10px;
+}
+
+
+/* SIDEBAR */
+
+.optionsD {
+  background: var(--surface-gradient);
+  width: 20%;
+  height: 85vh;
+  margin-left: 15px;
+  margin-top: 20px;
+  box-shadow: var(--boxShadowMedium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 25px;
+}
+
+.optionD {
+  color: var(--c6);
+  text-shadow: 0px 4px 4px var(--shadow1);
+  font-family: "MyFont", sans-serif;
+  background: var(--panel-gradient);
+  width: 80%;
+  height: auto;
+  padding: 15px;
+  border-radius: 25px;
+  box-shadow: var(--boxShadowSoft), var(--boxShadowInner);
+}
+
+.optionD0 {
+  
+}
+
+.optionD3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+  
+  
+  padding: 10px;
+  height: 5%;
+  
+}
+
+.optionD2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.subOptions {
+  
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  background: var(--inner-gradient);
+  height: 90%;
+  width: 85%;
+  transform: translateY(2%);
+  border-radius: 25px;
+  box-shadow: var(--boxShadowSoft);
+  gap: 5px;
+}
+
+.optionD p {
+  display: flex;
+}
+
+/* SEARCH */
+
+.searchListing {
+  width: 78%;
+  height: 50px;
+  border: none;
+  background: var(--inner-gradient);
+  padding-left: 30px;
+  color: var(--c7);
+  font-size: 24px;
+  border-radius: 25px;
+  box-shadow: var(--boxShadowSoft), var(--boxShadowInner);
+  transform: translateY(-10%);
+}
+
+.searchListing::placeholder {
+  color: var(--c8);
+  font-size: 23px;
+}
+
+.searchListing:focus {
+  outline: none;
+}
+
+/* BUTTONS */
+
+.aBtn {
+  all: unset;
+  font-family: inherit;
+  color: var(--c6);
+  background: var(--control-gradient);
+  width: 200px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+  box-shadow: var(--boxShadowSoft), var(--boxShadowInner);
+}
+
+/* CHECKBOX */
+
+input[type="checkbox"] {
+  width: 20px;
+  position: absolute;
+  right: 40px;
+  accent-color: var(--c1);
+}
+
+/* TITLES */
+
+.optionTitleD {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  margin-bottom: 30px;
+}
+
+/* LISTINGS */
+
+.listingsDiv {
+  background: var(--surface-gradient);
+  width: 77vw;
+  height: 85vh;
+  margin-left: 15px;
+  margin-top: 20px;
+  box-shadow: var(--boxShadowMedium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+}
+
+.allListings {
+  width: 95%;
+  height: 90%;
+  background: var(--inner-gradient);
+  border-radius: 25px;
+  box-shadow: var(--boxShadowSoft);
+}
+
+.aBtn{
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:15px;
+}
+
+.aBtn img{
+
+  transform: scale(1.4);
+}
+
+.allListings{
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.card{
+
+  margin-top: 30px;
+  width:90%;
+  height: 100px;
+  background-color: rgb(37, 36, 36);
+  border-radius: 40px;
+
+  display: flex;
+  align-items: center;
+  box-shadow: var(--boxShadowInner);
+  justify-content: space-around;
+   
+}
+
+.card img{
+
+  transform: translateX(30px);
+}
+
+.card .pfpDiv{
+
+
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+a.platforms{
+
+
+  width: 400px;
+}
+a.title{
+  width: 200px;
+}
+a.description{
+  width: 200px;
+}
+
+
+.optionD{
+  transform: scale(0.9);
+  margin:0;
+}
+.subOptions{
+  
+  margin: 0;
+  padding: 0;
+}
+
+
+
+.optionD3{
+
+
+  transform: translateY(50%) scale(0.9);
+}
+.optionD2{
+
+
+  transform: translateY(23%) scale(0.9);
+}
+.optionD1{
+
+
+  transform: translateY(8%) scale(0.9);
+}
+
+
+
+.platformContainer{
+
+
+display: flex;
+  background-color: rgb(56, 53, 58);
+
+  height: 95%;
+  width: 33%;
+  border-color: 3px solid green;
+  flex-direction: column;
+  align-items: center;
+}
+
+.platformContainer h1{
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+
+
+.allPlatformsDiv{
+  
+  width: 95%;
+  height: 90%;
+}
+
+.frame{
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  align-items: center;
+
+  overflow-y: auto;
+  
+}
+
+.frame2{
+
+
+   width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+
+  align-items: center;
+  
+  overflow-y: auto;
+}
+
+.card2{
+  margin: 0;
+  width: 90%;
+  height: 10%;
+  background-color: rgb(35, 33, 33);
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 10px;
+  overflow-y: auto;
+}
+
+.card2 p{
+  display: block;
+  margin: 20px;
+}
+
+.pfpDiv2{
+
+  width: 50px;
+  height: 50px;
+}

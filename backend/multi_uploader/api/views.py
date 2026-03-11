@@ -132,7 +132,7 @@ def deepweb_page(request):
     for l in listings:
         data[f"Listing {i}"] = { 
     "title": l.title,
-    "link": ListingPlatform.objects.filter(listing=l).first().link,
+    "links": list(ListingPlatform.objects.filter(listing=l).values_list("link", flat=True)),
     "description": l.description,
     "price":  str(l.price) if l.price is not None else None,
     "platforms": [listing_platform.platform.name for listing_platform in ListingPlatform.objects.filter(listing=l)],
@@ -182,6 +182,8 @@ def toImageFile(base64_string, filename="image"):
 
 @csrf_exempt
 def create_listing(request):
+    print(request.body)
+
     if request.method != "POST":
         return HttpResponse(status=405)
 
@@ -213,7 +215,7 @@ def create_listing(request):
             except InvalidOperation:
                 pass
 
-        # listing create/get
+        # create or get listing
         listing, created = Listing.objects.get_or_create(
             owner=request.user,
             title=title,
@@ -221,17 +223,19 @@ def create_listing(request):
             defaults={"price": price},
         )
 
-        # images only when new listing
+        # add images only if new listing
         if created:
             for image in images:
                 img_file = toImageFile(image)
                 if img_file:
                     ListingImage.objects.create(listing=listing, image=img_file)
 
+        # find platform
         platform = Platform.objects.filter(name=platform_name).first()
         if not platform:
             continue
-        
+
+        # create relation listing-platform
         ListingPlatform.objects.get_or_create(
             listing=listing,
             platform=platform,
@@ -240,8 +244,12 @@ def create_listing(request):
 
     return HttpResponse(status=204)
 
+
+
+@csrf_exempt
 @require_GET
 def getAllListings(request):
+    
     listings = Listing.objects.filter(owner=request.user).prefetch_related(
         "images",
         "listingplatform_set__platform"
