@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide</title>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'header.css' %}" />
+<link rel="stylesheet" href="{% static 'guide.css' %}" />
+<script src="{% static 'navigation.js' %}" type="module"></script>
+
+</head>
+
+<body>
+
+<header class="header1">
+  <div class="navbarD">
+    <button class="btnD btnD1">
+      <img src="{% static 'icons/Info.svg' %}" alt="">Guide
+    </button>
+
+    <button class="btnD btnD2">
+      <img src="{% static 'icons/Stat.svg' %}" alt="">Statistics
+    </button>
+
+    <button class="btnD btnD4">
+      <img src="{% static 'icons/Sort list_alt.svg' %}" alt="">Listings
+    </button>
+
+    <button class="btnD btnD3">
+      <img src="{% static 'icons/Setting_line.svg' %}" alt="">Settings
+    </button>
+  </div>
+</header>
+
+
+<main class="guideContainer">
+
+
+<!-- HERO -->
+<section class="guideHero">
+
+<h1>Multi-Uploader</h1>
+
+<p class="guideSubtitle">
+Manage marketplace listings from one dashboard and upload them to multiple platforms automatically.
+</p>
+
+</section>
+
+
+<!-- GITHUB -->
+<section class="githubCard">
+
+<div class="githubLeft">
+<h2>Download the Project</h2>
+<p>Get the full source code and run the project locally.</p>
+</div>
+
+<a class="githubButton"
+href="https://github.com/IvoFaltus/multiuploader"
+target="_blank">
+View on GitHub
+</a>
+
+</section>
+
+
+<!-- MODE SWITCH -->
+<div class="guideToggle">
+
+<span class="toggleText">Running locally</span>
+
+<label class="switch">
+<input type="checkbox" id="localToggle">
+<span class="slider"></span>
+</label>
+
+</div>
+
+
+<!-- HOW IT WORKS -->
+<section class="guideCard">
+
+<h2>How the system works</h2>
+
+<div class="guideSplit">
+
+<div class="splitBox">
+<h3>Web Application</h3>
+<p>
+Stores listings and shows them in a unified dashboard where you can manage uploads.
+</p>
+</div>
+
+<div class="splitBox">
+<h3>Browser Extension</h3>
+<p>
+Handles automation. It opens marketplace pages and fills listing forms automatically.
+</p>
+</div>
+
+</div>
+
+<div class="guideNote">
+Without the extension the dashboard can store listings but cannot interact with marketplaces.
+</div>
+
+</section>
+
+
+
+<!-- CREATE LISTING -->
+<section class="guideCard">
+
+<h2>Create a listing</h2>
+
+<div class="steps">
+
+<div class="stepItem">
+<span class="stepNumber">1</span>
+<p>Open the Listings page</p>
+</div>
+
+<div class="stepItem">
+<span class="stepNumber">2</span>
+<p>Click Add Listing</p>
+</div>
+
+<div class="stepItem">
+<span class="stepNumber">3</span>
+<p>Fill title, description, price, category and photos</p>
+</div>
+
+<div class="stepItem">
+<span class="stepNumber">4</span>
+<p>Select marketplaces</p>
+</div>
+
+<div class="stepItem">
+<span class="stepNumber">5</span>
+<p>Click Submit</p>
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- LOCAL SETUP -->
+<div id="localSection">
+
+<section class="guideCard">
+
+<h2>Local setup</h2>
+
+<div class="steps">
+
+<div class="stepItem">
+<span class="stepNumber">1</span>
+<p>Download the project from GitHub</p>
+</div>
+
+<div class="stepItem">
+<span class="stepNumber">2</span>
+<p>Install Python</p>
+</div>
+
+<div class="stepItem">
+<span class="stepNumber">3</span>
+<p>Install backend dependencies</p>
+</div>
+
+<div class="stepItem">
+<span class="stepNumber">4</span>
+<p>Run Django server</p>
+</div>
+
+<div class="stepItem">
+<span class="stepNumber">5</span>
+<p>Load the extension into Chrome</p>
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="guideCard">
+
+<h2>Start the server</h2>
+
+<div class="guideStep">
+<code>python manage.py runserver</code>
+</div>
+
+<div class="guideStep">
+<code>http://127.0.0.1:8000</code>
+</div>
+
+</section>
+
+</div>
+
+
+
+<!-- PLATFORMS -->
+<section class="guideCard">
+
+<h2>Supported platforms</h2>
+
+<div class="platformGrid">
+
+<div class="platformItem">Aukro</div>
+<div class="platformItem">Bazos</div>
+<div class="platformItem">Sbazar</div>
+<div class="platformItem">Facebook Marketplace</div>
+
+</div>
+
+</section>
+
+
+
+<!-- PROBLEMS -->
+<section class="warningCard">
+
+<h2>Common issues</h2>
+
+<ul>
+<li>Extension not installed</li>
+<li>Not logged into marketplace</li>
+<li>Captcha or security check</li>
+<li>Marketplace page structure changed</li>
+</ul>
+
+</section>
+
+
+</main>
+
+
+
+<script>
+
+const toggle = document.getElementById("localToggle");
+const section = document.getElementById("localSection");
+
+section.style.display = "none";
+
+toggle.addEventListener("change", () => {
+    section.style.display = toggle.checked ? "block" : "none";
+});
+
+</script>
+
+</body>
+</html>

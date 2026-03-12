@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from .models import Listing ,ListingPlatform, Platform, ListingImage
+from .models import Listing ,ListingPlatform, Platform, ListingImage, UserData
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 import json
@@ -16,6 +16,34 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Listing, ListingImage, Platform, ListingPlatform
 from django.views.decorators.http import require_GET,require_POST
+from pathlib import Path
+
+
+THEMES_FILE = Path(__file__).resolve().parent / "static" / "themes.txt"
+COLORS_FILE = Path(__file__).resolve().parent / "static" / "colors.css"
+
+
+def write_theme_css(theme_name):
+    try:
+        themes = json.loads(THEMES_FILE.read_text(encoding="utf-8") or "{}")
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False
+
+    css_text = themes.get(theme_name) or themes.get("black")
+    if not css_text:
+        return False
+
+    COLORS_FILE.write_text(css_text, encoding="utf-8")
+    return True
+
+
+def sync_user_theme(user):
+    if not getattr(user, "is_authenticated", False):
+        return False
+
+    config = UserData.objects.filter(user=user).values("theme").first()
+    theme_name = config["theme"] if config and config.get("theme") else "black"
+    return write_theme_css(theme_name)
 
 
 
@@ -95,6 +123,7 @@ def deleteTable(request):
 def create_listing_page(request):
     if not request.user.is_authenticated:
         return redirect('home')     # URL name  
+    sync_user_theme(request.user)
     return render(request, 'create_listing.html')
 
 def login_page(request):
@@ -125,6 +154,8 @@ def deepweb_page(request):
     if not request.user.is_authenticated:
         return redirect('home')
 
+    sync_user_theme(request.user)
+
     listings = Listing.objects.filter(owner=request.user)
 
     data = {}
@@ -144,7 +175,7 @@ def deepweb_page(request):
         
         
 
-    return render(request, 'deepweb.html', {"data_json": json.dumps(data)})
+    return render(request, 'deepweb.html', {"data_json": json.dumps(data),"config":json.dumps(UserData.objects.filter(user=request.user).values().first())})
 
 
 def register(request):
@@ -163,6 +194,27 @@ def register(request):
 
 
 
+def settings_page(request):
+    config = None
+    if request.user.is_authenticated:
+        sync_user_theme(request.user)
+        config = UserData.objects.filter(user=request.user).values().first()
+
+    return render(
+        request,
+        "settings.html",
+        {
+            "config": config,
+            "config_json": json.dumps(config)
+        }
+    )
+def guide_page(request):
+    sync_user_theme(request.user)
+    return render(request,"guide.html")
+def stats_page(request):
+    sync_user_theme(request.user)
+    return render(request,"stats.html")
+
 
 
 def toImageFile(base64_string, filename="image"):
@@ -178,6 +230,37 @@ def toImageFile(base64_string, filename="image"):
     )
 
 
+def saveConfig(request):
+    if request.method != "POST":
+        return HttpResponse(status=405)
+
+    data = json.loads(request.body)
+
+    UserData.objects.update_or_create(
+        user=request.user,
+        defaults={
+            "theme": data["theme"],
+            "email": data["email"],
+            "phone": data["phone"],
+            "sorting": data["sorting"],
+            "display": data["display"]
+        }
+    )
+
+    write_theme_css(data.get("theme", "black"))
+
+    return HttpResponse(status=204)
+
+
+@require_GET
+def applyTheme(request):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=204)
+
+    if sync_user_theme(request.user):
+        return HttpResponse(status=204)
+
+    return HttpResponse("Theme not found", status=404)
 
 
 @csrf_exempt
@@ -270,7 +353,8 @@ def getAllListings(request):
                     "link": lp.link
                 }
                 for lp in l.listingplatform_set.all()
-            ]
+            ],
+            "created_at":l.created_at
         })
 
     return JsonResponse(data, safe=False)
@@ -279,38 +363,28 @@ def getAllListings(request):
 
 
 def getListingsForPlatform(request, platform):
-    print("---- getListingsForPlatform DEBUG ----")
-
+    
     data = []
 
-    print("platform param:", platform)
-
+   
     platform_obj = Platform.objects.get(name=platform)
-    print("platform_obj:", platform_obj)
-    print("platform_obj.id:", platform_obj.id)
-
-    print("request.user:", request.user)
-    print("request.user.id:", request.user.id)
-    print("request.user.is_authenticated:", request.user.is_authenticated)
-
+   
     listingplatform_qs = ListingPlatform.objects.filter(platform=platform_obj)
-    print("ListingPlatform rows:", list(listingplatform_qs.values()))
+   
 
     listing_ids = list(
         listingplatform_qs.values_list("listing_id", flat=True)
     )
-    print("listing_ids:", listing_ids)
+    
 
     user_listings = Listing.objects.filter(owner=request.user)
-    print("all user listings:", list(user_listings.values("id", "title")))
 
     listings = Listing.objects.filter(
         owner=request.user,
         id__in=listing_ids
     )
 
-    print("filtered listings count:", listings.count())
-    print("filtered listings:", list(listings.values("id", "title")))
+  
 
     for l in listings:
         print("processing listing:", l.id, l.title)
@@ -318,12 +392,22 @@ def getListingsForPlatform(request, platform):
         images = [img.image.url for img in l.images.all()]
         print("images:", images)
 
+        platforms = [
+            {
+                "name": lp.platform.name,
+                "link": lp.link
+            }
+            for lp in l.listingplatform_set.all()
+        ]
+
         data.append({
             "id": l.id,
             "title": l.title,
             "description": l.description,
             "price": str(l.price),
-            "images": images
+            "images": images,
+            "platforms": platforms,
+            "created_at":l.created_at
         })
 
     print("final data:", data)

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'header.css' %}" />
+    <link rel="stylesheet" href="{% static 'stats.css' %}" />
+    <script src="{% static 'navigation.js' %}" type="module"></script>
+  </head>
+  <body>
+    <header class="header1">
+      <div class="navbarD">
+        <button class="btnD btnD1">
+          <img src="{% static 'icons/Info.svg' %}" alt="" />Guide
+        </button>
+        <button class="btnD btnD2">
+          <img src="{% static 'icons/Stat.svg' %}" alt="" />Statistics
+        </button>
+        <button class="btnD btnD4">
+          <img src="{% static 'icons/Sort list_alt.svg' %}" alt="" />Listings
+        </button>
+        <button class="btnD btnD3">
+          <img src="{% static 'icons/Setting_line.svg' %}" alt="" />Settings
+        </button>
+      </div>
+    </header>
+  </body>
+</html>
+

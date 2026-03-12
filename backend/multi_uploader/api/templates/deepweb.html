@@ -13,6 +13,7 @@
       rel="stylesheet"
     />
     <script src="{% static 'deepweb.js' %}" type="module"></script>
+    <script src="{% static 'navigation.js' %}" type="module"></script>
   </head>
   <body class="indexBody">
     <header class="header1">
@@ -35,13 +36,13 @@
     <div class="main">
       <div class="optionsD">
         <input type="text" class="searchListing" placeholder="Search" />
-
+<script>console.log({{config|safe}})</script>
         <div class="subOptions">
           <div class="optionD optionD0">
             <h1 class="optionTitleD">Display</h1>
             <p>All<input type="checkbox" id="all" checked /></p>
             <p>Seperate<input type="checkbox" id="seperate" /></p>
-            <p>Only Bazoš<input type="checkbox" id="bazosOnly" /></p>
+            <p>Only Bazos<input type="checkbox" id="bazosOnly" /></p>
             <p>Only Sbazar<input type="checkbox" id="sbazarOnly" /></p>
             <p>Only Aukro<input type="checkbox" id="aukroOnly" /></p>
           </div>
@@ -74,7 +75,7 @@
 
       <div class="listingsDiv">
         <div class="allListings">
-          
+          <!-- listings are rendered here--> 
         </div>
       </div>
     </div>

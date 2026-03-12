@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings</title>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'header.css' %}" />
+<link rel="stylesheet" href="{% static 'settings.css' %}" />
+<script src="{% static 'navigation.js' %}" type="module"></script>
+</head>
+
+<body>
+
+<header class="header1">
+  <div class="navbarD">
+    <button class="btnD btnD1">
+      <img src="{% static 'icons/Info.svg' %}" alt="" />Guide
+    </button>
+
+    <button class="btnD btnD2">
+      <img src="{% static 'icons/Stat.svg' %}" alt="" />Statistics
+    </button>
+
+    <button class="btnD btnD4">
+      <img src="{% static 'icons/Sort list_alt.svg' %}" alt="" />Listings
+    </button>
+
+    <button class="btnD btnD3">
+      <img src="{% static 'icons/Setting_line.svg' %}" alt="" />Settings
+    </button>
+  </div>
+</header>
+
+
+<main class="settingsContainer">
+
+<form id="settingsForm" class="settingsPanel">
+
+<section class="currentSettings">
+  <h1>Current Settings</h1>
+  <div class="currentSettingsGrid">
+    <p><span>Theme</span>{{ config.theme|default:"Not set" }}</p>
+    <p><span>Email</span>{{ config.email|default:"Not set" }}</p>
+    <p><span>Phone</span>{{ config.phone|default:"Not set" }}</p>
+    <p><span>Sorting</span>{{ config.sorting|default:"Not set" }}</p>
+    <p><span>Display</span>{{ config.display|default:"Not set" }}</p>
+  </div>
+</section>
+
+<h2>GUI Theme</h2>
+<select name="theme">
+  <option value="white" {% if config.theme == "white" %}selected{% endif %}>White</option>
+  <option value="black" {% if config.theme == "black" %}selected{% endif %}>Black</option>
+  <option value="blue" {% if config.theme == "blue" %}selected{% endif %}>Blue</option>
+  <option value="purple" {% if config.theme == "purple" %}selected{% endif %}>Purple</option>
+  <option value="cyan" {% if config.theme == "cyan" %}selected{% endif %}>Cyan</option>
+  <option value="green" {% if config.theme == "green" %}selected{% endif %}>Green</option>
+  <option value="amber" {% if config.theme == "amber" %}selected{% endif %}>Amber</option>
+  <option value="red" {% if config.theme == "red" %}selected{% endif %}>Red</option>
+  <option value="teal" {% if config.theme == "teal" %}selected{% endif %}>Teal</option>
+  <option value="olive" {% if config.theme == "olive" %}selected{% endif %}>Olive</option>
+</select>
+
+
+<h2>Contact</h2>
+
+<label>Email</label>
+<input type="email" name="email" placeholder="example@email.com" value="{{ config.email|default:'' }}">
+
+<label>Phone number</label>
+<input 
+    type="text"
+    name="phone"
+    placeholder="233130123"
+    value="{{ config.phone|default:'' }}"
+    pattern="[0-9]+"
+    inputmode="numeric"
+>
+
+
+<h2>Default Sorting</h2>
+<select name="sorting">
+  <option value="oldfirst" {% if config.sorting == "oldfirst" %}selected{% endif %}>Old first</option>
+  <option value="newfirst" {% if config.sorting == "newfirst" %}selected{% endif %}>New first</option>
+  <option value="priceasc" {% if config.sorting == "priceasc" %}selected{% endif %}>Price ascending</option>
+  <option value="pricedesc" {% if config.sorting == "pricedesc" %}selected{% endif %}>Price descending</option>
+</select>
+
+
+<h2>Default Display</h2>
+<select name="display">
+  <option value="separate" {% if config.display == "separate" %}selected{% endif %}>Separate</option>
+  <option value="all" {% if config.display == "all" %}selected{% endif %}>All</option>
+  <option value="bazos" {% if config.display == "bazos" %}selected{% endif %}>Bazos only</option>
+  <option value="aukro" {% if config.display == "aukro" %}selected{% endif %}>Aukro only</option>
+  <option value="sbazar" {% if config.display == "sbazar" %}selected{% endif %}>Sbazar only</option>
+</select>
+
+
+<button type="submit" class="saveBtn">Save Settings</button>
+
+</form>
+
+</main>
+
+
+<script>
+
+const config = {{ config_json|safe }}
+
+function getCookie(name) {
+    let cookieValue = null
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";")
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim()
+            if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+                break
+            }
+        }
+    }
+    return cookieValue
+}
+
+const csrftoken = getCookie("csrftoken")
+
+const form = document.getElementById("settingsForm")
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault()
+
+    const data = {
+        theme: form.theme.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        sorting: form.sorting.value,
+        display: form.display.value
+    }
+
+    const res = await fetch("/saveConfig/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify(data)
+    })
+
+    if (res.ok) {
+        await fetch(`/applyTheme/?t=${Date.now()}`, {
+            cache: "no-store"
+        })
+        location.reload()
+    } else {
+        alert("Error saving settings")
+    }
+})
+
+</script>
+
+</body>
+</html>

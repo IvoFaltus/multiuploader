@@ -1,0 +1,178 @@
+#listingDetailPanel {
+  position: fixed;
+  top: 120px;
+  left: 120px;
+
+  width: 440px;
+  max-height: 620px;
+
+  background: var(--panel-gradient);
+  border-radius: 12px;
+
+  box-shadow: var(--boxShadowMedium);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  z-index: 9999;
+
+  animation: panelOpen 0.25s ease;
+}
+
+@keyframes panelOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.closing {
+  animation: panelClose 0.2s forwards;
+}
+
+@keyframes panelClose {
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/* header */
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 16px;
+
+  background: var(--control-gradient);
+
+  color: var(--c6);
+  font-weight: 600;
+
+  cursor: move;
+
+  box-shadow: var(--boxShadowInner);
+}
+
+.detailClose {
+  background: none;
+  border: none;
+  color: var(--c6);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* content */
+
+.detailContent {
+  padding: 16px;
+  overflow: auto;
+}
+
+/* images */
+
+.detailImages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+
+  margin-bottom: 14px;
+}
+
+.detailImage {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+
+  border-radius: 6px;
+
+  background: var(--inner-gradient);
+}
+
+/* info grid */
+
+.detailGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 8px 10px;
+
+  background: var(--surface-gradient);
+  border-radius: 6px;
+}
+
+.detailKey {
+  color: var(--c8);
+  font-size: 13px;
+}
+
+.detailValue {
+  color: var(--c6);
+  font-size: 13px;
+}
+
+/* platforms */
+
+.detailPlatforms {
+  margin-top: 16px;
+}
+
+.platformTitle {
+  color: var(--c6);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.platformLink {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 8px 10px;
+  margin-bottom: 6px;
+
+  text-decoration: none;
+
+  color: var(--c7);
+
+  background: var(--surface-gradient);
+  border-radius: 6px;
+
+  transition: 0.2s;
+}
+
+.platformLink:hover {
+  background: var(--control-gradient);
+}
+
+.platformName {
+  text-transform: capitalize;
+}
+
+.platformArrow {
+  opacity: 0.6;
+}
+
+#listingDetailPanel
+  > div.detailContent
+  > div.detailGrid
+  > div:nth-child(1)
+  > span.detailValue {
+
+
+    text-align: left;
+    margin-left: 10px;
+}

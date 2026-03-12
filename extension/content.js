@@ -81,6 +81,7 @@ document.addEventListener(
     console.log("Sending data to background.js", data);
 
     if (data.platforms.includes("aukro")) {
+      console.log("sending to aukro")
       chrome.runtime.sendMessage({
         action: "aukro",
         payload: data,
@@ -88,12 +89,14 @@ document.addEventListener(
     }
 
     if (data.platforms.includes("bazos")) {
+      console.log("sending to bazos")
       chrome.runtime.sendMessage({
         action: "bazos",
         payload: data,
       });
     }
     if (data.platforms.includes("sbazar")) {
+      console.log("sending to sbazar")
       chrome.runtime.sendMessage({
         action: "sbazar",
         payload: data,
@@ -113,70 +116,63 @@ document.addEventListener(
   true,
 ); // capture phase prevents site handlers
 
+document.querySelector("#sync").addEventListener("click", () => {
 
-const syncBtn = document.querySelector("#sync");
+  const popup = document.querySelector("#syncPopup");
+  const syncBtn = popup?.querySelector("#syncListings");
 
+  if (!popup || !syncBtn) return;
 
-
-
-
-if (syncBtn) {
   syncBtn.addEventListener("click", async () => {
 
-   
+    const all = popup.querySelector("#all")?.checked;
+    const sbazar = popup.querySelector("#sbazar")?.checked;
+    const aukro = popup.querySelector("#aukro")?.checked;
+    const bazos = popup.querySelector("#bazos")?.checked;
 
-    
-    const all = document.querySelector("#all").checked
-    const sbazar = document.querySelector("#sbazar").checked
-    const aukro = document.querySelector("#aukro").checked
-    const bazos = document.querySelector("#bazos").checked
-    if(bazos){
-       const tel = prompt("Enter phone number for bazos")
-    const email = prompt("Enter email for bazos")
-    payload =(email && tel)? {
+    let payload = null;
 
-      email:email,
-      phone:tel
-    }:null
+    if (bazos) {
+      const tel = prompt("Enter phone number for bazos");
+      const email = prompt("Enter email for bazos");
+
+      payload = (email && tel) ? {
+        email: email,
+        phone: tel
+      } : null;
     }
+
     console.log("sync executed");
-    
 
-
-    if(all){
+    if (all) {
       chrome.runtime.sendMessage({
-      action: "syncAll",
-      payload: data,
-    })
-  }
-  if(aukro){
+        action: "syncAll",
+        payload: data,
+      });
+    }
 
-     chrome.runtime.sendMessage({
-      action: "sync",
-      payload: data,
-    });
-    console.log("aukro sync")
-  }
+    if (aukro) {
+      chrome.runtime.sendMessage({
+        action: "sync",
+        payload: data,
+      });
+      console.log("aukro sync");
+    }
 
-  if(sbazar){
-     chrome.runtime.sendMessage({
-      action: "syncSbazar",
-      payload: data,
-    });
-  }
+    if (sbazar) {
+      chrome.runtime.sendMessage({
+        action: "syncSbazar",
+        payload: data,
+      });
+    }
 
-  if(bazos){
-     chrome.runtime.sendMessage({
-      action: "syncBazos",
-      payload: payload,
-    });
-  }
-
-
-
-
-
-
+    if (bazos) {
+      chrome.runtime.sendMessage({
+        action: "syncBazos",
+        payload: payload,
+      });
+    }
 
   });
-}
+
+});

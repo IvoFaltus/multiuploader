@@ -1,0 +1,51 @@
+:root {
+  --c1: #050505;
+  --c2: #111111;
+  --c3: #1b1b1b;
+  --c4: #0d0d0d;
+  --c5: #171717;
+  --c6: #f3f3f3;
+  --c7: rgb(205,205,205);
+  --c8: rgb(120,120,120);
+  --c9: #262626;
+  --c10: #323232;
+
+  --accent-blue: #4da3ff;
+  --accent-cyan: #38d8ff;
+  --accent-green: #34c26f;
+  --accent-green-strong: #1d9f52;
+  --accent-red: #ef5a5a;
+  --accent-red-strong: #b93838;
+  --accent-amber: #f2b84b;
+  --accent-violet: #7d6bff;
+
+  --text-strong: #ffffff;
+  --text-soft: #d7dde6;
+  --text-muted: #93a0b2;
+
+  --bg-gradient: linear-gradient(90deg, #0f0f0f, #040404);
+  --surface-gradient: linear-gradient(180deg, #1a1a1a, #111111);
+  --panel-gradient: linear-gradient(180deg, #232323, #161616);
+  --inner-gradient: linear-gradient(180deg, #181818, #0f0f0f);
+  --control-gradient: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+  --search-gradient: linear-gradient(180deg, #191d22, #0f1115);
+  --card-gradient: linear-gradient(180deg, #232427, #1a1b1e);
+  --card-accent-gradient: linear-gradient(180deg, #1d1e21, #151619);
+  --positive-gradient: linear-gradient(135deg, #39c774, #1b6b3f);
+  --negative-gradient: linear-gradient(135deg, #f06464, #8b2525);
+  --neutral-accent-gradient: linear-gradient(135deg, #4da3ff, #2a3a70);
+  --platform-aukro: linear-gradient(180deg, rgba(77, 163, 255, 0.18), rgba(16, 21, 34, 0.96));
+  --platform-bazos: linear-gradient(180deg, rgba(52, 194, 111, 0.18), rgba(14, 24, 19, 0.96));
+  --platform-sbazar: linear-gradient(180deg, rgba(242, 184, 75, 0.18), rgba(28, 21, 12, 0.96));
+
+  --shadow1: rgba(0,0,0,0.35);
+  --shadow2: rgba(255,255,255,0.03);
+  --accent-shadow-blue: rgba(77, 163, 255, 0.22);
+  --accent-shadow-green: rgba(52, 194, 111, 0.22);
+  --accent-shadow-red: rgba(239, 90, 90, 0.22);
+  --accent-shadow-amber: rgba(242, 184, 75, 0.2);
+
+  --boxShadowSoft: 0px 6px 12px rgba(0,0,0,0.42);
+  --boxShadowMedium: 0px 10px 28px rgba(0,0,0,0.55);
+  --boxShadowInner: inset 0px 3px 0px rgba(255,255,255,0.04);
+}

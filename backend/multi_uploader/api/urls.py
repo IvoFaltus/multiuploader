@@ -12,5 +12,10 @@ urlpatterns = [
     path('createListing/', views.create_listing, name='create_listing'),
     path('deleteTable',views.deleteTable),
     path('getAllListings',views.getAllListings,name='getAllListings'),
-    path('getListingsForPlatform/<str:platform>', views.getListingsForPlatform, name='getListingsForPlatform')
+    path('getListingsForPlatform/<str:platform>', views.getListingsForPlatform, name='getListingsForPlatform'),
+    path('settings/',views.settings_page,name='settings_page'),
+    path('guide/',views.guide_page,name='guide_page'),
+    path('statistics/',views.stats_page,name='stats_page'),
+    path("saveConfig/",views.saveConfig,name="saveconfig"),
+    path("applyTheme/", views.applyTheme, name="apply_theme")
 ]

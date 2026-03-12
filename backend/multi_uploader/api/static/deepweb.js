@@ -1,4 +1,4 @@
-import { renderAll,addFrame,clearListings,renderSeperate } from "./UImanager.js"
+import { renderAll,addFrame,clearListings,renderSeperate,addSyncBtn,renderListingPopUp } from "./UImanager.js"
 import "./UImanager.js"
 
 const getAllListings = async (sort) => {
@@ -27,6 +27,15 @@ let bazosListings = []
 let sbazarListings = []
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    addSyncBtn()
+    const searchInput = document.querySelector(".searchListing")
+
+    document.querySelector(".addListingBtn").addEventListener("click",()=>{
+        renderListingPopUp()
+
+
+    })
 
     const displays = Array.from(document.querySelectorAll(".optionD0 input"))
     const sortings = Array.from(document.querySelectorAll(".optionD1 input"))
@@ -162,5 +171,22 @@ document.addEventListener('DOMContentLoaded', () => {
             reload()
             break
     }
+
+
+
+
+
+    const filterVisibleListings = () => {
+        const query = (searchInput?.value || "").trim().toLowerCase()
+        const cards = Array.from(document.querySelectorAll(".card, .card2"))
+
+        cards.forEach((card) => {
+            const titleEl = card.querySelector(".title")
+            const title = (titleEl?.textContent || "").toLowerCase()
+            card.style.display = title.includes(query) ? "" : "none"
+        })
+    }
+
+    searchInput?.addEventListener("input", filterVisibleListings)
 
 })

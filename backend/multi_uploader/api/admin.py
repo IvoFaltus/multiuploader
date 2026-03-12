@@ -15,12 +15,12 @@ class ListingPlatformInline(admin.TabularInline):
 class UserDataAdmin(admin.ModelAdmin):
     list_display = (
         "user",
-        "aukro_username",
-        "bazos_username",
-        "sbazar_username",
-        "facebook_username",
+        "email",
+        "sorting",
+        "display",
+        "phone",
     )
-    search_fields = ("user__username", "aukro_username", "bazos_username", "sbazar_username", "facebook_username")
+    search_fields = ("user", "email", "sorting", "display", "phone")
 
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):

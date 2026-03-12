@@ -1,0 +1,114 @@
+@import url(colors.css);
+
+.settingsContainer{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:40px;
+}
+
+.settingsPanel{
+    width:420px;
+    padding:30px;
+    border-radius:12px;
+    background:var(--panel-gradient);
+    box-shadow:var(--boxShadowMedium);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.currentSettings{
+    padding:16px;
+    border-radius:10px;
+    background:var(--control-gradient);
+    box-shadow:var(--boxShadowInner);
+}
+
+.currentSettings h1{
+    margin:0 0 14px 0;
+    font-size:18px;
+    color:var(--text-strong);
+}
+
+.currentSettingsGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 14px;
+}
+
+.currentSettingsGrid p{
+    margin:0;
+    padding:10px 12px;
+    border-radius:8px;
+    background:rgba(255,255,255,0.04);
+    color:var(--text-soft);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    word-break:break-word;
+}
+
+.currentSettingsGrid span{
+    font-size:12px;
+    color:var(--text-muted);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+}
+
+.settingsPanel h2{
+    margin-top:10px;
+    font-size:16px;
+    color:var(--text-soft);
+}
+
+.settingsPanel label{
+    font-size:13px;
+    color:var(--text-muted);
+}
+
+.settingsPanel input,
+.settingsPanel select{
+    padding:10px;
+    border-radius:6px;
+    border:none;
+    outline:none;
+    background:var(--control-gradient);
+    color:var(--text-strong);
+    box-shadow:var(--boxShadowInner);
+}
+
+.settingsPanel select option{
+    background:var(--c3);
+}
+
+.saveBtn{
+    margin-top:20px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:var(--accent-blue);
+    color:var(--text-strong);
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 0 8px var(--accent-shadow-blue);
+}
+
+.saveBtn:hover{
+    background:var(--accent-cyan);
+}
+
+@media (max-width: 560px){
+    .settingsContainer{
+        padding:20px;
+    }
+
+    .settingsPanel{
+        width:100%;
+        padding:22px;
+    }
+
+    .currentSettingsGrid{
+        grid-template-columns:1fr;
+    }
+}

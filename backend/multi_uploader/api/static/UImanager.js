@@ -1,10 +1,13 @@
+import { handleSync } from "./syncDetail.js"
+import {renderListingPopUp} from "./listingPopUp.js"
+import { renderListingDetail } from "./listingDetail.js";
 function getListingsRoot() {
     return document.querySelector(".allListings");
 }
 
 
 
-function addListing(image, title, description, platforms, frameSelector = ".frame") {
+function addListing(obj,num,creation,image, title, description, platforms, frameSelector = ".frame") {
     const container = document.querySelector(frameSelector);
     if (!container) {
         return;
@@ -36,13 +39,34 @@ function addListing(image, title, description, platforms, frameSelector = ".fram
     const button = document.createElement("button");
     button.className = "detail";
     button.textContent = "detail";
+    button.addEventListener("click",()=>{
+
+        renderListingDetail(obj)
+    })
+    const created_at = document.createElement("a")
+    const date = new Date(creation);
+
+created_at.textContent =
+  date.getDate() + "." +
+  (date.getMonth()+1) + "." +
+  date.getFullYear();
+    created_at.className = "created"
+
+
 
     card.appendChild(pfpDiv);
     card.appendChild(titleEl);
     card.appendChild(descEl);
     card.appendChild(platformsEl);
+    card.appendChild(created_at)
     card.appendChild(button);
 
+
+    // if(num===0){
+
+    //     card.style.marginTop = "100px"
+        
+    // }
     container.appendChild(card);
 }
 
@@ -54,17 +78,46 @@ function addFrame(num) {
 
     const frame = document.createElement("div");
     frame.className = num === 2 ? "frame2" : "frame";
+
+
+
+     if(num===1){
+        const title = document.createElement("div")
+        title.textContent = 'All Listings'
+        title.className = 'title1'
+        frame.appendChild(title)
+        
+    }
     listingsRoot.appendChild(frame);
+
+
+   
     return frame;
 }
 
+
+const addTitle = (text)=>{
+
+
+
+
+
+}
+
 function renderAll(list) {
-    for (const listing of list) {
+
+    
+
+    for (const [i,listing] of list.entries()) {
         addListing(
+            listing,
+            i,
+            listing.created_at,
             listing.images?.[0] || "",
             listing.title || "",
             listing.description || "",
             listing.platforms || []
+            
         );
     }
 }
@@ -83,9 +136,12 @@ function renderSeperate(aukro, bazos, sbazar) {
         const header = document.createElement("h1");
         header.textContent = titleText;
         container.appendChild(header);
-
+        let i=0
         list.forEach((item) => {
+            
             const card = document.createElement("div");
+            if(i===0) card.style.marginTop = "100px"
+            i++
             card.className = "card2";
 
             const pfpDiv = document.createElement("div");
@@ -151,5 +207,28 @@ Array.prototype.sortArray = function(num){
 
     return [...this].sort(sorts[num] || (()=>0))
 }
-export { renderAll, renderSingle, addFrame, clearListings, renderSeperate };
+
+
+const addSyncBtn = ()=>{
+const navbar = document.querySelector(".header1");
+
+const btn = document.createElement("button")
+btn.textContent = "Sync"
+btn.id = "sync"
+navbar.appendChild(btn)
+
+btn.addEventListener('click',()=>{
+handleSync()
+
+})
+
+
+
+}
+
+
+
+
+
+export { renderAll, renderSingle, addFrame, clearListings, renderSeperate,addSyncBtn,renderListingPopUp };
 export {}

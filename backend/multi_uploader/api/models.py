@@ -7,10 +7,21 @@ from django.contrib.auth.models import User
 
 class UserData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    aukro_username = models.CharField(max_length=150, null=True, blank=True)
-    bazos_username = models.CharField(max_length=150, null=True, blank=True)
-    sbazar_username = models.CharField(max_length=150, null=True, blank=True)
-    facebook_username = models.CharField(max_length=150, null=True, blank=True)
+    theme = models.CharField(max_length=20, default="black")
+
+    email = models.EmailField(blank=True)
+
+    phone = models.CharField(max_length=30, blank=True)
+
+    sorting = models.CharField(
+        max_length=20,
+        default="newfirst"
+    )
+
+    display = models.CharField(
+        max_length=20,
+        default="all"
+    )
 
 class Listing(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
