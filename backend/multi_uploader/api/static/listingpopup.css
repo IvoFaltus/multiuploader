@@ -6,7 +6,7 @@
     left:120px;
 
     width:440px;
-    max-height:85vh;
+    min-height:90vh;
 
     background:var(--panel-gradient);
     border-radius:12px;

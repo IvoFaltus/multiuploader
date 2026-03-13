@@ -52,10 +52,10 @@ function handleSync() {
     options.style.marginBottom = "16px";
 
     options.innerHTML = `
-        <label><input type="checkbox" id="all"> All</label>
         <label><input type="checkbox" id="aukro"> Aukro</label>
         <label><input type="checkbox" id="sbazar"> SBazar</label>
-        <label><input type="checkbox" id="bazos"> Bazos</label>
+        <label><input type="checkbox" id="bazos"> Bazoš</label>
+        <label><input type="checkbox" id="facebook"> Facebook</label>
     `;
 
     const button = document.createElement("button");

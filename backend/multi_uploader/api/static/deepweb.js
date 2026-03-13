@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             getAllListings(sortMap[getSorting()]).then((data)=>{
 
                 console.log("date are",data)
-                addFrame(1)
+                addFrame(1, "All Listings")
                 renderAll(data)
 
             })
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 bazosListings = arr
                 console.log(bazosListings)
-                addFrame(1)
+                addFrame(1, "Bazos Listings")
                 renderAll(bazosListings)
             })
 
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 aukroListings = arr
                 console.log(aukroListings)
-                addFrame(1)
+                addFrame(1, "Aukro Listings")
                 renderAll(aukroListings)
             })
 
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 sbazarListings = arr
                 console.log(sbazarListings)
-                addFrame(1)
+                addFrame(1, "Sbazar Listings")
                 renderAll(sbazarListings)
             })
 

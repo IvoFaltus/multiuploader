@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Statistics</title>
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'header.css' %}" />
     <link rel="stylesheet" href="{% static 'stats.css' %}" />
     <script src="{% static 'navigation.js' %}" type="module"></script>
+    <script src="{% static 'stats.js' %}" defer></script>
   </head>
   <body>
     <header class="header1">
@@ -27,6 +28,62 @@
         </button>
       </div>
     </header>
+
+    <main class="statsPage">
+      <section class="statsHero">
+        <div>
+          <p class="eyebrow">Dashboard</p>
+          <h1>Listing statistics</h1>
+          <p class="heroCopy">
+            Track volume, platform spread, pricing, and recent activity in one place.
+          </p>
+        </div>
+        <div class="heroBadge" id="heroBadge">Loading data</div>
+      </section>
+
+      <section class="summaryGrid" id="summaryGrid"></section>
+
+      <section class="statsLayout">
+        <article class="statsCard statsCardWide">
+          <div class="cardHeader">
+            <div>
+              <p class="cardEyebrow">Last 7 days</p>
+              <h2>Listings created</h2>
+            </div>
+          </div>
+          <div class="trendChart" id="trendChart"></div>
+        </article>
+
+        <article class="statsCard">
+          <div class="cardHeader">
+            <div>
+              <p class="cardEyebrow">Platform spread</p>
+              <h2>Where listings live</h2>
+            </div>
+          </div>
+          <div class="platformList" id="platformList"></div>
+        </article>
+
+        <article class="statsCard">
+          <div class="cardHeader">
+            <div>
+              <p class="cardEyebrow">Price mix</p>
+              <h2>Bucket breakdown</h2>
+            </div>
+          </div>
+          <div class="bucketList" id="bucketList"></div>
+        </article>
+
+        <article class="statsCard statsCardWide">
+          <div class="cardHeader">
+            <div>
+              <p class="cardEyebrow">Recent activity</p>
+              <h2>Newest listings</h2>
+            </div>
+          </div>
+          <div class="recentList" id="recentList"></div>
+        </article>
+      </section>
+    </main>
   </body>
 </html>
-

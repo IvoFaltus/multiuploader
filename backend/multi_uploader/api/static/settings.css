@@ -1,114 +1,237 @@
 @import url(colors.css);
+@import url(animations2.css);
+@import url(settingsresponsive.css);
 
-.settingsContainer{
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:40px;
+body {
+    background: var(--bg-gradient);
 }
 
-.settingsPanel{
-    width:420px;
-    padding:30px;
-    border-radius:12px;
-    background:var(--panel-gradient);
-    box-shadow:var(--boxShadowMedium);
-    display:flex;
-    flex-direction:column;
-    gap:14px;
+.settingsContainer {
+    display: flex;
+    justify-content: center;
+    padding: 34px 28px 56px;
 }
 
-.currentSettings{
-    padding:16px;
-    border-radius:10px;
-    background:var(--control-gradient);
-    box-shadow:var(--boxShadowInner);
+.settingsPanel {
+    width: min(1100px, 100%);
+    display: grid;
+    gap: 18px;
 }
 
-.currentSettings h1{
-    margin:0 0 14px 0;
-    font-size:18px;
-    color:var(--text-strong);
+.settingsHero,
+.settingsSection {
+    background:
+        radial-gradient(circle at top right, rgba(77, 163, 255, 0.12), transparent 30%),
+        var(--panel-gradient);
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: var(--boxShadowMedium), var(--boxShadowInner);
 }
 
-.currentSettingsGrid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px 14px;
+.settingsHero {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.05fr) minmax(320px, .95fr);
+    gap: 18px;
+    padding: 28px;
+    align-items: stretch;
 }
 
-.currentSettingsGrid p{
-    margin:0;
-    padding:10px 12px;
-    border-radius:8px;
-    background:rgba(255,255,255,0.04);
-    color:var(--text-soft);
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    word-break:break-word;
+.settingsHeroText {
+    padding: 8px 4px;
 }
 
-.currentSettingsGrid span{
-    font-size:12px;
-    color:var(--text-muted);
-    text-transform:uppercase;
-    letter-spacing:0.04em;
+.settingsEyebrow {
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: 12px;
+    color: var(--text-muted);
 }
 
-.settingsPanel h2{
-    margin-top:10px;
-    font-size:16px;
-    color:var(--text-soft);
+.settingsHeroText h1 {
+    margin: 0;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: .95;
+    color: var(--text-strong);
 }
 
-.settingsPanel label{
-    font-size:13px;
-    color:var(--text-muted);
+.settingsLead {
+    margin: 14px 0 0 0;
+    max-width: 520px;
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.currentSettings {
+    padding: 20px;
+    border-radius: 22px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+        var(--control-gradient);
+    box-shadow: var(--boxShadowSoft), var(--boxShadowInner);
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+.currentSettings h2,
+.sectionHeader h2 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--text-strong);
+}
+
+.currentSettingsGrid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.currentSettingsGrid p {
+    margin: 0;
+    min-height: 72px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)),
+        rgba(255,255,255,0.02);
+    color: var(--text-soft);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    word-break: break-word;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+.currentSettingsGrid span {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+}
+
+.settingsSection {
+    padding: 24px 26px;
+}
+
+.sectionHeader {
+    margin-bottom: 18px;
+}
+
+.themePicker {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 92px;
+    gap: 14px;
+    align-items: center;
+}
+
+.themeSpecimen {
+    --theme-color: #4da3ff;
+    height: 48px;
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0)),
+        var(--theme-color);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: var(--boxShadowSoft), var(--boxShadowInner), 0 0 22px color-mix(in srgb, var(--theme-color) 26%, transparent);
+}
+
+.inputGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.fieldGroup {
+    display: grid;
+    gap: 8px;
+}
+
+.settingsPanel label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
 }
 
 .settingsPanel input,
-.settingsPanel select{
-    padding:10px;
-    border-radius:6px;
-    border:none;
-    outline:none;
-    background:var(--control-gradient);
-    color:var(--text-strong);
-    box-shadow:var(--boxShadowInner);
+.settingsPanel select {
+    min-height: 54px;
+    padding: 0 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    outline: none;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+        var(--control-gradient);
+    color: var(--text-strong);
+    box-shadow: var(--boxShadowInner);
+    font-size: 15px;
 }
 
-.settingsPanel select option{
-    background:var(--c3);
+.settingsPanel select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 40px;
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--c7) 50%),
+        linear-gradient(135deg, var(--c7) 50%, transparent 50%),
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+        var(--control-gradient);
+    background-position:
+        calc(100% - 21px) calc(50% - 3px),
+        calc(100% - 15px) calc(50% - 3px),
+        0 0,
+        0 0;
+    background-size: 6px 6px, 6px 6px, 100% 100%, 100% 100%;
+    background-repeat: no-repeat;
 }
 
-.saveBtn{
-    margin-top:20px;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:var(--accent-blue);
-    color:var(--text-strong);
-    font-weight:600;
-    cursor:pointer;
-    box-shadow:0 0 8px var(--accent-shadow-blue);
+.settingsPanel input:focus,
+.settingsPanel select:focus {
+    border-color: rgba(77, 163, 255, 0.22);
+    box-shadow: var(--boxShadowInner), 0 0 0 1px rgba(77, 163, 255, 0.18), 0 0 24px rgba(77, 163, 255, 0.08);
 }
 
-.saveBtn:hover{
-    background:var(--accent-cyan);
+.settingsPanel select option {
+    background: var(--c3);
 }
 
-@media (max-width: 560px){
-    .settingsContainer{
-        padding:20px;
-    }
+.settingsPanel input:-webkit-autofill,
+.settingsPanel input:-webkit-autofill:hover,
+.settingsPanel input:-webkit-autofill:focus,
+.settingsPanel select:-webkit-autofill,
+.settingsPanel select:-webkit-autofill:hover,
+.settingsPanel select:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text-strong);
+    -webkit-box-shadow: 0 0 0 1000px var(--c3) inset;
+    box-shadow: 0 0 0 1000px var(--c3) inset;
+    transition: background-color 9999s ease-out 0s;
+    caret-color: var(--text-strong);
+}
 
-    .settingsPanel{
-        width:100%;
-        padding:22px;
-    }
+.settingsActions {
+    display: flex;
+    justify-content: center;
 
-    .currentSettingsGrid{
-        grid-template-columns:1fr;
-    }
+}
+
+.saveBtn {
+    min-width: 100%;
+    min-height: 56px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 18px;
+    background: var(--neutral-accent-gradient);
+    color: var(--text-strong);
+    font-weight: 700;
+    letter-spacing: .03em;
+    cursor: pointer;
+    box-shadow: var(--boxShadowSoft), 0 0 22px var(--accent-shadow-blue);
+}
+
+.saveBtn:hover {
+    filter: brightness(1.06);
 }

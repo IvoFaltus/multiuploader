@@ -1,0 +1,103 @@
+@media (max-width: 1200px) {
+    .main {
+        flex-direction: column;
+    }
+
+    .optionsD,
+    .listingsDiv {
+        width: calc(100% - 30px);
+    }
+
+    .optionsD {
+        height: auto;
+        padding: 18px 0;
+    }
+
+    .listingsDiv {
+        height: auto;
+        min-height: 70vh;
+    }
+
+    .subOptions {
+        width: 92%;
+        height: auto;
+        padding: 20px 0;
+    }
+
+    .searchListing {
+        width: 88%;
+    }
+}
+
+@media (max-width: 900px) {
+    .frame2 {
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    .platformContainer {
+        width: 100%;
+        min-height: 320px;
+    }
+
+    .card {
+        width: 96%;
+        height: auto;
+        min-height: 120px;
+        max-height: none;
+        padding: 16px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .card .pfpDiv {
+        width: 72px;
+        height: 72px;
+    }
+
+    .card .title,
+    .card .description,
+    .card .platforms {
+        width: 100%;
+    }
+
+    #sync {
+        position: static;
+        margin-top: 12px;
+    }
+}
+
+@media (max-width: 640px) {
+    .optionsD,
+    .listingsDiv {
+        width: calc(100% - 16px);
+        margin-left: 8px;
+        margin-top: 12px;
+    }
+
+    .searchListing {
+        width: calc(100% - 24px);
+        font-size: 18px;
+    }
+
+    .searchListing::placeholder {
+        font-size: 18px;
+    }
+
+    .aBtn {
+        width: 100%;
+        max-width: 260px;
+    }
+
+    .title1 {
+        width: 100%;
+        font-size: 26px;
+    }
+
+    .card2 {
+        width: calc(100% - 20px);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}

@@ -38,68 +38,106 @@
 
 <form id="settingsForm" class="settingsPanel">
 
-<section class="currentSettings">
-  <h1>Current Settings</h1>
-  <div class="currentSettingsGrid">
-    <p><span>Theme</span>{{ config.theme|default:"Not set" }}</p>
-    <p><span>Email</span>{{ config.email|default:"Not set" }}</p>
-    <p><span>Phone</span>{{ config.phone|default:"Not set" }}</p>
-    <p><span>Sorting</span>{{ config.sorting|default:"Not set" }}</p>
-    <p><span>Display</span>{{ config.display|default:"Not set" }}</p>
+<section class="settingsHero">
+  <div class="settingsHeroText">
+    <p class="settingsEyebrow">Workspace</p>
+    <h1>Settings</h1>
+    <p class="settingsLead">Control theme, default listing layout, and your contact details from one place.</p>
+  </div>
+
+  <section class="currentSettings">
+    <h2>Current Settings</h2>
+    <div class="currentSettingsGrid">
+      <p><span>Theme</span>{{ config.theme|default:"Not set" }}</p>
+      <p><span>Email</span>{{ config.email|default:"Not set" }}</p>
+      <p><span>Phone</span>{{ config.phone|default:"Not set" }}</p>
+      <p><span>Sorting</span>{{ config.sorting|default:"Not set" }}</p>
+      <p><span>Display</span>{{ config.display|default:"Not set" }}</p>
+    </div>
+  </section>
+</section>
+
+<section class="settingsSection">
+  <div class="sectionHeader">
+    <p class="settingsEyebrow">Appearance</p>
+    <h2>GUI Theme</h2>
+  </div>
+  <div class="themePicker">
+    <select name="theme" id="themeSelect">
+      <option value="white" {% if config.theme == "white" %}selected{% endif %}>White</option>
+      <option value="black" {% if config.theme == "black" %}selected{% endif %}>Black</option>
+      <option value="blue" {% if config.theme == "blue" %}selected{% endif %}>Blue</option>
+      <option value="purple" {% if config.theme == "purple" %}selected{% endif %}>Purple</option>
+      <option value="cyan" {% if config.theme == "cyan" %}selected{% endif %}>Cyan</option>
+      <option value="green" {% if config.theme == "green" %}selected{% endif %}>Green</option>
+      <option value="amber" {% if config.theme == "amber" %}selected{% endif %}>Amber</option>
+      <option value="red" {% if config.theme == "red" %}selected{% endif %}>Red</option>
+      <option value="teal" {% if config.theme == "teal" %}selected{% endif %}>Teal</option>
+      <option value="olive" {% if config.theme == "olive" %}selected{% endif %}>Olive</option>
+    </select>
+    <div class="themeSpecimen" id="themeSpecimen" aria-hidden="true"></div>
   </div>
 </section>
 
-<h2>GUI Theme</h2>
-<select name="theme">
-  <option value="white" {% if config.theme == "white" %}selected{% endif %}>White</option>
-  <option value="black" {% if config.theme == "black" %}selected{% endif %}>Black</option>
-  <option value="blue" {% if config.theme == "blue" %}selected{% endif %}>Blue</option>
-  <option value="purple" {% if config.theme == "purple" %}selected{% endif %}>Purple</option>
-  <option value="cyan" {% if config.theme == "cyan" %}selected{% endif %}>Cyan</option>
-  <option value="green" {% if config.theme == "green" %}selected{% endif %}>Green</option>
-  <option value="amber" {% if config.theme == "amber" %}selected{% endif %}>Amber</option>
-  <option value="red" {% if config.theme == "red" %}selected{% endif %}>Red</option>
-  <option value="teal" {% if config.theme == "teal" %}selected{% endif %}>Teal</option>
-  <option value="olive" {% if config.theme == "olive" %}selected{% endif %}>Olive</option>
-</select>
+<section class="settingsSection">
+  <div class="sectionHeader">
+    <p class="settingsEyebrow">Account</p>
+    <h2>Contact</h2>
+  </div>
 
+  <div class="inputGrid">
+    <div class="fieldGroup">
+      <label>Email</label>
+      <input type="email" name="email" placeholder="example@email.com" value="{{ config.email|default:'' }}">
+    </div>
 
-<h2>Contact</h2>
+    <div class="fieldGroup">
+      <label>Phone number</label>
+      <input 
+          type="text"
+          name="phone"
+          placeholder="233130123"
+          value="{{ config.phone|default:'' }}"
+          pattern="[0-9]+"
+          inputmode="numeric"
+      >
+    </div>
+  </div>
+</section>
 
-<label>Email</label>
-<input type="email" name="email" placeholder="example@email.com" value="{{ config.email|default:'' }}">
+<section class="settingsSection">
+  <div class="sectionHeader">
+    <p class="settingsEyebrow">Defaults</p>
+    <h2>Listing behavior</h2>
+  </div>
 
-<label>Phone number</label>
-<input 
-    type="text"
-    name="phone"
-    placeholder="233130123"
-    value="{{ config.phone|default:'' }}"
-    pattern="[0-9]+"
-    inputmode="numeric"
->
+  <div class="inputGrid">
+    <div class="fieldGroup">
+      <label>Default Sorting</label>
+      <select name="sorting">
+        <option value="oldfirst" {% if config.sorting == "oldfirst" %}selected{% endif %}>Old first</option>
+        <option value="newfirst" {% if config.sorting == "newfirst" %}selected{% endif %}>New first</option>
+        <option value="priceasc" {% if config.sorting == "priceasc" %}selected{% endif %}>Price ascending</option>
+        <option value="pricedesc" {% if config.sorting == "pricedesc" %}selected{% endif %}>Price descending</option>
+      </select>
+    </div>
 
+    <div class="fieldGroup">
+      <label>Default Display</label>
+      <select name="display">
+        <option value="separate" {% if config.display == "separate" %}selected{% endif %}>Separate</option>
+        <option value="all" {% if config.display == "all" %}selected{% endif %}>All</option>
+        <option value="bazos" {% if config.display == "bazos" %}selected{% endif %}>Bazos only</option>
+        <option value="aukro" {% if config.display == "aukro" %}selected{% endif %}>Aukro only</option>
+        <option value="sbazar" {% if config.display == "sbazar" %}selected{% endif %}>Sbazar only</option>
+      </select>
+    </div>
+  </div>
+</section>
 
-<h2>Default Sorting</h2>
-<select name="sorting">
-  <option value="oldfirst" {% if config.sorting == "oldfirst" %}selected{% endif %}>Old first</option>
-  <option value="newfirst" {% if config.sorting == "newfirst" %}selected{% endif %}>New first</option>
-  <option value="priceasc" {% if config.sorting == "priceasc" %}selected{% endif %}>Price ascending</option>
-  <option value="pricedesc" {% if config.sorting == "pricedesc" %}selected{% endif %}>Price descending</option>
-</select>
-
-
-<h2>Default Display</h2>
-<select name="display">
-  <option value="separate" {% if config.display == "separate" %}selected{% endif %}>Separate</option>
-  <option value="all" {% if config.display == "all" %}selected{% endif %}>All</option>
-  <option value="bazos" {% if config.display == "bazos" %}selected{% endif %}>Bazos only</option>
-  <option value="aukro" {% if config.display == "aukro" %}selected{% endif %}>Aukro only</option>
-  <option value="sbazar" {% if config.display == "sbazar" %}selected{% endif %}>Sbazar only</option>
-</select>
-
-
-<button type="submit" class="saveBtn">Save Settings</button>
+<div class="settingsActions">
+  <button type="submit" class="saveBtn" onclick="location.href='/deepweb/'">Save Settings</button>
+</div>
 
 </form>
 
@@ -128,6 +166,49 @@ function getCookie(name) {
 const csrftoken = getCookie("csrftoken")
 
 const form = document.getElementById("settingsForm")
+const themeSelect = document.getElementById("themeSelect")
+const themeSpecimen = document.getElementById("themeSpecimen")
+
+const themeSpecimens = {
+    white: {
+        color: "#8f9ead"
+    },
+    black: {
+        color: "#101011"
+    },
+    blue: {
+        color: "#7e94ac"
+    },
+    purple: {
+        color: "#9889aa"
+    },
+    cyan: {
+        color: "#7da5ab"
+    },
+    green: {
+        color: "#6d9b77"
+    },
+    amber: {
+        color: "#c29b61"
+    },
+    red: {
+        color: "#b36f76"
+    },
+    teal: {
+        color: "#7d9f9f"
+    },
+    olive: {
+        color: "#93a07c"
+    }
+}
+
+function updateThemeSpecimen() {
+    const specimen = themeSpecimens[themeSelect.value] || themeSpecimens.black
+    themeSpecimen.style.setProperty("--theme-color", specimen.color)
+}
+
+themeSelect.addEventListener("change", updateThemeSpecimen)
+updateThemeSpecimen()
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault()

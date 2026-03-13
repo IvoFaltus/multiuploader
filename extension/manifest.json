@@ -23,11 +23,13 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.facebook.com/marketplace/",
-        "https://facebook.com/*"
+        "https://www.facebook.com/marketplace/create/",
+        "https://facebook.com/*",
+        "https://www.facebook.com/marketplace/you/selling"
       ],
       "js": [
-        "facebook.js"
+        "facebook.js",
+        "syncFacebook.js"
       ]
     },
     {

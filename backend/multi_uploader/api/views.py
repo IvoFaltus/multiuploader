@@ -17,7 +17,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Listing, ListingImage, Platform, ListingPlatform
 from django.views.decorators.http import require_GET,require_POST
 from pathlib import Path
-
+from django.shortcuts import get_object_or_404
 
 THEMES_FILE = Path(__file__).resolve().parent / "static" / "themes.txt"
 COLORS_FILE = Path(__file__).resolve().parent / "static" / "colors.css"
@@ -359,7 +359,14 @@ def getAllListings(request):
 
     return JsonResponse(data, safe=False)
 
+@require_GET
+def deleteAllListings(request):
 
+    ListingImage.objects.filter(listing__owner=request.user).delete()
+    ListingPlatform.objects.filter(listing__owner=request.user).delete()
+    Listing.objects.filter(owner=request.user).delete()
+
+    return HttpResponse(status=203)
 
 
 def getListingsForPlatform(request, platform):
@@ -414,3 +421,10 @@ def getListingsForPlatform(request, platform):
     print("---- END DEBUG ----")
 
     return JsonResponse(data, safe=False)
+
+
+   
+def deleteListing(request, id):
+    listing = get_object_or_404(Listing, id=id, owner=request.user)
+    listing.delete()
+    return HttpResponse(status=204)

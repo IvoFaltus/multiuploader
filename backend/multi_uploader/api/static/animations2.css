@@ -1,0 +1,182 @@
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes softFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes glowPulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 rgba(77, 163, 255, 0);
+    }
+
+    50% {
+        text-shadow: 0 0 22px rgba(77, 163, 255, 0.12);
+    }
+}
+
+body {
+    animation: pageFadeIn .55s ease both;
+}
+
+.optionsD,
+.listingsDiv,
+.settingsPanel,
+.statsHero,
+.statsCard,
+.summaryCard,
+.guideHero,
+.guideCard,
+.githubCard,
+.guideToggle,
+.warningCard {
+    opacity: 0;
+    animation: pageFadeIn .6s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.optionsD,
+.settingsPanel,
+.statsHero,
+.guideHero,
+.githubCard {
+    animation-delay: .06s;
+}
+
+.listingsDiv,
+.statsCard,
+.guideToggle,
+.guideCard,
+.currentSettings {
+    animation-delay: .14s;
+}
+
+.summaryCard:nth-child(1),
+.card:nth-child(1),
+.card2:nth-child(1),
+.platformRow:nth-child(1),
+.bucketRow:nth-child(1),
+.recentRow:nth-child(1) {
+    animation-delay: .08s;
+}
+
+.summaryCard:nth-child(2),
+.card:nth-child(2),
+.card2:nth-child(2),
+.platformRow:nth-child(2),
+.bucketRow:nth-child(2),
+.recentRow:nth-child(2) {
+    animation-delay: .12s;
+}
+
+.summaryCard:nth-child(3),
+.card:nth-child(3),
+.card2:nth-child(3),
+.platformRow:nth-child(3),
+.bucketRow:nth-child(3),
+.recentRow:nth-child(3) {
+    animation-delay: .16s;
+}
+
+.summaryCard:nth-child(4),
+.card:nth-child(4),
+.card2:nth-child(4),
+.platformRow:nth-child(4),
+.bucketRow:nth-child(4),
+.recentRow:nth-child(4) {
+    animation-delay: .2s;
+}
+
+.summaryCard:nth-child(5),
+.card:nth-child(5),
+.card2:nth-child(5),
+.platformRow:nth-child(5),
+.bucketRow:nth-child(5),
+.recentRow:nth-child(5) {
+    animation-delay: .24s;
+}
+
+.heroBadge,
+#sync,
+.saveBtn,
+.githubButton {
+    animation: softFloat 5s ease-in-out infinite;
+}
+
+.summaryValue,
+.title1,
+.guideHero h1,
+.statsHero h1 {
+    animation: glowPulse 4.8s ease-in-out infinite;
+}
+
+.aBtn,
+.saveBtn,
+.githubButton,
+.card,
+.card2,
+.summaryCard,
+.statsCard,
+.guideCard,
+.platformItem,
+.stepItem {
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease,
+        border-color .18s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body,
+    .optionsD,
+    .listingsDiv,
+    .settingsPanel,
+    .statsHero,
+    .statsCard,
+    .summaryCard,
+    .guideHero,
+    .guideCard,
+    .githubCard,
+    .guideToggle,
+    .warningCard,
+    .heroBadge,
+    #sync,
+    .saveBtn,
+    .githubButton,
+    .summaryValue,
+    .title1,
+    .guideHero h1,
+    .statsHero h1 {
+        animation: none !important;
+    }
+
+    .aBtn,
+    .saveBtn,
+    .githubButton,
+    .card,
+    .card2,
+    .summaryCard,
+    .statsCard,
+    .guideCard,
+    .platformItem,
+    .stepItem {
+        transition: none !important;
+    }
+}

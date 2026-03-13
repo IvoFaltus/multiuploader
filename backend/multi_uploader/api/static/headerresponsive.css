@@ -1,0 +1,39 @@
+@media (max-width: 1100px) {
+    .navbarD {
+        width: 70%;
+    }
+}
+
+@media (max-width: 760px) {
+    .header1 {
+        height: auto;
+        padding: 14px 0;
+    }
+
+    .navbarD {
+        width: calc(100% - 24px);
+        height: auto;
+        padding: 12px;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .btnD {
+        font-size: 18px;
+    }
+
+    .btnD img {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbarD {
+        justify-content: center;
+    }
+
+    .btnD {
+        font-size: 16px;
+    }
+}

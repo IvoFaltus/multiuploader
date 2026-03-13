@@ -36,7 +36,15 @@
     <div class="main">
       <div class="optionsD">
         <input type="text" class="searchListing" placeholder="Search" />
-<script>console.log({{config|safe}})</script>
+<div style="display:none;" id="emailEX"></div>
+<div style="display:none;" id="phoneEX"></div>
+
+<script>
+const data = {{ config|safe }};
+
+document.getElementById("emailEX").textContent = data.email;
+document.getElementById("phoneEX").textContent = data.phone;
+</script>
         <div class="subOptions">
           <div class="optionD optionD0">
             <h1 class="optionTitleD">Display</h1>

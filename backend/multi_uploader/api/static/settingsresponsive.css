@@ -1,0 +1,35 @@
+@media (max-width: 560px) {
+    .settingsContainer {
+        padding: 16px 12px 28px;
+    }
+
+    .settingsHero,
+    .settingsSection {
+        padding: 18px;
+    }
+
+    .settingsHeroText h1 {
+        font-size: 34px;
+    }
+
+    .currentSettingsGrid,
+    .inputGrid,
+    .themePicker {
+        grid-template-columns: 1fr;
+    }
+
+    .settingsActions {
+        justify-content: stretch;
+    }
+
+    .saveBtn {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .settingsHero {
+        grid-template-columns: 1fr;
+    }
+}

@@ -2,14 +2,15 @@
     position: fixed;
     top: 120px;
     left: 120px;
-    width: 420px;
+    width: 600px;
     max-height: 80vh;
-    overflow-y: auto;
-    background: white;
+    overflow-y: hidden;
+    background: var(--panel-gradient);
     border-radius: 10px;
-    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    box-shadow: var(--boxShadowMedium);
+    border: 1px solid rgba(255,255,255,0.05);
     z-index: 9999;
-    font-family: Arial, sans-serif;
+    color: var(--c6);
 }
 
 .listingPopupHeader {
@@ -18,10 +19,11 @@
     align-items: center;
     padding: 12px;
     cursor: move;
-    background: #f3f3f3;
-    border-bottom: 1px solid #ddd;
+    background: var(--control-gradient);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    color: var(--c6);
 }
 
 .listingPopupTitle {
@@ -34,10 +36,11 @@
     background: transparent;
     font-size: 18px;
     cursor: pointer;
+    color: var(--c6);
 }
 
 .listingPopupClose:hover {
-    color: red;
+    color: var(--accent-red);
 }
 
 .listingPopupBody {
@@ -45,6 +48,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    overflow: hidden;
 }
 
 .listingInput,
@@ -54,8 +58,65 @@
     width: 100%;
     padding: 8px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(255,255,255,0.08);
     font-size: 14px;
+    background: var(--surface-gradient);
+    color: var(--c6);
+}
+
+.listingSelect {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 36px;
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--c7) 50%),
+        linear-gradient(135deg, var(--c7) 50%, transparent 50%),
+        var(--surface-gradient);
+    background-position:
+        calc(100% - 18px) calc(50% - 3px),
+        calc(100% - 12px) calc(50% - 3px),
+        0 0;
+    background-size: 6px 6px, 6px 6px, 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.listingSelect option {
+    background: var(--c3);
+    color: var(--c6);
+}
+
+.listingInput:focus,
+.listingTextarea:focus,
+.listingSelect:focus,
+.listingFile:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: rgba(255,255,255,0.14);
+}
+
+.listingSelect:focus,
+.listingSelect:active {
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--text-strong) 50%),
+        linear-gradient(135deg, var(--text-strong) 50%, transparent 50%),
+        var(--surface-gradient);
+}
+
+.listingInput:-webkit-autofill,
+.listingInput:-webkit-autofill:hover,
+.listingInput:-webkit-autofill:focus,
+.listingTextarea:-webkit-autofill,
+.listingTextarea:-webkit-autofill:hover,
+.listingTextarea:-webkit-autofill:focus,
+.listingSelect:-webkit-autofill,
+.listingSelect:-webkit-autofill:hover,
+.listingSelect:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--c6);
+    -webkit-box-shadow: 0 0 0 1000px var(--c3) inset;
+    box-shadow: 0 0 0 1000px var(--c3) inset;
+    transition: background-color 9999s ease-out 0s;
+    caret-color: var(--c6);
 }
 
 .listingTextarea {
@@ -77,10 +138,11 @@
     margin-top: 10px;
     border: none;
     border-radius: 6px;
-    background: linear-gradient(135deg,#4facfe,#00f2fe);
-    color: white;
+    background: var(--neutral-accent-gradient);
+    color: var(--text-strong);
     font-size: 16px;
     cursor: pointer;
+    box-shadow: var(--boxShadowSoft), 0 0 24px var(--accent-shadow-blue);
 }
 
 .listingSubmitBtn:hover {
@@ -142,7 +204,7 @@
 
 .detailBody{
     padding:14px;
-    overflow:auto;
+    overflow:hidden;
 }
 
 /* rows */

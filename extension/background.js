@@ -13,7 +13,7 @@ const AukroListingsUrl = "https://aukro.cz/moje-aukro/muj-prodej/prodavam";
 const SbazarListingsUrl = "https://sbazar.cz";
 const  BazosListingsUrl = "https://www.bazos.cz/moje-inzeraty.php";
 
-
+const facebooklistingsurl = "https://www.facebook.com/marketplace/you/selling"
 
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -127,7 +127,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if(msg.action === "facebook"){
 
     chrome.tabs.create(
-  { url: "https://www.facebook.com/marketplace/" },
+  { url: "https://www.facebook.com/marketplace/create/" },
   tab => {
     chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
       if (tabId === tab.id && info.status === "complete") {
@@ -257,6 +257,26 @@ if (msg.action === "syncListingsWithFetch") {
           chrome.tabs.sendMessage(tabId, {
 
             action: "syncBazos",
+            payload: data,
+            mainTab:tabId
+            
+          });
+        }
+      };
+
+      chrome.tabs.onUpdated.addListener(listener);
+    });
+  }
+  if(msg.action==="syncFacebook"){
+     console.log("message received");
+    chrome.tabs.create({ url: facebooklistingsurl, active: false }, (tab) => {
+      const tabId = tab.id;
+      const listener = (id, info) => {
+        if (id === tabId && info.status === "complete") {
+          chrome.tabs.onUpdated.removeListener(listener);
+          chrome.tabs.sendMessage(tabId, {
+
+            action: "syncFacebook",
             payload: data,
             mainTab:tabId
             

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import views2
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -15,7 +16,10 @@ urlpatterns = [
     path('getListingsForPlatform/<str:platform>', views.getListingsForPlatform, name='getListingsForPlatform'),
     path('settings/',views.settings_page,name='settings_page'),
     path('guide/',views.guide_page,name='guide_page'),
-    path('statistics/',views.stats_page,name='stats_page'),
+    path('statistics/',views2.stats_page,name='stats_page'),
+    path('statistics/data/',views2.stats_data,name='stats_data'),
     path("saveConfig/",views.saveConfig,name="saveconfig"),
-    path("applyTheme/", views.applyTheme, name="apply_theme")
+    path("applyTheme/", views.applyTheme, name="apply_theme"),
+    path("deleteAllListings/", views.deleteAllListings, name="delete_listings"),
+    path("deleteListing/<int:id>", views.deleteAllListings, name="delete_listing"),
 ]

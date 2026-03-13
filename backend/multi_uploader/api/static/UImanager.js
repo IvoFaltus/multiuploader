@@ -70,7 +70,7 @@ created_at.textContent =
     container.appendChild(card);
 }
 
-function addFrame(num) {
+function addFrame(num, titleText = "All Listings") {
     const listingsRoot = getListingsRoot();
     if (!listingsRoot) {
         return null;
@@ -83,7 +83,7 @@ function addFrame(num) {
 
      if(num===1){
         const title = document.createElement("div")
-        title.textContent = 'All Listings'
+        title.textContent = titleText
         title.className = 'title1'
         frame.appendChild(title)
         

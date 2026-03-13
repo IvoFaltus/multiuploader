@@ -118,11 +118,13 @@
 .detailKey {
   color: var(--c8);
   font-size: 13px;
+  margin-left: 10px;
 }
 
 .detailValue {
   color: var(--c6);
   font-size: 13px;
+  margin-right: 10px;
 }
 
 /* platforms */

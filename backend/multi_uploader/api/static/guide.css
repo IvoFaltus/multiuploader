@@ -1,4 +1,6 @@
 @import url(colors.css);
+@import url(animations2.css);
+@import url(guideresponsive.css);
 
 body{
 margin:0;
