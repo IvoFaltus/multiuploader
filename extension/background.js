@@ -5,7 +5,7 @@
 const AUKRO_URL =
   "https://aukro.cz/jednoduche-vystaveni?simpleFormOnDesktopAllowed=true";
 
-const BAZOS_URL = "https://auto.bazos.cz/pridat-inzerat.php";
+const BAZOS_URL = "https://www.bazos.cz/moje-inzeraty.php";
 
 const SBazar_URL = "https://www.sbazar.cz/nova-nabidka";
 
@@ -131,7 +131,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   tab => {
     chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
       if (tabId === tab.id && info.status === "complete") {
-        chrome.tabs.sendMessage(tabId, { action: "syncFacebook",payload:data });
+        chrome.tabs.sendMessage(tabId, { action: "syncFacebook",payload:data,tabId:tabId });
         chrome.tabs.onUpdated.removeListener(listener);
       }
     });
@@ -249,7 +249,7 @@ if (msg.action === "syncListingsWithFetch") {
 
   if (msg.action === "syncBazos") {
     console.log("message received");
-    chrome.tabs.create({ url: BazosListingsUrl, active: true }, (tab) => {
+    chrome.tabs.create({ url: BAZOS_URL, active: true }, (tab) => {
       const tabId = tab.id;
       const listener = (id, info) => {
         if (id === tabId && info.status === "complete") {
@@ -269,7 +269,7 @@ if (msg.action === "syncListingsWithFetch") {
   }
   if(msg.action==="syncFacebook"){
      console.log("message received");
-    chrome.tabs.create({ url: facebooklistingsurl, active: false }, (tab) => {
+    chrome.tabs.create({ url: facebooklistingsurl, active: true }, (tab) => {
       const tabId = tab.id;
       const listener = (id, info) => {
         if (id === tabId && info.status === "complete") {

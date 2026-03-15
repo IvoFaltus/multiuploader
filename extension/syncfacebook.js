@@ -1,4 +1,4 @@
-//sync.js
+// sync.js
 chrome.runtime.onMessage.addListener(async msg => {
   if (msg.action !== "syncFacebook") return;
 
@@ -6,21 +6,33 @@ chrome.runtime.onMessage.addListener(async msg => {
 
   if (!location.href.includes("selling")) return;
 
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
   const synced = [];
+  const links = [];
 
-  const links = [...document.querySelectorAll('img[src*="scontent"]')]
-  .map(img => img.closest('[role="button"]'))
-  .filter(Boolean)
-  .map(btn => {
-    const label = btn.getAttribute("aria-label");
-    if (!label) return null;
+  const divs = [...document.querySelectorAll('div[role="button"][aria-label]')]
+    .filter(el => el.querySelector('img[src*="scontent"]'));
 
-    // build marketplace link
-    return `https://www.facebook.com/marketplace/item/${label}`;
-  })
-  .filter(Boolean);
-console.log("links are")
-console.log("listing links:", links);
+  for (const div of divs) {
+
+    div.click();
+    await sleep(1200);
+
+    const a = document.querySelector('a[href*="/marketplace/item/"]');
+
+    if (a) {
+      const link = "https://www.facebook.com" + a.getAttribute("href");
+      links.push(link);
+    }
+
+    const closeBtn = document.querySelector('div[aria-label="Zavřít"], div[aria-label="Close"]');
+    if (closeBtn) closeBtn.click();
+
+    await sleep(800);
+  }
+
+  console.log("FOUND LINKS:", links);
 
   for (const link of links) {
 
@@ -28,8 +40,6 @@ console.log("listing links:", links);
       action: "openHiddenTab",
       url: link
     });
-
-    
 
     const data = await chrome.runtime.sendMessage({
       action: "extractListing",
@@ -46,19 +56,18 @@ console.log("listing links:", links);
 
   console.log("SYNC DONE:", synced);
 
-  
-await chrome.runtime.sendMessage({
-  action: "syncListings",
-  data: synced
-});
+  await chrome.runtime.sendMessage({
+    action: "syncListings",
+    data: synced
+  });
 
-// await chrome.runtime.sendMessage({
-//   action: "closeTab",
-//   tabId: msg.mainTab
-// })
+  await chrome.runtime.sendMessage({action:"closeTab",tabId:msg.tabId})
 
 
 
 })();
 
-})
+
+
+
+});

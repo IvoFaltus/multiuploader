@@ -145,6 +145,7 @@ const getListingsFor = async (platform_name, sort) => {
 let aukroListings = []
 let bazosListings = []
 let sbazarListings = []
+let facebookListings = []
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -241,6 +242,10 @@ document.addEventListener('DOMContentLoaded', () => {
             addFrame(2)
 
             getAllListings(sortMap[getSorting()]).then((data) => {
+                aukroListings = []
+                bazosListings = []
+                sbazarListings = []
+                facebookListings = []
 
                 data.forEach((d) => {
 
@@ -256,13 +261,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             case "sbazar":
                                 sbazarListings.push(d)
                                 break
+                            case "facebook":
+                                facebookListings.push(d)
+                                break
                         }
 
                     })
 
                 })
 
-                renderSeperate(aukroListings, bazosListings, sbazarListings)
+                renderSeperate(aukroListings, bazosListings, sbazarListings, facebookListings)
 
             })
 

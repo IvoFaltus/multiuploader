@@ -17,9 +17,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     const priceText =
       document.querySelector("span[translate='no']")?.textContent.trim();
 
-    const price = Number(
+    let price = Number(
       priceText?.replace(/\s/g, "").replace(/[^\d.,]/g, "").replace(",", ".")
     ) || null;
+    
 
     const images = [...document.querySelectorAll("img.carousel-cell-image")]
   .map(e => {

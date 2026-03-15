@@ -127,7 +127,7 @@ function renderAll(list) {
     }
 }
 
-function renderSeperate(aukro, bazos, sbazar) {
+function renderSeperate(aukro, bazos, sbazar, facebook) {
     const frame = document.querySelector(".frame2");
     if (!frame) {
         return;
@@ -188,6 +188,7 @@ function renderSeperate(aukro, bazos, sbazar) {
     createContainer("aukro", "Aukro", aukro);
     createContainer("bazos", "Bazoš", bazos);
     createContainer("sbazar", "SBazar", sbazar);
+    createContainer("facebook", "Facebook", facebook);
 }
 
 function renderSingle(list) {

@@ -24,12 +24,15 @@
     {
       "matches": [
         "https://www.facebook.com/marketplace/create/",
-        "https://facebook.com/*",
-        "https://www.facebook.com/marketplace/you/selling"
+        "https://www.facebook.com/marketplace/you/selling",
+        "https://www.facebook.com/marketplace/item/*",
+        "https://www.facebook.com/*",
+        "https://facebook.com/*"
       ],
       "js": [
         "facebook.js",
-        "syncFacebook.js"
+        "syncfacebook.js",
+        "facebookListingReader.js"
       ]
     },
     {

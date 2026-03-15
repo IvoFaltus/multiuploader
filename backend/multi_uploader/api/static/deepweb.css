@@ -462,6 +462,11 @@
   border-color: rgba(242, 184, 75, 0.2);
 }
 
+#facebook {
+  background: linear-gradient(180deg, rgba(28, 55, 109, 0.95), rgba(17, 28, 48, 0.98));
+  border-color: rgba(108, 158, 255, 0.22);
+}
+
 #aukro h1 {
   background: linear-gradient(135deg, rgba(33, 83, 152, 0.34), rgba(14, 21, 32, 0.94));
 }
@@ -472,6 +477,10 @@
 
 #sbazar h1 {
   background: linear-gradient(135deg, rgba(169, 112, 27, 0.32), rgba(33, 24, 14, 0.94));
+}
+
+#facebook h1 {
+  background: linear-gradient(135deg, rgba(53, 101, 199, 0.34), rgba(18, 29, 53, 0.94));
 }
 
 .card2 {
