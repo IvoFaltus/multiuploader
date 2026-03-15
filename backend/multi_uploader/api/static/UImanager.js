@@ -15,7 +15,8 @@ function addListing(obj,num,creation,image, title, description, platforms, frame
 
     const card = document.createElement("div");
     card.className = "card";
-
+    card.id=obj.id
+    card.dataset.listingId = obj.id
     const pfpDiv = document.createElement("div");
     pfpDiv.className = "pfpDiv";
     pfpDiv.style.backgroundImage = `url(${image})`;
@@ -33,7 +34,11 @@ function addListing(obj,num,creation,image, title, description, platforms, frame
     const platformsEl = document.createElement("a");
     platformsEl.className = "platforms";
     platformsEl.textContent = Array.isArray(platforms)
-        ? platforms.map((platform) => platform.name).join(", ")
+        ? platforms
+            .map((platform) => platform.name)
+            .filter(Boolean)
+            .map((name) => name.toUpperCase())
+            .join(" / ")
         : platforms;
 
     const button = document.createElement("button");
@@ -143,6 +148,8 @@ function renderSeperate(aukro, bazos, sbazar) {
             if(i===0) card.style.marginTop = "100px"
             i++
             card.className = "card2";
+            card.id = item.id;
+            card.dataset.listingId = item.id;
 
             const pfpDiv = document.createElement("div");
             pfpDiv.className = "pfpDiv2";
@@ -179,7 +186,7 @@ function renderSeperate(aukro, bazos, sbazar) {
     };
 
     createContainer("aukro", "Aukro", aukro);
-    createContainer("bazos", "Bazos", bazos);
+    createContainer("bazos", "Bazoš", bazos);
     createContainer("sbazar", "SBazar", sbazar);
 }
 
@@ -211,10 +218,15 @@ Array.prototype.sortArray = function(num){
 
 const addSyncBtn = ()=>{
 const navbar = document.querySelector(".header1");
+if (!navbar || document.getElementById("sync")) {
+    return
+}
 
 const btn = document.createElement("button")
 btn.textContent = "Sync"
 btn.id = "sync"
+btn.type = "button"
+btn.className = "navbarSyncBtn"
 navbar.appendChild(btn)
 
 btn.addEventListener('click',()=>{

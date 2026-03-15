@@ -3,8 +3,6 @@
 
 
 @import url(colors.css);
-@import url(headerresponsive.css);
-@import url(deepweb.css);
 body{margin: 0;}
 .header1 {
   width: 100%;
@@ -19,6 +17,9 @@ body{margin: 0;}
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  overflow: visible;
+  z-index: 10;
 }
 
 .navbarD {
@@ -40,6 +41,49 @@ body{margin: 0;}
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
+  transition: opacity .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.navbarToggle {
+  display: none;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    var(--panel-gradient);
+  box-shadow: var(--boxShadowSoft), var(--boxShadowInner);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 12;
+}
+
+.navbarToggle span {
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--text-strong);
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.header1.navbar-open .navbarToggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.header1.navbar-open .navbarToggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.header1.navbar-open .navbarToggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 .btnD {
@@ -97,7 +141,6 @@ body{margin: 0;}
   transform: translateY(1px);
 }
 
-
 .btnD2 img  {
   transform: translateY(-2px);
 }
@@ -110,6 +153,10 @@ body{margin: 0;}
 
 .btnD img, .btnD  {
  text-shadow:var(--shadow2)
+}
+
+.navbarSyncBtn {
+  font-family: "Lato", "Segoe UI", sans-serif;
 }
 html{
   scrollbar-color:  var(--c1) var(--c3);

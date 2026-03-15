@@ -7,8 +7,10 @@
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'header.css' %}" />
+<link rel="stylesheet" href="{% static 'headerresponsive.css' %}" />
 <link rel="stylesheet" href="{% static 'settings.css' %}" />
-<script src="{% static 'navigation.js' %}" type="module"></script>
+<link rel="stylesheet" href="{% static 'global.css' %}" />
+<script src="{% static 'navbar.js' %}" type="module"></script>
 </head>
 
 <body>
@@ -239,6 +241,7 @@ form.addEventListener("submit", async (e) => {
         alert("Error saving settings")
     }
 })
+
 
 </script>
 

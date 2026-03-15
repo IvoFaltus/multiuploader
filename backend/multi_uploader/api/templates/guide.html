@@ -6,9 +6,11 @@
 <title>Guide</title>
 
 {% load static %}
+
 <link rel="stylesheet" href="{% static 'header.css' %}" />
+<link rel="stylesheet" href="{% static 'headerresponsive.css' %}" />
 <link rel="stylesheet" href="{% static 'guide.css' %}" />
-<script src="{% static 'navigation.js' %}" type="module"></script>
+<script src="{% static 'navbar.js' %}" type="module"></script>
 
 </head>
 
@@ -255,7 +257,8 @@ toggle.addEventListener("change", () => {
     section.style.display = toggle.checked ? "block" : "none";
 });
 
-</script>
 
+</script>
+<link rel="stylesheet" href="{% static 'global.css' %}" />
 </body>
 </html>

@@ -6,6 +6,8 @@
     <title>Document</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'deepweb.css' %}" />
+    <link rel="stylesheet" href="{% static 'headerresponsive.css' %}" />
+    <link rel="stylesheet" href="{% static 'global.css' %}" />
     <link rel="preconnect" href="https://icons.googleapis.com" />
     <link rel="preconnect" href="https://icons.gstatic.com" crossorigin />
     <link
@@ -13,7 +15,8 @@
       rel="stylesheet"
     />
     <script src="{% static 'deepweb.js' %}" type="module"></script>
-    <script src="{% static 'navigation.js' %}" type="module"></script>
+    <script src="{% static 'deepwebresponsive.js' %}" type="module"></script>
+    <script src="{% static 'navbar.js' %}" type="module"></script>
   </head>
   <body class="indexBody">
     <header class="header1">
@@ -33,8 +36,12 @@
       </div>
     </header>
 
-    <div class="main">
-      <div class="optionsD">
+    <main class="main">
+      <aside class="optionsD">
+        <div class="filtersIntro">
+          <p class="filtersEyebrow">Listings workspace</p>
+          <h1 class="filtersTitle">Manage listings</h1>
+        </div>
         <input type="text" class="searchListing" placeholder="Search" />
 <div style="display:none;" id="emailEX"></div>
 <div style="display:none;" id="phoneEX"></div>
@@ -46,11 +53,20 @@ document.getElementById("emailEX").textContent = data.email;
 document.getElementById("phoneEX").textContent = data.phone;
 </script>
         <div class="subOptions">
+          <div class="optionD optionD2">
+            <button class="addListingBtn aBtn">
+              <img src="{% static 'icons/Chat_plus.svg' %}" alt="" />Add Listing
+            </button>
+            <button class="removeListingBtn aBtn">
+              <img src="{% static './icons/Remove.svg' %}" alt="" />Remove
+              Listing
+            </button>
+          </div>
           <div class="optionD optionD0">
             <h1 class="optionTitleD">Display</h1>
             <p>All<input type="checkbox" id="all" checked /></p>
             <p>Seperate<input type="checkbox" id="seperate" /></p>
-            <p>Only Bazos<input type="checkbox" id="bazosOnly" /></p>
+            <p>Only Bazoš<input type="checkbox" id="bazosOnly" /></p>
             <p>Only Sbazar<input type="checkbox" id="sbazarOnly" /></p>
             <p>Only Aukro<input type="checkbox" id="aukroOnly" /></p>
           </div>
@@ -63,29 +79,23 @@ document.getElementById("phoneEX").textContent = data.phone;
             <p>Oldest First<input type="checkbox" id="oldestFirst" /></p>
           </div>
 
-          <div class="optionD optionD2">
-            <button class="addListingBtn aBtn">
-              <img src="{% static 'icons/Chat_plus.svg' %}" alt="" />Add Listing
-            </button>
-            <button class="removeListingBtn aBtn">
-              <img src="{% static './icons/Remove.svg' %}" alt="" />Remove
-              Listing
-            </button>
-          </div>
+          
 
-          <div class="optionD optionD3">
-            <h1>Options</h1>
-          </div>
+          
         </div>
-      </div>
+      </aside>
 
       <script></script>
 
-      <div class="listingsDiv">
+      <section class="listingsDiv">
+        <div class="listingSelectionActions hidden">
+          <button class="cancelSelectionBtn aBtn">Cancel</button>
+          <button class="confirmDeleteBtn aBtn">Delete Selected</button>
+        </div>
         <div class="allListings">
           <!-- listings are rendered here--> 
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   </body>
 </html>

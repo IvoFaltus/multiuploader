@@ -424,7 +424,15 @@ def getListingsForPlatform(request, platform):
 
 
    
+@csrf_exempt
 def deleteListing(request, id):
+    if request.method not in ["POST", "DELETE", "GET"]:
+        return HttpResponseNotAllowed(["POST", "DELETE", "GET"])
+    
     listing = get_object_or_404(Listing, id=id, owner=request.user)
+    for img in listing.images.all():
+        img.image.delete(save=False)   # deletes file from /media/
+        img.delete()   
+
     listing.delete()
     return HttpResponse(status=204)

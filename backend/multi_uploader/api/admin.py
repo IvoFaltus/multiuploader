@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Listing, ListingImage, Platform, ListingPlatform, UserData
+from .models import Listing, ListingImage, Platform, ListingPlatform, UserData, Feedback
 
 
 class ListingImageInline(admin.TabularInline):
@@ -9,6 +9,20 @@ class ListingImageInline(admin.TabularInline):
 class ListingPlatformInline(admin.TabularInline):
     model = ListingPlatform
     extra = 1
+
+
+@admin.register(Feedback)
+class SaveFeedback(admin.ModelAdmin):
+    list_display=(
+        "name",
+        "email",
+        "text"
+
+    )
+    search_fields  =("name",
+        "email",
+        "text") 
+
 
 
 @admin.register(UserData)

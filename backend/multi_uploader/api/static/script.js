@@ -34,7 +34,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.5;
+renderer.toneMappingExposure = 0.42;
 document.body.appendChild(renderer.domElement);
 
 /* ---------- CONTROLS ---------- */
@@ -91,14 +91,16 @@ let bgNext = null;
 let fading = false;
 let fadeStart = 0;
 
-const FADE_TIME = 1500;
+export const BACKGROUND_TRANSITION_MS = 1800;
+const FADE_TIME = BACKGROUND_TRANSITION_MS;
 const FADE_ROTATION = Math.PI / 3;
 let startRotation = 0;
 let bgRotationSpeed = 0.0003;
+let fadeRotationTarget = FADE_ROTATION;
 
 /* ---------- FADE FUNCTION ---------- */
 
-export function fadeToBackground(texture) {
+function startBackgroundFade(texture, rotationTarget) {
   if (fading || !texture) return;
 
   bgNext = createBgSphere(texture);
@@ -106,8 +108,21 @@ export function fadeToBackground(texture) {
   bgGroup.add(bgNext);
 
   startRotation = bgGroup.rotation.y;
+  fadeRotationTarget = rotationTarget;
   fadeStart = performance.now();
   fading = true;
+}
+
+export function fadeToBackground(texture) {
+  startBackgroundFade(texture, FADE_ROTATION);
+}
+
+export function fadeToBackgroundLeft(texture) {
+  startBackgroundFade(texture, -FADE_ROTATION);
+}
+
+export function fadeToBackgroundRight(texture) {
+  startBackgroundFade(texture, FADE_ROTATION);
 }
 
 function updateBackgroundFade() {
@@ -119,7 +134,7 @@ function updateBackgroundFade() {
   if (bgCurrent) bgCurrent.material.opacity = 1 - e;
   if (bgNext) bgNext.material.opacity = e;
 
-  bgGroup.rotation.y = startRotation + FADE_ROTATION * e;
+  bgGroup.rotation.y = startRotation + fadeRotationTarget * e;
 
   if (t === 1) {
     if (bgCurrent) bgGroup.remove(bgCurrent);
@@ -135,7 +150,7 @@ function updateBackgroundFade() {
 const bar = document.querySelector(".loading-bar");
 
 let done = 0;
-const total = 5;
+const total = 1;
 
 const track = (promise) =>
   promise.finally(() => {
@@ -145,18 +160,10 @@ const track = (promise) =>
 export const backgrounds = [];
 
 Promise.all([
-  track(loadEXR("/static/models/bg1.exr")),
-  track(loadEXR("/static/models/nature.exr")),
-  track(loadEXR("/static/models/sky1.exr")),
-  track(loadEXR("/static/models/sky2.exr")),
-  track(loadEXR("/static/models/nature3.exr")),
+  track(loadEXR("/static/models/bg10.exr")),
 ])
 .then((textures) => {
   backgrounds[0] = textures[0];
-  backgrounds[1] = textures[1];
-  backgrounds[2] = textures[2];
-  backgrounds[3] = textures[3];
-  backgrounds[4] = textures[4];
 
   bgCurrent = createBgSphere(backgrounds[0]);
   bgGroup.add(bgCurrent);

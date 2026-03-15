@@ -1,103 +1,266 @@
-@media (max-width: 1200px) {
-    .main {
-        flex-direction: column;
-    }
+@media (max-width: 1260px) {
+  .main {
+    width: min(100%, calc(100% - 24px));
+    min-height: auto;
+    height: auto;
+    margin: 12px auto 24px;
+    padding: 0;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 14px;
+    overflow: visible;
+  }
 
-    .optionsD,
-    .listingsDiv {
-        width: calc(100% - 30px);
-    }
+  .optionsD {
+    top: 0;
+    height: auto;
+    overflow: visible;
+  }
 
-    .optionsD {
-        height: auto;
-        padding: 18px 0;
-    }
+  .listingsDiv {
+    min-height: 70vh;
+    height: auto;
+  }
 
-    .listingsDiv {
-        height: auto;
-        min-height: 70vh;
-    }
+  .card {
+    grid-template-columns: 84px minmax(160px, 1fr) minmax(160px, 1.15fr) auto auto;
+  }
 
-    .subOptions {
-        width: 92%;
-        height: auto;
-        padding: 20px 0;
-    }
+  .card .created {
+    grid-column: 4;
+  }
+}
 
-    .searchListing {
-        width: 88%;
-    }
+@media (max-width: 1024px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .optionsD {
+    position: static;
+    top: auto;
+  }
+
+  .listingsDiv {
+    min-height: 60vh;
+  }
+
+  .frame2 {
+    flex-direction: column;
+  }
+
+  .platformContainer {
+    width: 100%;
+  }
 }
 
 @media (max-width: 900px) {
-    .frame2 {
-        flex-direction: column;
-        overflow-x: hidden;
-    }
+  .main {
+    width: min(100%, calc(100% - 16px));
+    margin-top: 12px;
+    overflow: visible;
+  }
 
-    .platformContainer {
-        width: 100%;
-        min-height: 320px;
-    }
+  .optionsD {
+    overflow: hidden;
+    padding-bottom: 14px;
+    transition: max-height .24s ease, padding .24s ease, opacity .2s ease;
+  }
 
-    .card {
-        width: 96%;
-        height: auto;
-        min-height: 120px;
-        max-height: none;
-        padding: 16px;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
+  .optionsD.responsive-collapsed {
+    max-height: 184px;
+  }
 
-    .card .pfpDiv {
-        width: 72px;
-        height: 72px;
-    }
+  .optionsD.responsive-collapsed .subOptions {
+    opacity: 0;
+    pointer-events: none;
+    max-height: 0;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
 
-    .card .title,
-    .card .description,
-    .card .platforms {
-        width: 100%;
-    }
+  .optionsD.responsive-expanded {
+    max-height: 1400px;
+  }
 
-    #sync {
-        position: static;
-        margin-top: 12px;
-    }
+  .responsiveFiltersToggle {
+    all: unset;
+    width: 100%;
+    margin-top: 14px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-radius: 16px;
+    box-sizing: border-box;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+      var(--panel-gradient);
+    color: var(--text-strong);
+    box-shadow: var(--boxShadowSoft), var(--boxShadowInner);
+    border: 1px solid rgba(77, 163, 255, 0.14);
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .responsiveFiltersToggle::after {
+    content: "+";
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .optionsD.responsive-expanded .responsiveFiltersToggle::after {
+    content: "-";
+  }
+
+  .card {
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .card .pfpDiv {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    grid-row: span 2;
+  }
+
+  .card .title,
+  .card .description,
+  .card .platforms,
+  .card .created,
+  .card .detail {
+    grid-column: 2;
+  }
+
+  .card .created,
+  .card .detail {
+    justify-self: start;
+  }
+
+  .card.selectionMode {
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+  }
+
+  .card.selectionMode .rBtn {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .card2,
+  .card2.selectionMode {
+    grid-template-columns: 52px minmax(0, 1fr);
+  }
+
+  .card2 .description,
+  .card2 .detail {
+    grid-column: 2;
+  }
+
+  .card2.selectionMode .rBtn {
+    grid-column: 2;
+    justify-self: start;
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 640px) {
-    .optionsD,
-    .listingsDiv {
-        width: calc(100% - 16px);
-        margin-left: 8px;
-        margin-top: 12px;
-    }
+  .main {
+    width: min(100%, calc(100% - 10px));
+    gap: 10px;
+  }
 
-    .searchListing {
-        width: calc(100% - 24px);
-        font-size: 18px;
-    }
+  .optionsD,
+  .listingsDiv {
+    border-radius: 20px;
+  }
 
-    .searchListing::placeholder {
-        font-size: 18px;
-    }
+  .optionsD {
+    padding: 16px 12px 12px;
+  }
 
-    .aBtn {
-        width: 100%;
-        max-width: 260px;
-    }
+  .filtersTitle {
+    font-size: 24px;
+  }
 
-    .title1 {
-        width: 100%;
-        font-size: 26px;
-    }
+  .subOptions {
+    padding: 10px;
+    gap: 10px;
+  }
 
-    .card2 {
-        width: calc(100% - 20px);
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
+  .optionD {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .optionTitleD,
+  .optionD3 h1 {
+    font-size: 18px;
+  }
+
+  .searchListing {
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .searchListing::placeholder {
+    font-size: 16px;
+  }
+
+  .listingsDiv {
+    padding: 12px;
+  }
+
+  .frame,
+  .frame2 {
+    padding: 12px;
+  }
+
+  .title1 {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 12px;
+    border-radius: 22px;
+    gap: 10px;
+  }
+
+  .card .title {
+    font-size: 16px;
+  }
+
+  .card .description {
+    font-size: 14px;
+  }
+
+  .card .platforms {
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .card2 {
+    padding: 10px;
+  }
+
+  .card2 .title,
+  .card2 .description {
+    white-space: normal;
+  }
+
+  .card2 .detail {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .listingSelectionActions {
+    justify-content: stretch;
+  }
+
+  .listingSelectionActions .aBtn {
+    flex: 1 1 100%;
+  }
 }

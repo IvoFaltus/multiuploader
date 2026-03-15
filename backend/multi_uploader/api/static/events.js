@@ -1,54 +1,92 @@
-import { backgrounds, fadeToBackground } from "./script.js";
+import {
+  BACKGROUND_TRANSITION_MS,
+  backgrounds,
+  fadeToBackgroundRight,
+} from "./script.js";
 let currentPage = "page-home";
+let isSwitching = false;
+let switchCleanupTimer = null;
+const PAGE_TRANSITION_MS = BACKGROUND_TRANSITION_MS;
 // ======================================================
 // PAGE SWITCH (NO CSS ANIMATION LOGIC)
 // ======================================================
-const switchToPage = (pageClass, bgIndex) => {
-  if (pageClass === currentPage) return;
-
-  if (backgrounds?.[bgIndex]) {
-    fadeToBackground(backgrounds[bgIndex]);
+const fadeToBackgroundForPage = (pageClass, bgIndex) => {
+  const texture = backgrounds?.[bgIndex];
+  if (!texture) {
+    return;
   }
+
+  fadeToBackgroundRight(texture);
+};
+
+const resetPageTransitionState = (page) => {
+  if (!page) return;
+  page.style.transition = "";
+  page.style.transform = "";
+  page.style.opacity = "";
+  page.classList.remove("animatedOff", "entered", "enteredhelper");
+};
+
+const switchToPage = (pageClass, bgIndex) => {
+  if (pageClass === currentPage || isSwitching) return;
+
+  fadeToBackgroundForPage(pageClass, bgIndex);
 
   const oldPage = document.querySelector(`.${currentPage}`);
   const nextPage = document.querySelector(`.${pageClass}`);
   if (!nextPage) return;
 
-  // ----- RESET NEXT PAGE -----
-  nextPage.classList.remove("hidden", "animatedOff", "entered");
-  nextPage.classList.add("enteredhelper");
+  isSwitching = true;
 
-  // force reflow (CRITICAL)
-  nextPage.getBoundingClientRect();
-
-  // ----- START ENTER -----
-  nextPage.classList.add("entered");
-
-  // ----- EXIT OLD PAGE -----
-  if (oldPage) {
-    oldPage.classList.remove("enteredhelper");
-    oldPage.classList.add("animatedOff");
-
-    const onExitEnd = (e) => {
-      if (e.propertyName !== "transform") return;
-      oldPage.classList.add("hidden");
-      oldPage.classList.remove("animatedOff", "entered");
-      oldPage.removeEventListener("transitionend", onExitEnd);
-    };
-
-    oldPage.addEventListener("transitionend", onExitEnd);
+  if (switchCleanupTimer) {
+    clearTimeout(switchCleanupTimer);
+    switchCleanupTimer = null;
   }
 
-  // ----- CLEANUP ENTER -----
-  const onEnterEnd = (e) => {
-    if (e.propertyName !== "transform") return;
-    nextPage.classList.remove("enteredhelper");
-    nextPage.removeEventListener("transitionend", onEnterEnd);
-  };
+  resetPageTransitionState(oldPage);
+  resetPageTransitionState(nextPage);
 
-  nextPage.addEventListener("transitionend", onEnterEnd);
+  nextPage.classList.remove("hidden");
+  nextPage.style.transition = "none";
+  nextPage.style.transform = "translateX(100vw)";
+  nextPage.style.opacity = "1";
 
-  currentPage = pageClass;
+  if (oldPage) {
+    oldPage.classList.remove("hidden");
+    oldPage.style.transition = "none";
+    oldPage.style.transform = "translateX(0)";
+    oldPage.style.opacity = "1";
+  }
+
+  nextPage.getBoundingClientRect();
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const transitionValue =
+        `transform ${PAGE_TRANSITION_MS}ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${Math.round(PAGE_TRANSITION_MS * 0.72)}ms ease`;
+
+      nextPage.style.transition = transitionValue;
+      nextPage.style.transform = "translateX(0)";
+
+      if (oldPage) {
+        oldPage.style.transition = transitionValue;
+        oldPage.style.transform = "translateX(100vw)";
+        oldPage.style.opacity = "0";
+      }
+    });
+  });
+
+  switchCleanupTimer = setTimeout(() => {
+    if (oldPage) {
+      oldPage.classList.add("hidden");
+      resetPageTransitionState(oldPage);
+    }
+
+    resetPageTransitionState(nextPage);
+    currentPage = pageClass;
+    isSwitching = false;
+    switchCleanupTimer = null;
+  }, PAGE_TRANSITION_MS + 60);
 };
 
 // ======================================================
@@ -67,11 +105,11 @@ const finishSwitch = (pageClass) => {
 // ======================================================
 document
   .getElementById("About")
-  ?.addEventListener("click", () => switchToPage("page-about", 1));
+  ?.addEventListener("click", () => switchToPage("page-about", 0));
 
 document
   .getElementById("Contact")
-  ?.addEventListener("click", () => switchToPage("page-contact", 2));
+  ?.addEventListener("click", () => switchToPage("page-contact", 0));
 
 document
   .getElementById("Home")
@@ -79,8 +117,8 @@ document
 
 document
   .getElementById("Login")
-  ?.addEventListener("click", () => switchToPage("page-login", 3));
+  ?.addEventListener("click", () => switchToPage("page-login", 0));
 
 document
   .getElementById("Register")
-  ?.addEventListener("click", () => switchToPage("page-register", 4));
+  ?.addEventListener("click", () => switchToPage("page-register", 0));

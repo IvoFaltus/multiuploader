@@ -69,3 +69,11 @@ class ListingPlatform(models.Model):
 
     def __str__(self):
         return f"{self.listing.id} → {self.platform.name}"
+    
+
+
+
+class Feedback(models.Model):
+    email = models.CharField(max_length=70)
+    name = models.CharField(max_length=100)
+    text = models.TextField(null=False)

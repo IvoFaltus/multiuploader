@@ -21,5 +21,6 @@ urlpatterns = [
     path("saveConfig/",views.saveConfig,name="saveconfig"),
     path("applyTheme/", views.applyTheme, name="apply_theme"),
     path("deleteAllListings/", views.deleteAllListings, name="delete_listings"),
-    path("deleteListing/<int:id>", views.deleteAllListings, name="delete_listing"),
+    path("deleteListing/<int:id>", views.deleteListing, name="delete_listing"),
+    path("saveFeedback/",views2.saveFeedback)
 ]

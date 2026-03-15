@@ -10,7 +10,26 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from .models import Listing, UserData
-
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from .models import Listing ,ListingPlatform, Platform, ListingImage, UserData,Feedback
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.decorators import login_required
+import json
+import base64
+from django.core.files.base import ContentFile
+from django.shortcuts import redirect
+from django.http import HttpResponse,HttpResponseNotAllowed
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+from decimal import Decimal, InvalidOperation
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
+from .models import Listing, ListingImage, Platform, ListingPlatform
+from django.views.decorators.http import require_GET,require_POST
+from pathlib import Path
+from django.shortcuts import get_object_or_404
 
 THEMES_FILE = Path(__file__).resolve().parent / "static" / "themes.txt"
 COLORS_FILE = Path(__file__).resolve().parent / "static" / "colors.css"
@@ -142,3 +161,18 @@ def stats_data(request):
     }
 
     return JsonResponse(payload)
+
+
+
+
+@csrf_exempt
+def saveFeedback(request):
+    if request.method != "POST":
+        return HttpResponse(status=405)
+    
+    name = request.POST["name"]
+    email = request.POST["email"]
+    text = request.POST["text"]
+
+    Feedback.objects.create(name=name,email=email,text=text).save()
+    return HttpResponse(status=204)
