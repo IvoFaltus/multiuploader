@@ -13,7 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-dev-secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
+DEBUG_ENV = os.environ.get("DJANGO_DEBUG")
+DEBUG = True if DEBUG_ENV is None else DEBUG_ENV.lower() == "true"
 
 if SECRET_KEY == "unsafe-dev-secret" and not DEBUG:
     raise ValueError("DJANGO_SECRET_KEY is required in production.")
@@ -21,6 +22,13 @@ if SECRET_KEY == "unsafe-dev-secret" and not DEBUG:
 ALLOWED_HOSTS = [
     "faltus-projekt.dev.spsejecna.net",
 ]
+
+if DEBUG:
+    ALLOWED_HOSTS += [
+        "127.0.0.1",
+        "localhost",
+        "192.168.1.15",
+    ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://faltus-projekt.dev.spsejecna.net",
@@ -30,6 +38,16 @@ CORS_ALLOWED_ORIGINS = [
     "http://faltus-projekt.dev.spsejecna.net",
     "https://faltus-projekt.dev.spsejecna.net",
 ]
+
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += [
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ]
+    CORS_ALLOWED_ORIGINS += [
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ]
 
 
 
@@ -135,6 +153,8 @@ TIME_ZONE = 'UTC'
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
 SECURE_COOKIES = os.environ.get("DJANGO_SECURE_COOKIES", "true").lower() == "true"
+if DEBUG:
+    SECURE_COOKIES = False
 SESSION_COOKIE_SECURE = SECURE_COOKIES
 CSRF_COOKIE_SECURE = SECURE_COOKIES
 

@@ -451,20 +451,6 @@ body > div.page.page-register > div > section.auth-intro.panel-card{
   line-height: 1.65;
 }
 
-.auth-message {
-  min-height: 18px;
-  margin: 4px 0 14px;
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.auth-message.is-error {
-  color: #ffb2b2;
-}
-
-.auth-message.is-success {
-  color: #b9f7c8;
-}
 
 .login-form,
 .register-form {

@@ -5,7 +5,7 @@
 const AUKRO_URL =
   "https://aukro.cz/jednoduche-vystaveni?simpleFormOnDesktopAllowed=true";
 
-const BAZOS_URL = "https://www.bazos.cz/moje-inzeraty.php";
+const BAZOS_URL = "https://auto.bazos.cz/pridat-inzerat.php";
 
 const SBazar_URL = "https://www.sbazar.cz/nova-nabidka";
 
@@ -14,6 +14,19 @@ const SbazarListingsUrl = "https://sbazar.cz";
 const  BazosListingsUrl = "https://www.bazos.cz/moje-inzeraty.php";
 
 const facebooklistingsurl = "https://www.facebook.com/marketplace/you/selling"
+
+const DEFAULT_API_BASE = "http://faltus-projekt.dev.spsejecna.net";
+
+const getApiBase = () =>
+  new Promise((resolve) => {
+    if (!chrome?.storage?.local) {
+      resolve(DEFAULT_API_BASE);
+      return;
+    }
+    chrome.storage.local.get(["apiBase"], (result) => {
+      resolve(result.apiBase || DEFAULT_API_BASE);
+    });
+  });
 
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -170,13 +183,16 @@ if (msg.action === "closeTab") {
   chrome.tabs.remove(msg.tabId);
 }
 if (msg.action === "syncListings") {
-  fetch("http://faltus-projekt.dev.spsejecna.net/createListing/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ listings: msg.data })
-  }).then(r => sendResponse({ ok: true }))
-    .catch(() => sendResponse({ ok: false }));
+  (async () => {
+    const apiBase = await getApiBase();
+    fetch(`${apiBase}/createListing/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ listings: msg.data })
+    }).then(() => sendResponse({ ok: true }))
+      .catch(() => sendResponse({ ok: false }));
+  })();
 
   return true;
 }
@@ -212,7 +228,8 @@ if (msg.action === "syncListingsWithFetch") {
       ).then(arr => arr.filter(Boolean));
     }
 
-    fetch("http://faltus-projekt.dev.spsejecna.net/createListing/", {
+    const apiBase = await getApiBase();
+    fetch(`${apiBase}/createListing/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -249,7 +266,7 @@ if (msg.action === "syncListingsWithFetch") {
 
   if (msg.action === "syncBazos") {
     console.log("message received");
-    chrome.tabs.create({ url: BAZOS_URL, active: true }, (tab) => {
+    chrome.tabs.create({ url: BazosListingsUrl, active: true }, (tab) => {
       const tabId = tab.id;
       const listener = (id, info) => {
         if (id === tabId && info.status === "complete") {

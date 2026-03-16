@@ -2,7 +2,9 @@
 let data = {};
 console.log("content.js loaded");
 
-
+if (chrome?.storage?.local) {
+  chrome.storage.local.set({ apiBase: window.location.origin });
+}
 
 const obs = new MutationObserver(() => {
 
@@ -132,17 +134,35 @@ obs.observe(document.body, {
   subtree: true
 })
 
+// Ensure sync button listener is attached once it appears.
+const syncObserver = new MutationObserver(() => {
+  attachSyncListener();
+});
+
+syncObserver.observe(document.body, {
+  childList: true,
+  subtree: true
+});
 
 
 
-document.querySelector("#sync").addEventListener("click", () => {
 
-  const popup = document.querySelector("#syncPopup");
-  const syncBtn = popup?.querySelector("#syncListings");
+let syncListenerAttached = false;
 
-  if (!popup || !syncBtn) return;
+const attachSyncListener = () => {
+  if (syncListenerAttached) return;
+  const syncButton = document.querySelector("#sync");
+  if (!syncButton) return;
 
-  syncBtn.addEventListener("click", async () => {
+  syncListenerAttached = true;
+  syncButton.addEventListener("click", () => {
+
+    const popup = document.querySelector("#syncPopup");
+    const syncBtn = popup?.querySelector("#syncListings");
+
+    if (!popup || !syncBtn) return;
+
+    syncBtn.addEventListener("click", async () => {
 
     const all = popup.querySelector("#all")?.checked;
     const sbazar = popup.querySelector("#sbazar")?.checked;
@@ -202,6 +222,8 @@ document.querySelector("#sync").addEventListener("click", () => {
       });
     }
 
+    });
   });
+};
 
-});
+attachSyncListener();

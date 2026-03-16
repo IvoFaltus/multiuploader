@@ -6,20 +6,18 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 )?.innerText.trim();
 
 console.log(price);
-  const title =
+  let title =
     document.querySelector(
       'div.xyamay9.xv54qhq.x18d9i69.xf7dkkf > h1[aria-hidden="false"] span[dir="auto"]'
     )?.textContent?.trim() ||
     document.querySelector('h1 span[dir="auto"]')?.textContent?.trim() ||
     null;
 
-  const description =
-    document.querySelector('div.xz9dl7a span[dir="auto"]')?.innerText.trim() ||
-    [...document.querySelectorAll('div[dir="auto"], span[dir="auto"]')]
-      .map((node) => node.innerText?.trim())
-      .find((text) => text && text.length > 40 && text !== title) ||
-    null;
+  const description = [...document.querySelectorAll('div[aria-hidden="false"] span')]
+  .map(el => el.textContent.trim())
+  .filter(text => text.length > 0)[6]
 
+    title = title.slice(11)
   const img =
     document.querySelector('img[alt^="Fotka produktu"]') ||
     document.querySelector('img[referrerpolicy="origin-when-cross-origin"]') ||
