@@ -50,6 +50,12 @@ canvas {
     linear-gradient(to top, rgba(3, 5, 9, 0.78), rgba(3, 5, 9, 0.18) 42%, transparent 78%);
   z-index: 1;
 }
+body > div.page.page-register > div > section.auth-intro.panel-card{
+
+
+  width: 600px;
+}
+
 
 .hidden {
   display: none;
@@ -157,8 +163,8 @@ canvas {
   gap: 10px;
   transform: scale(0.8);
   font-family: "MyFont", sans-serif;
-  height: 60px;
-  width: 300px;
+  height: 40px;
+  width: 150px;
   margin: 0;
   transition: transform 0.2s ease;
   cursor: pointer;
@@ -274,7 +280,6 @@ canvas {
 }
 
 .auth-intro {
-  width: 600px;
   padding: 30px;
   border-radius: 30px;
 }
@@ -427,6 +432,7 @@ canvas {
 }
 
 .about-top,
+.about-layout,
 .contact-top {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.6fr);
@@ -614,71 +620,4 @@ canvas {
   font-size: 16px;
   cursor: pointer;
   justify-self: start;
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 1080px) {
-  .auth-shell,
-  .contact-layout,
-  .about-top,
-  .contact-top {
-    grid-template-columns: 1fr;
-  }
-
-  .home-points,
-  .about-grid,
-  .contact-points-row,
-  .auth-metrics {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 720px) {
-  .page-shell,
-  .auth-shell {
-    width: calc(100vw - 28px);
-    margin-top: 102px;
-    margin-bottom: 18px;
-  }
-
-  .home-wrapper {
-    height: auto;
-    min-height: calc(100vh - 160px);
-  }
-
-  .home-content {
-    position: relative;
-    width: 100%;
-    height: auto;
-    left: 0;
-    bottom: 0;
-  }
-
-  .glass-nav {
-    width: calc(100vw - 26px);
-    overflow-x: auto;
-    justify-content: flex-start;
-  }
-
-  .nav-item {
-    min-width: max-content;
-    width: auto;
-    transform: none;
-  }
-
-  .section-title,
-  .home-title,
-  .auth-intro h2 {
-    line-height: 1;
-  }
-
-  .page-contact .page-shell {
-    margin-top: 118px;
-    min-height: calc(100vh - 156px);
-  }
-
-  .contact-form {
-    grid-template-columns: 1fr;
-  }
 }

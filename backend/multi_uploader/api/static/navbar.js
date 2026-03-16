@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnD4: "/deepweb/"
   };
 
-  const mobileQuery = window.matchMedia("(max-width: 760px)");
+  const mobileQuery = window.matchMedia("(max-width: 900px)");
   const toggle = document.createElement("button");
   toggle.type = "button";
   toggle.className = "navbarToggle";

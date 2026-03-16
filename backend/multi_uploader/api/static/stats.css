@@ -1,6 +1,5 @@
 @import url(colors.css);
 @import url(animations2.css);
-@import url(statsresponsive.css);
 
 body {
     margin: 0;
@@ -76,6 +75,7 @@ body {
 
 .summaryCard {
     padding: 18px;
+    overflow: hidden;
 }
 
 .summaryCard p {

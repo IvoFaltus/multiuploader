@@ -176,7 +176,7 @@ function renderSeperate(aukro, bazos, sbazar, facebook) {
 
             card.appendChild(pfpDiv);
             card.appendChild(title);
-            card.appendChild(desc);
+            
             card.appendChild(button);
 
             container.appendChild(card);

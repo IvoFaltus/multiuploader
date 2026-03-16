@@ -32,4 +32,24 @@
     .settingsHero {
         grid-template-columns: 1fr;
     }
+
+    .settingsContainer {
+        padding: 24px 16px 40px;
+    }
+
+    .settingsPanel {
+        gap: 14px;
+    }
+
+    .settingsHero {
+        padding: 22px;
+    }
+
+    .settingsSection {
+        padding: 20px 18px;
+    }
+
+    .currentSettingsGrid {
+        grid-template-columns: 1fr;
+    }
 }

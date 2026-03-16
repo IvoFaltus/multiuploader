@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [
     "faltus-projekt.dev.spsejecna.net",
     "127.0.0.1",
     "localhost",
+    "192.168.1.15"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
