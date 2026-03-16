@@ -1,4 +1,5 @@
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -9,31 +10,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-z)+yj65a@qp766id@hlzj@4%=d44x&#*ai7bvl*jt0g%ffaa=@'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-dev-secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
+
+if SECRET_KEY == "unsafe-dev-secret" and not DEBUG:
+    raise ValueError("DJANGO_SECRET_KEY is required in production.")
 
 ALLOWED_HOSTS = [
     "faltus-projekt.dev.spsejecna.net",
-    "127.0.0.1",
-    "localhost",
-    "192.168.1.15"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "chrome-extension://gfpofkjdligjpnbaagjildkjomeeckig",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "https://aukro.cz",
-    "http://127.0.0.1:5555"
+    "http://faltus-projekt.dev.spsejecna.net",
+    "https://faltus-projekt.dev.spsejecna.net",
 ]
 CORS_ALLOWED_ORIGINS = [
-    "chrome-extension://gfpofkjdligjpnbaagjildkjomeeckig",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "https://aukro.cz",
-    "http://127.0.0.1:5555"
+    "http://faltus-projekt.dev.spsejecna.net",
+    "https://faltus-projekt.dev.spsejecna.net",
 ]
 
 
@@ -74,7 +69,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'multi_uploader.urls'
 
-import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -139,9 +133,10 @@ TIME_ZONE = 'UTC'
 # Use same-site cookies for regular browser login flows.
 # `SameSite=None` requires `Secure=True`, otherwise many browsers reject the cookie.
 SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = False
+SECURE_COOKIES = os.environ.get("DJANGO_SECURE_COOKIES", "true").lower() == "true"
+SESSION_COOKIE_SECURE = SECURE_COOKIES
+CSRF_COOKIE_SECURE = SECURE_COOKIES
 
 USE_I18N = True
 

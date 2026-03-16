@@ -170,7 +170,7 @@ if (msg.action === "closeTab") {
   chrome.tabs.remove(msg.tabId);
 }
 if (msg.action === "syncListings") {
-  fetch("http://127.0.0.1:8000/createListing/", {
+  fetch("http://faltus-projekt.dev.spsejecna.net/createListing/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -212,7 +212,7 @@ if (msg.action === "syncListingsWithFetch") {
       ).then(arr => arr.filter(Boolean));
     }
 
-    fetch("http://127.0.0.1:8000/createListing/", {
+    fetch("http://faltus-projekt.dev.spsejecna.net/createListing/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

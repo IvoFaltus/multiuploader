@@ -133,7 +133,7 @@ def login_page(request):
 def register_page(request):
     return render(request, 'register.html')
 
-
+@csrf_exempt
 def login_check(request):
     if request.method != "POST":
         return HttpResponse("Invalid method", status=405)
@@ -177,7 +177,7 @@ def deepweb_page(request):
 
     return render(request, 'deepweb.html', {"data_json": json.dumps(data),"config":json.dumps(UserData.objects.filter(user=request.user).values().first())})
 
-
+@csrf_exempt
 def register(request):
     if request.method != "POST":
         return HttpResponse("Invalid method", status=405)

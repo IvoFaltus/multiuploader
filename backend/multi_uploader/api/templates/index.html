@@ -90,6 +90,23 @@
               <b>scalability in mind</b>, so <b>new platforms and features</b> can
               be added seamlessly as the project grows.
             </div>
+            <div class="home-cta">
+
+              <script>
+                const switchToPG = (page)=>{
+                  (page=="login") ? document.querySelector("#Login").click() : document.querySelector("#Register").click()
+
+                }
+              </script>
+              <button class="cta-primary" data-target="Register" onclick='switchToPG("register")'>Start Publishing</button>
+              <button class="cta-secondary" data-target="Login" onclick='switchToPG("login")'>Sign In</button>
+            </div>
+            <div class="home-chips">
+              <span>Bulk listing sync</span>
+              <span>Single source of truth</span>
+              <span>Audit-ready exports</span>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -120,22 +137,29 @@
           <div class="auth-icon"></div>
           <h2 class="auth-title">Log in to your account</h2>
           <p class="auth-copy">Access your existing listings and continue publishing without rebuilding your workflow.</p>
+          <div class="auth-message" data-auth-message="login" aria-live="polite"></div>
           <form method="POST" action="/login/check/" class="login-form">
             {% csrf_token %}
-            <input
-              class="login-input"
-              type="text"
-              name="username"
-              placeholder="Username"
-              required
-            />
-            <input
-              class="login-input"
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-            />
+            <div class="input-with-icon">
+              <span class="input-icon input-icon-user" aria-hidden="true"></span>
+              <input
+                class="login-input"
+                type="text"
+                name="username"
+                placeholder="Username"
+                required
+              />
+            </div>
+            <div class="input-with-icon">
+              <span class="input-icon input-icon-lock" aria-hidden="true"></span>
+              <input
+                class="login-input"
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+              />
+            </div>
             <button class="auth-submit" type="submit">Login</button>
           </form>
         </section>
@@ -169,24 +193,31 @@
           <p class="auth-copy">
             Set up your workspace and start managing multi-platform uploads from one place.
           </p>
+          <div class="auth-message" data-auth-message="register" aria-live="polite"></div>
           <form action="/register/check/" method="POST" class="register-form">
             {% csrf_token %}
 
-            <input
-              class="register-input"
-              type="text"
-              name="username"
-              placeholder="Username"
-              required
-            />
+            <div class="input-with-icon">
+              <span class="input-icon input-icon-user" aria-hidden="true"></span>
+              <input
+                class="register-input"
+                type="text"
+                name="username"
+                placeholder="Username"
+                required
+              />
+            </div>
 
-            <input
-              class="register-input"
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-            />
+            <div class="input-with-icon">
+              <span class="input-icon input-icon-lock" aria-hidden="true"></span>
+              <input
+                class="register-input"
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+              />
+            </div>
 
             <button class="auth-submit" type="submit">Register</button>
           </form>
@@ -319,6 +350,97 @@
         </div>
       </div>
     </div>
+    <script>
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+  return "";
+};
+
+const attachAuthHandler = (formSelector, messageSelector, endpoint, redirectUrl) => {
+  const form = document.querySelector(formSelector);
+  const message = document.querySelector(messageSelector);
+  if (!form || !message) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    message.textContent = "";
+    message.classList.remove("is-error", "is-success");
+
+    const formData = new FormData(form);
+    const body = new URLSearchParams(formData);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body,
+      });
+
+      if (!response.ok) {
+        message.textContent = "Something went wrong. Please try again.";
+        message.classList.add("is-error");
+        return;
+      }
+
+      const text = await response.text();
+
+      if (text && text.trim().length > 0) {
+        message.textContent = text.trim();
+        message.classList.add("is-error");
+        return;
+      }
+
+      message.textContent = "Success. Redirecting...";
+      message.classList.add("is-success");
+
+      window.location.href = redirectUrl;
+
+    } catch (error) {
+      message.textContent = "Network error. Please try again.";
+      message.classList.add("is-error");
+    }
+  });
+};
+
+attachAuthHandler(".login-form", "[data-auth-message='login']", "/login/check/", "/dashboard/");
+attachAuthHandler(".register-form", "[data-auth-message='register']", "/register/check/", "/dashboard/");
+
+
+/* CONTACT FORM */
+
+const form = document.querySelector(".contact-form");
+
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.querySelector("input[name='name']").value;
+    const email = document.querySelector("input[name='email']").value;
+    const text = document.querySelector("textarea[name='text']").value;
+
+    const body = new URLSearchParams({ name, email, text });
+
+    await fetch("/saveFeedback/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body,
+    });
+
+    document.querySelector("input[name='name']").value = "";
+    document.querySelector("input[name='email']").value = "";
+    document.querySelector("textarea[name='text']").value = "";
+  });
+}
+</script>
     <style>
       html,
       body {
