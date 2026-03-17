@@ -129,12 +129,30 @@
 
   .home-content h1,
   .home-subtitle,
-  .home-text {
+  .home-text,
+  .home-cta,
+  .home-chips,
+  .home-stats {
     position: static;
   }
 
   .home-content h1 {
     font-size: 56px;
+  }
+
+  .home-cta {
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .home-chips {
+    margin-top: 16px;
+  }
+
+  .home-stats {
+    margin-top: 18px;
+    grid-template-columns: 1fr;
+    max-width: none;
   }
 
   .about-hero,
@@ -202,7 +220,10 @@
 
   .home-content h1,
   .home-subtitle,
-  .home-text {
+  .home-text,
+  .home-cta,
+  .home-chips,
+  .home-stats {
     position: static;
   }
 
@@ -219,6 +240,27 @@
   .home-text {
     margin-top: 16px;
     text-shadow: none;
+  }
+
+  .home-cta {
+    margin-top: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home-cta button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-chips {
+    margin-top: 16px;
+  }
+
+  .home-stats {
+    margin-top: 18px;
+    grid-template-columns: 1fr;
+    max-width: none;
   }
 
 
@@ -275,6 +317,11 @@
 
   .home-subtitle {
     font-size: 18px;
+  }
+
+  .home-cta button {
+    height: 44px;
+    font-size: 15px;
   }
 
   .page-about .about-hero,

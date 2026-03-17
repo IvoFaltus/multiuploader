@@ -15,7 +15,11 @@ const  BazosListingsUrl = "https://www.bazos.cz/moje-inzeraty.php";
 
 const facebooklistingsurl = "https://www.facebook.com/marketplace/you/selling"
 
-const DEFAULT_API_BASE = "http://faltus-projekt.dev.spsejecna.net";
+const DEFAULT_API_BASE = "http://127.0.0.1:8000";
+const LOCAL_API_BASES = new Set([
+  "http://localhost:8000",
+  "http://127.0.0.1:8000",
+]);
 
 const getApiBase = () =>
   new Promise((resolve) => {
@@ -24,7 +28,8 @@ const getApiBase = () =>
       return;
     }
     chrome.storage.local.get(["apiBase"], (result) => {
-      resolve(result.apiBase || DEFAULT_API_BASE);
+      const stored = result.apiBase;
+      resolve(LOCAL_API_BASES.has(stored) ? stored : DEFAULT_API_BASE);
     });
   });
 

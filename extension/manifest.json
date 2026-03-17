@@ -12,8 +12,6 @@
   "host_permissions": [
     "http://localhost:8000/*",
     "http://127.0.0.1:8000/*",
-    "http://faltus-projekt.dev.spsejecna.net/*",
-    "https://faltus-projekt.dev.spsejecna.net/*",
     "https://aukro.cz/*",
     "https://www.aukro.cz/*",
     "https://www.bazos.cz/*",
@@ -40,9 +38,7 @@
     {
       "matches": [
         "http://localhost:8000/*",
-        "http://127.0.0.1:8000/*",
-        "http://faltus-projekt.dev.spsejecna.net/*",
-        "https://faltus-projekt.dev.spsejecna.net/*"
+        "http://127.0.0.1:8000/*"
       ],
       "js": [
         "content.js"
